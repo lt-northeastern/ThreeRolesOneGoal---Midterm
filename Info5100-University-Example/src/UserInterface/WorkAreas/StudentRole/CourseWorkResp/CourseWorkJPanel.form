@@ -165,7 +165,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="lblHint">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Select a class, type the title of the work you are handing in and click Submit Assignment. Progress is the share of the semester's assignments you have handed in."/>
+        <Property name="text" type="java.lang.String" value="Select a class, type the assignment title and click Submit Assignment. Progress counts the assignments handed in out of five per class."/>
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
