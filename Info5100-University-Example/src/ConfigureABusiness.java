@@ -72,6 +72,7 @@ class ConfigureABusiness {
 
     // ---- added for the Student use case by Hemanth Bezawada (NUID 002059527) ----
     // Courses, degree requirements, three semesters of classes and the students'
+    // (student use case seed data - Hemanth Bezawada, NUID 002059527)
     // academic records live in the university model behind the business.
     static void setUpUniversity(Business business, StudentProfile adam, StudentProfile jack) {
         Department dept = business.getDepartment();
