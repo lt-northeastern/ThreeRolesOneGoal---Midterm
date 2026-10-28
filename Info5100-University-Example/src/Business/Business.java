@@ -5,6 +5,7 @@
  */
 package Business;
 
+import info5100.university.example.Department.Department;
 import Business.Person.PersonDirectory;
 import Business.Profiles.EmployeeDirectory;
 import Business.Profiles.StudentDirectory;
@@ -23,6 +24,7 @@ public class Business {
     EmployeeDirectory employeedirectory;
     UserAccountDirectory useraccountdirectory;
     StudentDirectory studentdirectory;
+    Department department; // the university model: courses, schedules, transcripts, degree
     
 
 
@@ -33,6 +35,7 @@ public class Business {
         employeedirectory = new EmployeeDirectory(this);
         useraccountdirectory = new UserAccountDirectory();
         studentdirectory = new StudentDirectory();
+        department = new Department(n);
 
 
     }
@@ -54,4 +57,8 @@ public class Business {
         return studentdirectory;
     }
 
+    // ---- added for the Student use case by Hemanth Bezawada (NUID 002059527) ----
+    public Department getDepartment() {
+        return department;
+    }
 }

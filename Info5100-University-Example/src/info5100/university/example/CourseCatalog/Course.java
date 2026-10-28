@@ -37,4 +37,14 @@ public class Course {
     
 }
     
+
+    // ---- added for the Student use case by Hemanth Bezawada (NUID 002059527) ----
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public String toString() {
+        return number + " " + name;
+    }
 }

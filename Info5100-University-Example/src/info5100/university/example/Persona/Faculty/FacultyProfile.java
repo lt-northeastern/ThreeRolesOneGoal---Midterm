@@ -58,4 +58,8 @@ public class FacultyProfile {
         return false;
     }
 
+    // ---- added for the Student use case by Hemanth Bezawada (NUID 002059527) ----
+    public Person getPerson() {
+        return person;
+    }
 }
