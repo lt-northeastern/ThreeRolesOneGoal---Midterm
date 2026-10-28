@@ -32,6 +32,10 @@ public class ProfileWorkAreaMainFrame extends javax.swing.JFrame {
     public ProfileWorkAreaMainFrame() {
         initComponents();
         business = ConfigureABusiness.initialize();
+        // the work areas need room: start large enough for every role's screens (Hemanth Bezawada)
+        setMinimumSize(new java.awt.Dimension(1120, 560));
+        setSize(1120, 560);
+        setLocationRelativeTo(null);
         
 
     }
