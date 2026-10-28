@@ -5,6 +5,9 @@
  */
 package info5100.university.example.Department;
 
+import java.util.Comparator;
+import java.util.Collections;
+import java.util.ArrayList;
 import info5100.university.example.CourseCatalog.Course;
 import info5100.university.example.CourseCatalog.CourseCatalog;
 import info5100.university.example.CourseSchedule.CourseLoad;
@@ -41,6 +44,7 @@ public class Department {
         studentdirectory = new StudentDirectory(this); //pass the department object so it stays linked to it
         persondirectory = new PersonDirectory();
         degree = new Degree("MSIS");
+        facultydirectory = new FacultyDirectory(this);
         
     }
     public void addCoreCourse(Course c){
@@ -106,5 +110,29 @@ public void addElectiveCourse(Course c){
 
         co.assignEmptySeat(cl);
 
+    }
+
+    // ---- added for the Student use case by Hemanth Bezawada (NUID 002059527) ----
+    public String getName() {
+        return name;
+    }
+
+    public Degree getDegree() {
+        return degree;
+    }
+
+    public FacultyDirectory getFacultyDirectory() {
+        return facultydirectory;
+    }
+
+    // semesters that have a schedule, oldest first
+    public ArrayList<String> getSemesters() {
+        ArrayList<String> semesters = new ArrayList<String>(mastercoursecatalog.keySet());
+        Collections.sort(semesters, new Comparator<String>() {
+            public int compare(String a, String b) {
+                return info5100.university.example.Persona.Transcript.semesterOrder(a) - info5100.university.example.Persona.Transcript.semesterOrder(b);
+            }
+        });
+        return semesters;
     }
 }

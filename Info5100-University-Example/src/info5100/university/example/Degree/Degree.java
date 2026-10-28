@@ -53,7 +53,7 @@ public class Degree {
       
         //Check for the total number of credit hours that it is above 32
 
-        else return true; //student has at least 32 credit hours per NEU requirements
+        else return getCompletedCredits(sp) >= REQUIRED_CREDITS; //student has at least 32 credit hours per NEU requirements
 
     }
 
@@ -102,4 +102,37 @@ public class Degree {
 
     }
 
+    // ---- added for the Student use case by Hemanth Bezawada (NUID 002059527) ----
+    static final int REQUIRED_CREDITS = 32;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public ArrayList<Course> getCoreList() {
+        return corelist;
+    }
+
+    public ArrayList<Course> getElectiveList() {
+        return electives;
+    }
+
+    public int getRequiredCredits() {
+        return REQUIRED_CREDITS;
+    }
+
+    // credits from graded courses only
+    public int getCompletedCredits(StudentProfile sp) {
+        return sp.getTranscript().getTotalCreditsCompleted();
+    }
+
+    // the seat assignment on the transcript for this course, graded or not; null if never taken
+    public SeatAssignment findCourseOnTranscript(StudentProfile sp, Course c) {
+        for (SeatAssignment sa : sp.getCourseList()) {
+            if (sa.getAssociatedCourse().equals(c)) {
+                return sa;
+            }
+        }
+        return null;
+    }
 }

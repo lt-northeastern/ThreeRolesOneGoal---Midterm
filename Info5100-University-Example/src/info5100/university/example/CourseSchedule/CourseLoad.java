@@ -46,4 +46,50 @@ public class CourseLoad {
             return seatassignments;
         }
             
+
+    // ---- added for the Student use case by Hemanth Bezawada (NUID 002059527) ----
+    public String getSemester() {
+        return semester;
+    }
+
+    public SeatAssignment findSeatAssignment(CourseOffer co) {
+        for (SeatAssignment sa : seatassignments) {
+            if (sa.getCourseOffer() == co) {
+                return sa;
+            }
+        }
+        return null;
+    }
+
+    public void dropSeatAssignment(SeatAssignment sa) {
+        seatassignments.remove(sa);
+        sa.getSeat().release();
+    }
+
+    public int getTotalCredits() {
+        int sum = 0;
+        for (SeatAssignment sa : seatassignments) {
+            sum = sum + sa.getCreditHours();
+        }
+        return sum;
+    }
+
+    // only graded courses count toward the GPA
+    public int getGradedCredits() {
+        int sum = 0;
+        for (SeatAssignment sa : seatassignments) {
+            if (sa.isGraded()) {
+                sum = sum + sa.getCreditHours();
+            }
+        }
+        return sum;
+    }
+
+    public float getSemesterGPA() {
+        int credits = getGradedCredits();
+        if (credits == 0) {
+            return 0;
+        }
+        return getSemesterScore() / credits;
+    }
 }
