@@ -15,6 +15,7 @@ import Business.Profiles.StudentProfile;
 import java.awt.CardLayout;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import UserInterface.WorkAreas.StudentRole.TranscriptWorkResp.TranscriptJPanel;
 import UserInterface.WorkAreas.StudentRole.CourseWorkResp.CourseWorkJPanel;
 import UserInterface.WorkAreas.StudentRole.RegistrationWorkResp.RegistrationJPanel;
 
@@ -216,7 +217,9 @@ public class StudentWorkAreaJPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton11ActionPerformed
 
     private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
-        // TODO add your handling code here:
+        getRecord();
+        TranscriptJPanel screen = new TranscriptJPanel(business, student, CardSequencePanel);
+        open("Transcript", screen);
     }//GEN-LAST:event_jButton12ActionPerformed
 
 
