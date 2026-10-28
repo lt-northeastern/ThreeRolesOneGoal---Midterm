@@ -15,6 +15,7 @@ import Business.Profiles.StudentProfile;
 import java.awt.CardLayout;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import UserInterface.WorkAreas.StudentRole.CourseWorkResp.CourseWorkJPanel;
 import UserInterface.WorkAreas.StudentRole.RegistrationWorkResp.RegistrationJPanel;
 
 /**
@@ -190,8 +191,9 @@ public class StudentWorkAreaJPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton4IdentifyResourceAssetsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4IdentifyResourceAssetsActionPerformed
-        
-
+        getRecord();
+        CourseWorkJPanel screen = new CourseWorkJPanel(business, student, CardSequencePanel);
+        open("CourseWork", screen);
     }//GEN-LAST:event_jButton4IdentifyResourceAssetsActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
