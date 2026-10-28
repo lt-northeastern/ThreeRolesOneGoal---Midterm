@@ -198,7 +198,7 @@ public class CourseWorkJPanel extends javax.swing.JPanel {
         add(btnLike);
         btnLike.setBounds(640, 300, 170, 30);
 
-        lblHint.setText("Select a class, type the title of the work you are handing in and click Submit Assignment. Progress is the share of the semester's assignments you have handed in.");
+        lblHint.setText("Select a class, type the assignment title and click Submit Assignment. Progress counts the assignments handed in out of five per class.");
         add(lblHint);
         lblHint.setBounds(30, 340, 850, 20);
 
