@@ -12,7 +12,10 @@ package UserInterface.WorkAreas.StudentRole;
 
 import Business.Business;
 import Business.Profiles.StudentProfile;
+import java.awt.CardLayout;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import UserInterface.WorkAreas.StudentRole.RegistrationWorkResp.RegistrationJPanel;
 
 /**
  *
@@ -30,6 +33,23 @@ public class StudentWorkAreaJPanel extends javax.swing.JPanel {
      * @param spp
      * @param clp
      */
+
+    // Student use case - buttons wired by Hemanth Bezawada (NUID 002059527)
+
+    // the academic record in the university model; a student the admin just created gets one on first use
+    private info5100.university.example.Persona.StudentProfile getRecord() {
+        if (student.getAcademicRecord() == null) {
+            info5100.university.example.Department.Department department = business.getDepartment();
+            info5100.university.example.Persona.Person person = department.getPersonDirectory().newPerson(student.getPerson().getPersonId());
+            student.setAcademicRecord(department.getStudentDirectory().newStudentProfile(person));
+        }
+        return student.getAcademicRecord();
+    }
+
+    private void open(String name, JPanel screen) {
+        CardSequencePanel.add(name, screen);
+        ((CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+    }
 
     public StudentWorkAreaJPanel(Business b, StudentProfile spp, JPanel clp) {
 
@@ -188,10 +208,10 @@ public class StudentWorkAreaJPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
-        // TODO add your handling code here:
-
-        CardSequencePanel.removeAll();
-}//GEN-LAST:event_jButton11ActionPerformed
+        getRecord();
+        RegistrationJPanel screen = new RegistrationJPanel(business, student, CardSequencePanel);
+        open("Registration", screen);
+    }//GEN-LAST:event_jButton11ActionPerformed
 
     private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
         // TODO add your handling code here:
