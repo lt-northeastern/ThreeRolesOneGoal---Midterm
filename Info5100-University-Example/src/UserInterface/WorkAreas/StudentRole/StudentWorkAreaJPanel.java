@@ -15,6 +15,7 @@ import Business.Profiles.StudentProfile;
 import java.awt.CardLayout;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import UserInterface.WorkAreas.StudentRole.GraduationAuditWorkResp.GraduationAuditJPanel;
 import UserInterface.WorkAreas.StudentRole.TranscriptWorkResp.TranscriptJPanel;
 import UserInterface.WorkAreas.StudentRole.CourseWorkResp.CourseWorkJPanel;
 import UserInterface.WorkAreas.StudentRole.RegistrationWorkResp.RegistrationJPanel;
@@ -205,9 +206,9 @@ public class StudentWorkAreaJPanel extends javax.swing.JPanel {
 }//GEN-LAST:event_jButton9ActionPerformed
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
-        // TODO add your handling code here:
-
-
+        getRecord();
+        GraduationAuditJPanel screen = new GraduationAuditJPanel(business, student, CardSequencePanel);
+        open("GraduationAudit", screen);
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
