@@ -3,7 +3,6 @@ package UserInterface.WorkAreas.StudentRole.CourseWorkResp;
 import Business.Business;
 import Business.Profiles.StudentProfile;
 import info5100.university.example.CourseSchedule.CourseLoad;
-import info5100.university.example.CourseSchedule.CourseOffer;
 import info5100.university.example.CourseSchedule.SeatAssignment;
 import info5100.university.example.Department.Department;
 import java.awt.CardLayout;
@@ -59,6 +58,10 @@ public class CourseWorkJPanel extends javax.swing.JPanel {
     }
 
     private SeatAssignment selectedCourse() {
+        if (rows.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "You are not registered for any class in this semester. Use Registration to enroll first.", "No Classes", JOptionPane.WARNING_MESSAGE);
+            return null;
+        }
         int row = tblCourses.getSelectedRow();
         if (row < 0 || row >= rows.size()) {
             JOptionPane.showMessageDialog(this, "Please select a class from the table first.", "No Selection", JOptionPane.WARNING_MESSAGE);
@@ -91,8 +94,12 @@ public class CourseWorkJPanel extends javax.swing.JPanel {
             }
         }
         int percent = due == 0 ? 0 : submitted * 100 / due;
-        lblSummary.setText("Semester progress: " + submitted + " of " + due + " assignments submitted (" + percent + "%)"
-                + "   -   courses liked so far: " + record.getTranscript().getStudentSatifactionIndex());
+        if (record.getTranscript().getCourseLoads().isEmpty()) {
+            lblSummary.setText("You are not registered for any classes yet - use Registration first.");
+        } else {
+            lblSummary.setText("Semester progress: " + submitted + " of " + due + " assignments submitted (" + percent + "%)"
+                    + "   -   courses liked so far: " + record.getTranscript().getStudentSatifactionIndex());
+        }
         int[] widths = { 90, 280, 120, 90, 80, 90, 60 };
         for (int i = 0; i < widths.length; i++) {
             tblCourses.getColumnModel().getColumn(i).setPreferredWidth(widths[i]);
@@ -230,9 +237,15 @@ public class CourseWorkJPanel extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, sa.getCourseOffer().getCourseNumber() + " is already graded (" + sa.getLetterGrade() + "). No more work can be submitted.", "Course Completed", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        if (sa.getSubmissions().contains(title)) {
-            JOptionPane.showMessageDialog(this, "You already submitted \"" + title + "\" for this class.", "Duplicate Submission", JOptionPane.WARNING_MESSAGE);
+        if (title.length() > 60) {
+            JOptionPane.showMessageDialog(this, "Please keep the assignment title under 60 characters.", "Title Too Long", JOptionPane.WARNING_MESSAGE);
             return;
+        }
+        for (String earlier : sa.getSubmissions()) {
+            if (earlier.trim().equalsIgnoreCase(title)) {
+                JOptionPane.showMessageDialog(this, "You already submitted \"" + earlier + "\" for this class.", "Duplicate Submission", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
         }
         if (!sa.submitAssignment(title)) {
             JOptionPane.showMessageDialog(this, "All " + sa.getAssignmentsDue() + " assignments for " + sa.getCourseOffer().getCourseNumber() + " are already submitted.", "Nothing Due", JOptionPane.INFORMATION_MESSAGE);

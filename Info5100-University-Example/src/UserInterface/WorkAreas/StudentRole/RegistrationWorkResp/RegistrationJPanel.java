@@ -113,9 +113,16 @@ public class RegistrationJPanel extends javax.swing.JPanel {
                 credits = credits + sa.getCreditHours();
             }
         }
-        boolean open = semester != null && semester.equals(currentSemester());
-        lblCredits.setText("Credits this semester: " + credits + " (maximum " + (MAX_COURSES_PER_SEMESTER * 4) + ")"
-                + (open ? "   -   registration is open" : "   -   registration is closed for this semester"));
+        String note;
+        if (currentSemester() == null) {
+            note = "no semester has been scheduled yet";
+        } else if (semester != null && semester.equals(currentSemester())) {
+            note = "registration is open";
+        } else {
+            note = "registration is closed for this semester";
+        }
+        int classes = load == null ? 0 : load.getSeatAssignments().size();
+        lblCredits.setText("Classes this semester: " + classes + " of " + MAX_COURSES_PER_SEMESTER + " (credits: " + credits + ")   -   " + note);
         int[] w1 = { 90, 300, 60, 130, 90, 90 };
         for (int i = 0; i < w1.length; i++) {
             tblOffers.getColumnModel().getColumn(i).setPreferredWidth(w1[i]);
@@ -231,9 +238,9 @@ public class RegistrationJPanel extends javax.swing.JPanel {
         add(spMine);
         spMine.setBounds(30, 307, 850, 95);
 
-        lblCredits.setText("Credits this semester:");
+        lblCredits.setText("Classes this semester:");
         add(lblCredits);
-        lblCredits.setBounds(30, 408, 600, 20);
+        lblCredits.setBounds(30, 408, 700, 20);
 
         btnDrop.setText("Drop Selected Class");
         btnDrop.addActionListener(new java.awt.event.ActionListener() {
@@ -275,27 +282,32 @@ public class RegistrationJPanel extends javax.swing.JPanel {
         }
         CourseOffer co = offerRows.get(row);
 
-        CourseLoad load = loadFor(semester);
-        if (load == null) {
-            load = record.newCourseLoad(semester);   // first class this semester
-        }
-        if (load.findSeatAssignment(co) != null) {
+        CourseLoad load = loadFor(semester);   // stays null until the first class of the semester is accepted
+        if (load != null && load.findSeatAssignment(co) != null) {
             JOptionPane.showMessageDialog(this, "You are already registered for " + co.getCourseNumber() + " this semester.", "Already Registered", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        // a course that is already on the transcript with a grade cannot be taken again
+        // a course that is already on the transcript cannot be taken again: completed, or still being taken
         SeatAssignment earlier = department.getDegree().findCourseOnTranscript(record, co.getSubjectCourse());
         if (earlier != null && earlier.isGraded()) {
             JOptionPane.showMessageDialog(this, "You have already completed " + co.getCourseNumber() + " with a grade of " + earlier.getLetterGrade() + ".", "Course Completed", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        if (load.getSeatAssignments().size() >= MAX_COURSES_PER_SEMESTER) {
+        if (earlier != null) {
+            JOptionPane.showMessageDialog(this, "You are already taking " + co.getCourseNumber() + " (" + earlier.getCourseLoad().getSemester() + "). It has not been graded yet, so you cannot register for it again.", "Course In Progress", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        int classesNow = load == null ? 0 : load.getSeatAssignments().size();
+        if (classesNow >= MAX_COURSES_PER_SEMESTER) {
             JOptionPane.showMessageDialog(this, "You can take at most " + MAX_COURSES_PER_SEMESTER + " classes in a semester.", "Course Load Full", JOptionPane.WARNING_MESSAGE);
             return;
         }
         if (co.getAvailableSeats() == 0) {
             JOptionPane.showMessageDialog(this, co.getCourseNumber() + " is full. There are no seats left.", "Class Full", JOptionPane.WARNING_MESSAGE);
             return;
+        }
+        if (load == null) {
+            load = record.newCourseLoad(semester);   // first class this semester
         }
         SeatAssignment sa = load.newSeatAssignment(co);
         if (sa == null) {

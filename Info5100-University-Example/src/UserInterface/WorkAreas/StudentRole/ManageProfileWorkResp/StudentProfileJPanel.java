@@ -3,13 +3,9 @@ package UserInterface.WorkAreas.StudentRole.ManageProfileWorkResp;
 import Business.Business;
 import Business.Profiles.StudentProfile;
 import info5100.university.example.CourseSchedule.CourseLoad;
-import info5100.university.example.CourseSchedule.CourseOffer;
-import info5100.university.example.CourseSchedule.SeatAssignment;
 import info5100.university.example.Department.Department;
 import java.awt.CardLayout;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.table.DefaultTableModel;
 import Business.UserAccounts.UserAccount;
 
 /**
@@ -42,7 +38,8 @@ public class StudentProfileJPanel extends javax.swing.JPanel {
         txtUsername.setText(account == null ? "-" : account.getUserLoginName());
         txtDegree.setText(department.getDegree().getTitle() + " - " + department.getName());
         CourseLoad current = record.getCurrentCourseLoad();
-        txtSemester.setText(current == null ? "Not registered yet" : current.getSemester() + " (" + current.getSeatAssignments().size() + " classes)");
+        int classes = current == null ? 0 : current.getSeatAssignments().size();
+        txtSemester.setText(current == null ? "Not registered yet" : current.getSemester() + " (" + classes + (classes == 1 ? " class)" : " classes)"));
         txtCredits.setText(String.valueOf(record.getTranscript().getTotalCreditsCompleted()));
         txtGpa.setText(record.getTranscript().getTotalCreditsCompleted() == 0 ? "-" : String.format("%.2f", record.getTranscript().getGPA()));
     }

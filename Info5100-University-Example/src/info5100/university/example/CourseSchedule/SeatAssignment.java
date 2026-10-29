@@ -59,6 +59,10 @@ public class SeatAssignment {
         return grade;
     }
 
+    public CourseLoad getCourseLoad() {
+        return courseload;
+    }
+
     public void setGrade(float g) {
         grade = g;
     }

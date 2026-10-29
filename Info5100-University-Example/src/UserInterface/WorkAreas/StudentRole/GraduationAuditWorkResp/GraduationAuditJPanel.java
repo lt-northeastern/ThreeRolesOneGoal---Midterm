@@ -2,8 +2,6 @@ package UserInterface.WorkAreas.StudentRole.GraduationAuditWorkResp;
 
 import Business.Business;
 import Business.Profiles.StudentProfile;
-import info5100.university.example.CourseSchedule.CourseLoad;
-import info5100.university.example.CourseSchedule.CourseOffer;
 import info5100.university.example.CourseSchedule.SeatAssignment;
 import info5100.university.example.Department.Department;
 import java.awt.CardLayout;
@@ -86,7 +84,8 @@ public class GraduationAuditJPanel extends javax.swing.JPanel {
         lblCore.setText("Core courses completed: " + coreDone + " of " + degree.getCoreList().size());
         lblElectives.setText("Electives completed: " + electivesDone);
         lblCreditsDone.setText("Credits completed: " + credits + " of " + required + " required");
-        boolean ready = degree.isStudentReadyToGraduate(record);
+        // the verdict uses the same counts shown above: every core course graded and the credits in
+        boolean ready = coreDone == degree.getCoreList().size() && credits >= required;
         if (ready) {
             lblVerdict.setText("Audit result: you meet the requirements and are ready to graduate.");
         } else {
