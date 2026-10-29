@@ -73,7 +73,7 @@ public class Degree {
 
     public boolean isCoreSatisfied(ArrayList<SeatAssignment> sas, Course c) {
         for (SeatAssignment sa : sas) {
-            if (sa.getAssociatedCourse().equals(c)) {
+            if (sa.getAssociatedCourse().equals(c) && sa.isGraded()) { // a core course counts once it is graded (Hemanth Bezawada)
                 return true;
             }
         }

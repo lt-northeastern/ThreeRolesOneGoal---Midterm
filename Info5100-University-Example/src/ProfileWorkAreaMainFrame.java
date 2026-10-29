@@ -139,9 +139,15 @@ public class ProfileWorkAreaMainFrame extends javax.swing.JFrame {
         String un = UserNameTextField.getText();
         String pw = PasswordTextField.getText();
 
+        if (un.trim().isEmpty() || pw.trim().isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Please enter your user name and password.", "Login", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         UserAccountDirectory uad = business.getUserAccountDirectory();
         UserAccount useraccount = uad.AuthenticateUser(un, pw);
         if (useraccount == null) {
+            // the only feedback used to be silence (Hemanth Bezawada)
+            javax.swing.JOptionPane.showMessageDialog(this, "Invalid user name or password. Please try again.", "Login", javax.swing.JOptionPane.ERROR_MESSAGE);
             return;
         }
         StudentWorkAreaJPanel studentworkareajpanel;

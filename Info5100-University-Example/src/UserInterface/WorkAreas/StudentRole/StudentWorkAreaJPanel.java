@@ -37,6 +37,15 @@ public class StudentWorkAreaJPanel extends javax.swing.JPanel {
      * @param clp
      */
 
+    public StudentWorkAreaJPanel(Business b, StudentProfile spp, JPanel clp) {
+
+        business = b;
+        this.CardSequencePanel = clp;
+        student = spp;
+        initComponents();
+
+    }
+
     // Student use case - buttons wired by Hemanth Bezawada (NUID 002059527)
 
     // the academic record in the university model; a student the admin just created gets one on first use
@@ -49,18 +58,10 @@ public class StudentWorkAreaJPanel extends javax.swing.JPanel {
         return student.getAcademicRecord();
     }
 
+    // add a screen to the card stack and show it
     private void open(String name, JPanel screen) {
         CardSequencePanel.add(name, screen);
         ((CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
-    }
-
-    public StudentWorkAreaJPanel(Business b, StudentProfile spp, JPanel clp) {
-
-        business = b;
-        this.CardSequencePanel = clp;
-        student = spp;
-        initComponents();
-
     }
 
     /**
