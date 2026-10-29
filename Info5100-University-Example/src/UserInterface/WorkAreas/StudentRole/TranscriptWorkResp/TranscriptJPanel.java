@@ -3,11 +3,9 @@ package UserInterface.WorkAreas.StudentRole.TranscriptWorkResp;
 import Business.Business;
 import Business.Profiles.StudentProfile;
 import info5100.university.example.CourseSchedule.CourseLoad;
-import info5100.university.example.CourseSchedule.CourseOffer;
 import info5100.university.example.CourseSchedule.SeatAssignment;
 import info5100.university.example.Department.Department;
 import java.awt.CardLayout;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
 

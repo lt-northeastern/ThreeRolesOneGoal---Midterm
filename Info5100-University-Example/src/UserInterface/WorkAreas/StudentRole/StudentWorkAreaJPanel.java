@@ -13,7 +13,6 @@ package UserInterface.WorkAreas.StudentRole;
 import Business.Business;
 import Business.Profiles.StudentProfile;
 import java.awt.CardLayout;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import UserInterface.WorkAreas.StudentRole.ManageProfileWorkResp.StudentProfileJPanel;
 import UserInterface.WorkAreas.StudentRole.GraduationAuditWorkResp.GraduationAuditJPanel;
