@@ -44,7 +44,7 @@ Demo accounts (password `****` for all): `admin` (administrator), `adam` and `ja
 
 ## Authentication & Access Control
 
-- **Login:** the user name and password typed on the left of the main frame are checked by `UserAccountDirectory.AuthenticateUser`, which compares them with every `UserAccount`. A wrong user name or password is refused; nothing is shown.
+- **Login:** the user name and password typed on the left of the main frame are checked by `UserAccountDirectory.AuthenticateUser`, which compares them with every `UserAccount`. A wrong user name or password, or an empty field, is refused with a message box and no work area opens.
 - **Role:** every `UserAccount` is attached to a `Profile`. The subclass of the profile (`StudentProfile`, `FacultyProfile`, `EmployeeProfile`) is the role. The main frame checks the profile type and opens the matching work area in its `CardLayout` container, clearing whatever was there before.
 - **Authorization:** each work area only contains the buttons of its role, and each screen is created with the profile of the logged-in user, so a student can only reach the student screens and only sees and changes their own record. There is no way to open another role's screens without logging in with an account of that role.
 
@@ -56,13 +56,13 @@ All student screens live in `UserInterface.WorkAreas.StudentRole` and are NetBea
 
 | Screen | What it does |
 |---|---|
-| Registration | Pick a semester, see every class offered with professor and seats left, register for a class, drop a class. Rules: only the current semester is open; no duplicate registration; a course already completed cannot be retaken; at most four classes a semester; a full class cannot be joined; graded classes cannot be dropped; dropping needs confirmation and frees the seat. |
+| Registration | Pick a semester, see every class offered with professor and seats left, register for a class, drop a class. Rules: only the current semester is open; no duplicate registration; a course already completed, or still in progress from an earlier semester, cannot be registered again; at most four classes a semester; a full class cannot be joined; graded classes cannot be dropped; dropping needs confirmation and frees the seat. |
 | Course Work | Classes of a semester with assignments submitted out of five, progress percentage, grade and whether the student liked the class. Submit an assignment by title (empty, duplicate, sixth and graded-class submissions are refused), like or unlike a class. |
 | Transcript | Every class by semester with credits, letter grade and grade points, a per-semester table with semester GPA, and a summary with credits completed, overall GPA and classes in progress. |
 | Graduation Audit | Core courses and electives against the MSIS degree, each completed, in progress or not taken; credits completed against the 32 required; a verdict that says ready or lists what is outstanding. |
 | My Profile | Name, role, user name, degree program, current semester, credits completed and GPA. |
 
-Changes to the shared model for the student use case: `Business.getDepartment()`, `StudentProfile.getAcademicRecord()`, grade and submission helpers on `SeatAssignment`, semester GPA on `CourseLoad`, ordered course loads and overall GPA on `Transcript`, seat release on `Seat`, getters on `Degree` and `Department`, and the 32-credit rule in `Degree.isStudentReadyToGraduate`.
+Changes to the shared model for the student use case, each in a block marked "added for the Student use case": `Business.getDepartment()`, `StudentProfile.getAcademicRecord()`, grade, like and submission helpers on `SeatAssignment`, semester GPA and drop on `CourseLoad`, seat release on `Seat`, ordered course loads and overall GPA on `Transcript`, `getPerson()` on the university `StudentProfile` and `FacultyProfile`, name and teacher/seat helpers on `Course`, `CourseOffer` and `CourseSchedule`, getters and the semester list on `Department`, getters on `Degree` plus the 32-credit and graded-core rules in `Degree.isStudentReadyToGraduate`.
 
 ### Administrator ((add name))
 
@@ -90,15 +90,21 @@ Student scenario:
 
 ## Testing Guide
 
-The student screens were tested with a harness that drives the real panels (selects rows, types text, clicks buttons, reads the message boxes) and then checks the university model: 48 checks in total. Sample cases to repeat by hand:
+The student screens were tested with a harness that drives the real panels (selects rows, types text, clicks buttons, reads the message boxes) and then checks the university model: 56 checks in total. It is in the repository as `Info5100-University-Example/test/StudentUITest.java`; after compiling the project run it with a folder for its screenshots:
+
+    javac -d build/test -cp build/classes test/StudentUITest.java
+    java -cp build/classes:build/test StudentUITest screenshots
+
+Sample cases to repeat by hand:
 
 | Test | Steps | Expected |
 |---|---|---|
-| Wrong password | log in as `adam` with `xxxx` | no work area opens |
+| Wrong password | log in as `adam` with `xxxx` | "Invalid user name or password" message, no work area opens |
 | Register with nothing selected | Registration → Register | message asking to select a class |
 | Register twice | select the class already marked Registered → Register | "already registered" message |
 | Full class | select INFO 6350 (0 of 1 seats) → Register | "class is full" message |
 | Retake | select INFO 5100 → Register | "already completed" message |
+| Empty login | leave both fields blank → Login | "enter your user name and password" message |
 | Past semester | choose Fall 2025 → Register | "registration is closed" message |
 | Drop a graded class | Fall 2025 → select a class → Drop | "cannot be dropped" message |
 | Drop a current class | Fall 2026 → select a class → Drop → Yes | class removed, seat count goes back up |
@@ -126,6 +132,6 @@ Authentication and authorization check: log in with each demo account and confir
 
 | Member | Coding | Documentation | Testing | Other |
 |---|---|---|---|---|
-| Hemanth Bezawada | Student use case (5 screens, 6 pull requests), model integration, seed data | this README's shared sections and the student sections | student UI harness (48 checks) | main window sizing |
+| Hemanth Bezawada | Student use case (5 screens, 7 pull requests), model integration, seed data, login messages | this README's shared sections and the student sections | student UI harness (56 checks) | main window sizing |
 | Luke Tomlinson | (add) | (add) | (add) | (add) |
 | Christopher Ogden | (add) | (add) | (add) | (add) |
