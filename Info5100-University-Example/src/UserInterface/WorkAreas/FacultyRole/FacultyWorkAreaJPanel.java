@@ -154,14 +154,16 @@ public class FacultyWorkAreaJPanel extends javax.swing.JPanel {
 
     private void btnManageCoursesIdentifyResourceAssetsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManageCoursesIdentifyResourceAssetsActionPerformed
         // TODO add your handling code here:
-         JOptionPane.showMessageDialog(this, "This function is not available.", "Not available", JOptionPane.INFORMATION_MESSAGE);
-
+          ManageCourseJPanel profile = new ManageCourseJPanel(business, useraccount, CardSequencePanel);
+        CardSequencePanel.add("ManageCourses", profile);
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel); 
     }//GEN-LAST:event_btnManageCoursesIdentifyResourceAssetsActionPerformed
 
     private void btnManageStudentProfilesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManageStudentProfilesActionPerformed
         // TODO add your handling code here:
-         JOptionPane.showMessageDialog(this, "This function is not available.", "Not available", JOptionPane.INFORMATION_MESSAGE);
-  
+         ManageStudentsProfileJPanel students = new ManageStudentsProfileJPanel(business, useraccount, CardSequencePanel);
+        CardSequencePanel.add("StudentProfiles", students);
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
     }//GEN-LAST:event_btnManageStudentProfilesActionPerformed
 
     private void btnMyProfileIdentifyEventsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMyProfileIdentifyEventsActionPerformed
@@ -175,7 +177,9 @@ public class FacultyWorkAreaJPanel extends javax.swing.JPanel {
 
     private void btnPerformanceReportsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPerformanceReportsActionPerformed
         // TODO add your handling code here:
-        JOptionPane.showMessageDialog(this, "This function is not available.", "Not available", JOptionPane.INFORMATION_MESSAGE);
+        ManageStudentsProfileJPanel students = new ManageStudentsProfileJPanel(business, useraccount, CardSequencePanel);
+        CardSequencePanel.add("StudentProfiles", students);
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
 
 }//GEN-LAST:event_btnPerformanceReportsActionPerformed
 
