@@ -3,9 +3,35 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/ogdenc/Documents/GitHub/ogden_christopher_003959375_assignments/Info5100-University-Example/src/info5100/university/example/workareas/Workarea.java</file>
-            <file>file:/Users/ogdenc/Documents/GitHub/ogden_christopher_003959375_assignments/Info5100-University-Example/src/info5100/university/example/Persona/Faculty/FacultyDirectory.java</file>
-            <file>file:/Users/ogdenc/Documents/GitHub/ogden_christopher_003959375_assignments/Info5100-University-Example/src/info5100/university/example/Persona/StudentDirectory.java</file>
+            <file>file:/Users/ogdenc/Documents/GitHub/ThreeRolesOneGoal---Midterm/Info5100-University-Example/src/Business/ConfigureABusiness.java</file>
+            <file>file:/Users/ogdenc/Documents/GitHub/ThreeRolesOneGoal---Midterm/Info5100-University-Example/src/Business/Profiles/FacultyProfile.java</file>
+            <file>file:/Users/ogdenc/Documents/GitHub/ThreeRolesOneGoal---Midterm/Info5100-University-Example/src/UserInterface/WorkAreas/AdminRole/AdministerUserAccountsWorkResp/AdminUserAccount.java</file>
+            <file>file:/Users/ogdenc/Documents/GitHub/ThreeRolesOneGoal---Midterm/Info5100-University-Example/src/UserInterface/WorkAreas/SignUp/SignUpJPanel.java</file>
+            <file>file:/Users/ogdenc/Documents/GitHub/ThreeRolesOneGoal---Midterm/Info5100-University-Example/src/UserInterface/WorkAreas/AdminRole/ManageFacultyWorkResp/ManageFacultyJPanel.java</file>
+            <file>file:/Users/ogdenc/Documents/GitHub/ThreeRolesOneGoal---Midterm/Info5100-University-Example/src/Business/Profiles/EmployeeProfile.java</file>
+            <file>file:/Users/ogdenc/Documents/GitHub/ThreeRolesOneGoal---Midterm/Info5100-University-Example/src/UserInterface/WorkAreas/AdminRole/AdminRoleWorkAreaJPanel.java</file>
+            <file>file:/Users/ogdenc/Documents/GitHub/ThreeRolesOneGoal---Midterm/Info5100-University-Example/src/UserInterface/WorkAreas/StudentRole/GraduationAuditWorkResp/GraduationAuditJPanel.java</file>
+            <file>file:/Users/ogdenc/Documents/GitHub/ThreeRolesOneGoal---Midterm/Info5100-University-Example/src/UserInterface/WorkAreas/StudentRole/RegistrationWorkResp/RegistrationJPanel.java</file>
+            <file>file:/Users/ogdenc/Documents/GitHub/ThreeRolesOneGoal---Midterm/Info5100-University-Example/src/Business/Profiles/Profile.java</file>
+            <file>file:/Users/ogdenc/Documents/GitHub/ThreeRolesOneGoal---Midterm/Info5100-University-Example/src/Business/Profiles/FacultyDirectory.java</file>
+            <file>file:/Users/ogdenc/Documents/GitHub/ThreeRolesOneGoal---Midterm/Info5100-University-Example/src/UserInterface/WorkAreas/StudentRole/StudentWorkAreaJPanel.java</file>
+            <file>file:/Users/ogdenc/Documents/GitHub/ThreeRolesOneGoal---Midterm/Info5100-University-Example/src/Business/Validation.java</file>
+            <file>file:/Users/ogdenc/Documents/GitHub/ThreeRolesOneGoal---Midterm/Info5100-University-Example/src/Business/UserAccounts/UserAccount.java</file>
+            <file>file:/Users/ogdenc/Documents/GitHub/ThreeRolesOneGoal---Midterm/Info5100-University-Example/src/UserInterface/WorkAreas/StudentRole/CourseWorkResp/CourseWorkJPanel.java</file>
+            <file>file:/Users/ogdenc/Documents/GitHub/ThreeRolesOneGoal---Midterm/Info5100-University-Example/src/Business/Profiles/EmployeeDirectory.java</file>
+            <file>file:/Users/ogdenc/Documents/GitHub/ThreeRolesOneGoal---Midterm/Info5100-University-Example/src/Business/Profiles/StudentProfile.java</file>
+            <file>file:/Users/ogdenc/Documents/GitHub/ThreeRolesOneGoal---Midterm/Info5100-University-Example/src/UserInterface/WorkAreas/MyProfile/MyProfileJPanel.java</file>
+            <file>file:/Users/ogdenc/Documents/GitHub/ThreeRolesOneGoal---Midterm/Info5100-University-Example/src/Business/Profiles/StudentDirectory.java</file>
+            <file>file:/Users/ogdenc/Documents/GitHub/ThreeRolesOneGoal---Midterm/Info5100-University-Example/src/UserInterface/WorkAreas/FacultyRole/FacultyWorkAreaJPanel.java</file>
+            <file>file:/Users/ogdenc/Documents/GitHub/ThreeRolesOneGoal---Midterm/Info5100-University-Example/src/UserInterface/WorkAreas/AdminRole/ManageStudentsWorkResp/ManageStudentsJPanel.java</file>
+            <file>file:/Users/ogdenc/Documents/GitHub/ThreeRolesOneGoal---Midterm/Info5100-University-Example/src/Business/ProfileWorkAreaMainFrame.java</file>
+            <file>file:/Users/ogdenc/Documents/GitHub/ThreeRolesOneGoal---Midterm/Info5100-University-Example/src/Business/Person/PersonDirectory.java</file>
+            <file>file:/Users/ogdenc/Documents/GitHub/ThreeRolesOneGoal---Midterm/Info5100-University-Example/src/Business/Person/Person.java</file>
+            <file>file:/Users/ogdenc/Documents/GitHub/ThreeRolesOneGoal---Midterm/Info5100-University-Example/src/UserInterface/WorkAreas/AdminRole/ManagePersonnelWorkResp/ManagePersonsJPanel.java</file>
+            <file>file:/Users/ogdenc/Documents/GitHub/ThreeRolesOneGoal---Midterm/Info5100-University-Example/src/Business/Profiles/StudentAccount.java</file>
+            <file>file:/Users/ogdenc/Documents/GitHub/ThreeRolesOneGoal---Midterm/Info5100-University-Example/src/UserInterface/WorkAreas/StudentRole/TranscriptWorkResp/TranscriptJPanel.java</file>
+            <file>file:/Users/ogdenc/Documents/GitHub/ThreeRolesOneGoal---Midterm/Info5100-University-Example/src/Business/Business.java</file>
+            <file>file:/Users/ogdenc/Documents/GitHub/ThreeRolesOneGoal---Midterm/Info5100-University-Example/src/Business/UserAccounts/UserAccountDirectory.java</file>
         </group>
     </open-files>
 </project-private>
