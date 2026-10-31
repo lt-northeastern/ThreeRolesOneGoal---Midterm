@@ -77,13 +77,14 @@ public class AdminUserAccount extends javax.swing.JPanel {
         rows.clear();
         for (UserAccount ua : business.getUserAccountDirectory().getUserAccountList()) {
             rows.add(ua);
-            Object[] row = new Object[6];
+            Object[] row = new Object[7];
             row[0] = ua.getUserLoginName();
             row[1] = ua.getAssociatedPersonProfile().getPerson().getName();
             row[2] = ua.getRole();
             row[3] = formatTime(ua.getCreatedTime());
             row[4] = formatTime(ua.getLastLoginTime());
             row[5] = formatTime(ua.getLastUpdatedTime());
+            row[6] = ua.getStatus();   // Christopher Ogden NUID: 003959375 Admin use case
             model.addRow(row);
         }
     }
@@ -159,6 +160,7 @@ public class AdminUserAccount extends javax.swing.JPanel {
         lblNewPassword = new javax.swing.JLabel();
         lblUserName = new javax.swing.JLabel();
         lblInfo = new javax.swing.JLabel();
+        btnEnableDisable = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(204, 204, 204));
         setLayout(null);
@@ -197,17 +199,17 @@ public class AdminUserAccount extends javax.swing.JPanel {
 
         tblUserAccounts.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "User Name", "Name", "Role", "Account Created", "Last Login", "Account Last Updated"
+                "User Name", "Name", "Role", "Account Created", "Last Login", "Account Last Updated", "Status"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -234,6 +236,15 @@ public class AdminUserAccount extends javax.swing.JPanel {
         lblInfo.setText("Select an account and update the password, username or delete the account. Keep the password field empty to keep the password. ");
         add(lblInfo);
         lblInfo.setBounds(10, 360, 790, 60);
+
+        btnEnableDisable.setText("Enable / Disable");
+        btnEnableDisable.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEnableDisableActionPerformed(evt);
+            }
+        });
+        add(btnEnableDisable);
+        btnEnableDisable.setBounds(360, 540, 130, 23);
     }// </editor-fold>//GEN-END:initComponents
 
     /**
@@ -330,11 +341,41 @@ UserAccount ua = selectedAccount();
         JOptionPane.showMessageDialog(this, "The account was updated.");
     
     }//GEN-LAST:event_btnUpdateActionPerformed
+    /**
+     * Disables the selected account so it can no longer log in, or enables it again. The
+     * person's profile and records are kept. The admin cannot disable their own account.
+     *
+     * Christopher Ogden NUID: 003959375 Admin use case.
+     */
+    private void btnEnableDisableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnableDisableActionPerformed
+        // TODO add your handling code here:
+        UserAccount ua = selectedAccount();
+        if (ua == null) {
+            JOptionPane.showMessageDialog(this, "Please select an account in the table first.", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (ua == currentUser) {
+            JOptionPane.showMessageDialog(this, "You cannot disable the account you are logged in with.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        boolean disable = ua.isActive();
+        String action = disable ? "Disable" : "Enable";
+        if (!confirm(action + " the login account \"" + ua.getUserLoginName() + "\"?"
+                + (disable ? "\nThe person will not be able to log in until the account is enabled again." : ""))) {
+            return;
+        }
+        ua.setActive(!disable);   // also updates "Account Last Updated"
+        refreshTable();
+        clearFields();
+        JOptionPane.showMessageDialog(this, "The account \"" + ua.getUserLoginName() + "\" was "
+                + (disable ? "disabled." : "enabled."));
+    }//GEN-LAST:event_btnEnableDisableActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnEnableDisable;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblInfo;
