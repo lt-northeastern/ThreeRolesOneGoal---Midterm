@@ -18,7 +18,7 @@ import UserInterface.WorkAreas.MyProfile.*;
 import UserInterface.WorkAreas.AdminRole.AdministerUserAccountsWorkResp.AdminUserAccount;
 import UserInterface.WorkAreas.AdminRole.ManageFacultyWorkResp.ManageFacultyJPanel;
 import UserInterface.WorkAreas.AdminRole.ManageStudentsWorkResp.ManageStudentsJPanel;
-
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
@@ -43,6 +43,20 @@ public class AdminRoleWorkAreaJPanel extends javax.swing.JPanel {
         this.CardSequencePanel = clp;
         initComponents();
 
+    }
+   /**
+     * Authorization guard used by every button below: only a logged-in administrator may open
+     * an admin screen. Shows a message and returns false for anyone else.
+     *
+     * Christopher Ogden NUID: 003959375 Admin use case.
+     */
+    private boolean isAllowed() {
+        if (business.isAdministrator(useraccount)) {
+            return true;
+        }
+        JOptionPane.showMessageDialog(this, "Only an administrator can open this screen.",
+                "Access denied", JOptionPane.ERROR_MESSAGE);
+        return false;
     }
 
     /**
@@ -174,7 +188,9 @@ public class AdminRoleWorkAreaJPanel extends javax.swing.JPanel {
      */
     private void btnAdminUserAccountsIdentifyResourceAssetsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdminUserAccountsIdentifyResourceAssetsActionPerformed
         // TODO add your handling code here:
-
+        if (!isAllowed()) {
+            return;
+        }
         AdminUserAccount aua = new AdminUserAccount(business, useraccount, CardSequencePanel);
 
         CardSequencePanel.add("AdminUserAccount", aua);
@@ -190,7 +206,9 @@ public class AdminRoleWorkAreaJPanel extends javax.swing.JPanel {
      */
     private void btnRegisterPersonsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterPersonsActionPerformed
         // TODO add your handling code here:
-
+        if (!isAllowed()) {
+            return;
+        }
         ManagePersonsJPanel manage = new ManagePersonsJPanel(business, useraccount, CardSequencePanel);
 
         CardSequencePanel.add("ManagePersons", manage);
@@ -205,6 +223,9 @@ public class AdminRoleWorkAreaJPanel extends javax.swing.JPanel {
      */
     private void btnManageStudentsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManageStudentsActionPerformed
         // TODO add your handling code here:
+        if (!isAllowed()) {
+            return;
+        }
         ManageStudentsJPanel manage = new ManageStudentsJPanel(business, useraccount, CardSequencePanel);
         CardSequencePanel.add("ManageStudents", manage);
         ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
@@ -217,6 +238,10 @@ public class AdminRoleWorkAreaJPanel extends javax.swing.JPanel {
      * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
      */
     private void btnMyprofileIdentifyEventsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMyprofileIdentifyEventsActionPerformed
+    if (!isAllowed()) {
+            return;
+        }
+        
     MyProfileJPanel profile = new MyProfileJPanel(useraccount, CardSequencePanel);
     CardSequencePanel.add("MyProfile", profile);
     ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
@@ -228,6 +253,9 @@ public class AdminRoleWorkAreaJPanel extends javax.swing.JPanel {
      * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
      */
     private void btnManageFacultyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManageFacultyActionPerformed
+    if (!isAllowed()) {
+            return;
+        }   
     ManageFacultyJPanel manage = new ManageFacultyJPanel(business, useraccount, CardSequencePanel);
     CardSequencePanel.add("ManageFaculty", manage);
     ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
