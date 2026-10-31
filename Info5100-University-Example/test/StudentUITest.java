@@ -419,6 +419,17 @@ public class StudentUITest {
         click(button(cwE, "Submit Assignment"));
         check("course work: submit with no classes explains what to do", lastDialogText.contains("Registration"));
 
+        // ---- a long name must not push the NUID out of the header
+        StudentProfile longName = b.getStudentDirectory().newStudentProfile(b.getPersonDirectory().newPerson("Priya Natarajan-Venkataraman"), "912570009");
+        UserAccount longNameAccount = b.getUserAccountDirectory().newUserAccount(longName, "priya", "priya123");
+        JPanel waL = (JPanel) Class.forName("UserInterface.WorkAreas.StudentRole.StudentWorkAreaJPanel").getConstructor(Business.class, UserAccount.class, JPanel.class).newInstance(b, longNameAccount, upc);
+        click(button(waL, "Registration"));
+        JLabel hdrReg = label((JPanel) upc.getComponent(upc.getComponentCount() - 1), "Student:");
+        check("registration: a 28-character name still leaves the NUID visible in the header", hdrReg.getText().endsWith("(NUID 912570009)") && hdrReg.getPreferredSize().width <= hdrReg.getWidth());
+        click(button(waL, "Course Work"));
+        JLabel hdrCw = label((JPanel) upc.getComponent(upc.getComponentCount() - 1), "Student:");
+        check("course work: the long name fits the header as well", hdrCw.getText().endsWith("(NUID 912570009)") && hdrCw.getPreferredSize().width <= hdrCw.getWidth());
+
         // ---- deleting a student from the administrator side frees the seats and removes the university record
         StudentProfile jimProfile = b.getStudentDirectory().findStudentByNuid("912564001");
         info5100.university.example.Persona.StudentProfile jimRecord = jimProfile.getAcademicRecord();
