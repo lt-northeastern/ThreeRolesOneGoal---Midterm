@@ -155,7 +155,18 @@ public class Business {
         }
         persondirectory.removePerson(person);
     }
-
+    /**
+     * Authorization check for the administrator screens: true only for an account that still
+     * exists in the directory and belongs to an administrator (EmployeeProfile). Every button
+     * of the admin work area asks this before it opens a screen.
+     *
+     * Christopher Ogden NUID: 003959375 Admin use case.
+     */
+    public boolean isAdministrator(UserAccount ua) {
+        return ua != null
+                && useraccountdirectory.getUserAccountList().contains(ua)
+                && ua.getAssociatedPersonProfile() instanceof EmployeeProfile;
+    }    
     // ---- added for the Student use case by Hemanth Bezawada (NUID 002059527) ----
     public Department getDepartment() {
         return department;
