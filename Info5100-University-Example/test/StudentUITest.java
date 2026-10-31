@@ -189,6 +189,7 @@ public class StudentUITest {
         check("registration: Fall 2026 shows 5 classes offered", offers.getRowCount() == 5);
         check("registration: Adam's registered class is marked Registered", "Registered".equals(offers.getValueAt(0, 5)) && "INFO 7250".equals(offers.getValueAt(0, 0)));
         check("registration: the one-seat class is marked Full", "Full".equals(offers.getValueAt(1, 5)));
+        check("registration: header shows the student's name and NUID", label(reg, "Student:").getText().contains("Adam Rollen") && label(reg, "Student:").getText().contains("912568888"));
         check("registration: my classes table shows the in-progress class", mine.getRowCount() == 1 && "In progress".equals(mine.getValueAt(0, 3)));
         render(reg, "10_registration", 900, 480);
 
@@ -299,6 +300,7 @@ public class StudentUITest {
         check("transcript: 7 classes over 3 semesters, oldest first", trCourses.getRowCount() == 7 && "Fall 2025".equals(trCourses.getValueAt(0, 0)) && "Fall 2026".equals(trCourses.getValueAt(6, 0)) && trSem.getRowCount() == 3);
         check("transcript: letter grades and points shown", "A".equals(trCourses.getValueAt(0, 4)) && "16.0".equals(trCourses.getValueAt(0, 5)) && "-".equals(trCourses.getValueAt(6, 5)));
         check("transcript: semester GPA for Fall 2025 is 3.65", "3.65".equals(trSem.getValueAt(0, 3)));
+        check("transcript: header shows the name, not the person id", label(tr, "Student:").getText().contains("Adam Rollen") && !label(tr, "Student:").getText().contains("P10"));
         check("transcript: summary shows 16 credits, GPA 3.50, 3 in progress", label(tr, "Credits completed").getText().contains("16") && label(tr, "Credits completed").getText().contains("3.50") && label(tr, "Credits completed").getText().contains("progress: 3"));
         render(tr, "30_transcript", 900, 500);
         if (stage.equals("transcript")) { finish(); return; }

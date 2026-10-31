@@ -32,7 +32,7 @@ public class CourseWorkJPanel extends javax.swing.JPanel {
         department = b.getDepartment();
         CardSequencePanel = clp;
         initComponents();
-        lblStudent.setText("Student: " + student.getPerson().getPersonId());
+        lblStudent.setText("Student: " + student.getPerson().getName() + " (NUID " + student.getNuid() + ")");
         populateSemesters();
         refreshTable();
     }
