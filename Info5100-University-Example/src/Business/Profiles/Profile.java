@@ -31,6 +31,11 @@ public abstract class Profile {
         }
         return false;
     }
+    /**
+     * Shows the person's name when a profile is displayed in a list or combo box.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     @Override
     public String toString() {
         return person.getName();

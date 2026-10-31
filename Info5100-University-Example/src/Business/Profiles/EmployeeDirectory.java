@@ -27,6 +27,11 @@ public class EmployeeDirectory {
 
     }
 
+    /**
+     * Creates an employee profile with the next generated employee ID and adds it to the list.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     public EmployeeProfile newEmployeeProfile(Person p) {
 
         EmployeeProfile sp = new EmployeeProfile(p, "E" + (nextEmployeeNumber++));
@@ -45,10 +50,20 @@ public class EmployeeDirectory {
             return null; //not found after going through the whole list
          }
     
+    /**
+     * Removes an employee profile from the directory.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     public void removeEmployee(EmployeeProfile ep) {
         employeelist.remove(ep);
     }
 
+    /**
+     * Returns every employee profile.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     public ArrayList<EmployeeProfile> getEmployeeList() {
         return employeelist;
     }

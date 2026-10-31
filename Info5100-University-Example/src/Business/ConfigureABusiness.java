@@ -30,6 +30,13 @@ import info5100.university.example.Department.Department;
  */
 class ConfigureABusiness {
 
+    /**
+     * Seeds the test data: an email for each person, two admins (John Smith, Jack While) with
+     * department and job title, two faculty (Gina Montana, Laura Brown), three students with
+     * NUIDs, and their login accounts, then sets up the university model.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     static Business initialize() {
         Business business = new Business("Information Systems");
 

@@ -41,6 +41,11 @@ public class UserAccountDirectory {
             return null; //not found after going through the whole list
          }
       
+    /**
+     * Returns the account with this username (case-insensitive), or null.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     public UserAccount findByUsername(String un) {
         if (un == null) {
             return null;
@@ -53,6 +58,12 @@ public class UserAccountDirectory {
         return null;
     }
     
+    /**
+     * Returns true when another account already uses this username. The except parameter lets
+     * an account keep its own name during an update.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
      public boolean isUsernameTaken(String un, UserAccount except) {
         UserAccount found = findByUsername(un);
         return found != null && found != except;
@@ -73,6 +84,11 @@ public class UserAccountDirectory {
          return useraccountlist;
      }
      
+    /**
+     * Removes a login account from the directory.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
         public void removeUserAccount(UserAccount ua) {
         useraccountlist.remove(ua);
     }

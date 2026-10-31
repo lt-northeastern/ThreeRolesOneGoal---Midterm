@@ -19,31 +19,66 @@ public class Validation {
 
     private static final Pattern EMAIL = Pattern.compile("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
 
+    /**
+     * Private constructor; Validation is a static helper class and is never instantiated.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private Validation() {
     }
 
+    /**
+     * Returns true when the text is null, empty or only spaces.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     public static boolean isBlank(String s) {
         return s == null || s.trim().isEmpty();
     }
 
+    /**
+     * Returns true when the text looks like an email address (name@domain.tld).
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     public static boolean isValidEmail(String s) {
         return s != null && EMAIL.matcher(s.trim()).matches();
     }
 
     
+    /**
+     * Returns true when the NUID is exactly 9 digits.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     public static boolean isValidNuid(String s) {
         return s != null && s.trim().matches("\\d{" + NUID_LENGTH + "}");
     }
 
+    /**
+     * Returns true when the username is at least 3 characters long and contains no spaces.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     public static boolean isValidUsername(String s) {
         return s != null && s.trim().length() >= MIN_USERNAME_LENGTH && !s.trim().contains(" ");
     }
 
+    /**
+     * Returns true when the password is at least 6 characters long.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     public static boolean isValidPassword(String s) {
         return s != null && s.length() >= MIN_PASSWORD_LENGTH;
     }
 
-    /** Parses yyyy-MM-dd, returns null if the text is not a valid date. */
+    /**
+     * Parses a date in yyyy-MM-dd format. Returns null instead of throwing when the text is
+     * not a valid date.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     public static LocalDate parseDate(String s) {
         try {
             return LocalDate.parse(s.trim());

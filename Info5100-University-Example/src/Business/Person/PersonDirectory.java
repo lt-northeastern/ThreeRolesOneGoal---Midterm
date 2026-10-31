@@ -22,6 +22,12 @@ public class PersonDirectory {
 
     }
 
+    /**
+     * Creates a person with the next generated ID (P1001, P1002, ...) and adds it to the
+     * directory. The parameter is used as the person's name.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     public Person newPerson(String id) {
 
         Person p = new Person("P" + (nextId++), id);
@@ -39,10 +45,20 @@ public class PersonDirectory {
         }
             return null; //not found after going through the whole list
          }
+    /**
+     * Removes a person from the directory.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     public void removePerson(Person p) {
         personlist.remove(p);
     }
 
+    /**
+     * Returns every person in the directory.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     public ArrayList<Person> getPersonList() {
         return personlist;
     }
