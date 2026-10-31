@@ -5,8 +5,17 @@
 package UserInterface.WorkAreas.FacultyRole;
 
 import Business.Business;
+import Business.Profiles.StudentProfile;
 import Business.UserAccounts.UserAccount;
 import javax.swing.JPanel;
+import java.util.ArrayList;
+import java.util.List;
+import info5100.university.example.CourseSchedule.CourseOffer;
+import info5100.university.example.CourseSchedule.SeatAssignment;
+import info5100.university.example.CourseSchedule.CourseSchedule;
+import info5100.university.example.Department.Department;
+import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -17,6 +26,10 @@ public class ManageStudentsProfileJPanel extends javax.swing.JPanel {
     private final Business business;
     private final UserAccount useraccount;
     private final JPanel CardSequencePanel;
+    
+    private final List<CourseOffer> courseRows = new ArrayList<>();      // section behind each dropdown item
+    private final List<SeatAssignment> rows = new ArrayList<>();        // student's seat (grade) behind each table row
+    private final List<StudentProfile> studentRows = new ArrayList<>();        // student's seat behind each table row
 
     /**
      * Creates new form ManageStudentsJPanel
@@ -27,8 +40,132 @@ public class ManageStudentsProfileJPanel extends javax.swing.JPanel {
         this.business = business;
         this.useraccount = currentUser;
         this.CardSequencePanel = userProcessContainer;
+        
+        tblStudents.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        tblStudents.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                populateFormFromSelection();
+            }
+        });
+
+        fillCourseDropdown();
+        cmbCourses.addActionListener(e -> refreshTable());   // reload the table when a different course is picked
+        
+        refreshTable();
+       
+       
+    }
+// Author: Luke Tomlinson
+    // Fills the Course dropdown with every section the logged-in professor teaches
+    private void fillCourseDropdown() {
+        cmbCourses.removeAllItems();
+        courseRows.clear();
+
+        Department department = business.getDepartment();
+        String myName = useraccount.getAssociatedPersonProfile().getPerson().getName();
+
+        for (String semester : department.getSemesters()) {
+            CourseSchedule schedule = department.getCourseSchedule(semester);
+            for (CourseOffer co : schedule.getSchedule()) {
+                if (co.getTeacherName().equals(myName)) {   // only my sections
+                    courseRows.add(co);
+                    cmbCourses.addItem(co.getCourseNumber() + " - " + semester);
+                }
+            }
+        }
+    }
+    
+    // Author: Luke Tomlinson
+    // Returns the section chosen in the dropdown, or null
+    private CourseOffer selectedCourse() {
+        int i = cmbCourses.getSelectedIndex();
+        return (i < 0 || i >= courseRows.size()) ? null : courseRows.get(i);
     }
 
+    // Author: Luke Tomlinson
+    // Returns the student's seat for the selected table row, or null
+    private int selectedRow() {
+        int row = tblStudents.getSelectedRow();
+        return (row < 0 || row >= rows.size()) ? -1 : row;
+    }
+    // Author: Luke Tomlinson
+    // Fills the table with the students in the selected section
+    private void refreshTable() {
+        DefaultTableModel model = (DefaultTableModel) tblStudents.getModel();
+        model.setRowCount(0);
+        rows.clear();
+        studentRows.clear();
+        clearForm();
+
+        CourseOffer co = selectedCourse();
+        if (co == null) {
+            return;
+        }
+        
+        for (StudentProfile student : business.getStudentDirectory().getStudentList()) {
+            info5100.university.example.Persona.StudentProfile record = student.getAcademicRecord();
+            if (record == null) {
+                continue;   // student has no academic record yet
+            }
+            for (SeatAssignment sa : record.getTranscript().getCourseList()) {
+                if (sa.getCourseOffer() == co) {   // this student sits in my selected section
+                    rows.add(sa);
+                    studentRows.add(student);
+                    model.addRow(new Object[]{
+                        student.getPerson().getName(),
+                        student.getNuid(),
+                        student.getPerson().getEmail(),
+                        sa.getLetterGrade()
+                    });
+                }
+            }
+        }
+    }
+    // Author: Luke Tomlinson
+    // Copies the selected student's profile and progress into the form fields
+    private void populateFormFromSelection() {
+        int row = selectedRow();
+        if (row < 0) {
+            clearForm();
+            return;
+        }
+        StudentProfile student = studentRows.get(row);
+        SeatAssignment sa = rows.get(row);
+        float gpa = student.getAcademicRecord().getTranscript().getGPA();
+
+        txtName.setText(student.getPerson().getName());
+        txtEmail.setText(student.getPerson().getEmail());
+        txtNUID.setText(student.getNuid());
+        txtGPA.setText(gpa == 0 ? "No graded courses yet" : String.format("%.2f", gpa));
+        txtHobbies.setText(student.getHobbies());
+        txtInterests.setText(student.getInterests());
+        txtGrade.setText(sa.getLetterGrade());
+    }
+
+    // Author: Luke Tomlinson
+    // Empties every field and clears the table selection
+    private void clearForm() {
+        txtName.setText("");
+        txtEmail.setText("");
+        txtNUID.setText("");
+        txtGPA.setText("");
+        txtHobbies.setText("");
+        txtInterests.setText("");
+        txtGrade.setText("");
+        tblStudents.clearSelection();
+    }
+
+
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -166,6 +303,11 @@ public class ManageStudentsProfileJPanel extends javax.swing.JPanel {
         add(lblCourse);
         lblCourse.setBounds(390, 53, 45, 17);
 
+        cmbCourses.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbCoursesActionPerformed(evt);
+            }
+        });
         add(cmbCourses);
         cmbCourses.setBounds(473, 50, 193, 23);
     }// </editor-fold>//GEN-END:initComponents
@@ -180,6 +322,11 @@ public class ManageStudentsProfileJPanel extends javax.swing.JPanel {
         ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
     }//GEN-LAST:event_btnBackActionPerformed
 
+    private void cmbCoursesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCoursesActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbCoursesActionPerformed
+
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
@@ -204,4 +351,11 @@ public class ManageStudentsProfileJPanel extends javax.swing.JPanel {
     private javax.swing.JTextField txtNUID;
     private javax.swing.JTextField txtName;
     // End of variables declaration//GEN-END:variables
+
+    
+    
+
 }
+
+
+
