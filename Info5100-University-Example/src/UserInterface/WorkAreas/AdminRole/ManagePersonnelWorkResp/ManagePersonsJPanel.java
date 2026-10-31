@@ -10,6 +10,7 @@ import Business.Person.*;
 import Business.Profiles.*;
 import Business.UserAccounts.*;
 import java.awt.CardLayout;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import javax.swing.JPanel;
@@ -58,7 +59,7 @@ public class ManagePersonsJPanel extends javax.swing.JPanel {
             }
         });
         refreshTable();
-        setAddMode(true);
+        clearForm();
 
     }
     /**
@@ -148,7 +149,7 @@ public class ManagePersonsJPanel extends javax.swing.JPanel {
         txtEmployeeId.setText("");
         txtDepartment.setText("");
         txtJobTitle.setText("");
-        txtHireDate.setText("");
+        txtHireDate.setText(LocalDate.now().toString());   // Christopher Ogden NUID: 003959375 Admin use case: default hire date is today (yyyy-mm-dd)
         setAddMode(true); 
     }
     /**
