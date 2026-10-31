@@ -92,6 +92,42 @@ public class StudentUITest {
         try { closer.join(4500); } catch (InterruptedException e) { }
     }
 
+    /** click; the confirmation box opened by the click is answered Yes, the message after it is read and dismissed */
+    static void clickYes(AbstractButton b) {
+        lastDialogText = "";
+        Thread closer = new Thread(new Runnable() {
+            public void run() {
+                try {
+                    int handled = 0;
+                    for (int i = 0; i < 60 && handled < 2; i++) {
+                        Thread.sleep(100);
+                        for (Window w : Window.getWindows()) {
+                            if (w instanceof JDialog && w.isShowing()) {
+                                JButton yes = null;
+                                for (JButton jb : all((Container) w, JButton.class)) if ("Yes".equals(jb.getText())) yes = jb;
+                                if (handled == 0 && yes != null) {
+                                    yes.doClick();
+                                } else {
+                                    StringBuilder sb = new StringBuilder();
+                                    for (JLabel l : all((Container) w, JLabel.class)) if (l.getText() != null) sb.append(l.getText()).append(" ");
+                                    lastDialogText = sb.toString();
+                                    w.dispose();
+                                }
+                                handled++;
+                                break;
+                            }
+                        }
+                    }
+                } catch (InterruptedException e) {
+                }
+            }
+        });
+        closer.setDaemon(true);
+        closer.start();
+        b.doClick();
+        try { closer.join(6500); } catch (InterruptedException e) { }
+    }
+
     static void render(JComponent c, String name, int w, int h) throws Exception {
         JFrame f = new JFrame();
         f.setContentPane(c);
@@ -358,6 +394,22 @@ public class StudentUITest {
         offersN2.setRowSelectionInterval(0, 0);
         click(button(regN2, "Register for Selected Class"));
         check("new student: a course still in progress cannot be registered again", lastDialogText.contains("already taking") && newKid.getAcademicRecord().getCourseLoadBySemester("Spring 2027") == null);
+        // ---- dropping the only class of a semester takes the empty semester off the transcript
+        CourseOffer spring7375 = b.getDepartment().getCourseSchedule("Spring 2027").newCourseOffer("INFO 7375");
+        spring7375.generatSeats(5);
+        JPanel regN3 = (JPanel) regCls.getConstructor(Business.class, StudentProfile.class, JPanel.class).newInstance(b, newKid, upc);
+        JTable offersN3 = all(regN3, JTable.class).get(0), mineN3 = all(regN3, JTable.class).get(1);
+        for (int i = 0; i < offersN3.getRowCount(); i++) if ("INFO 7375".equals(offersN3.getValueAt(i, 0))) offersN3.setRowSelectionInterval(i, i);
+        click(button(regN3, "Register for Selected Class"));
+        check("drop: new student holds one class in Spring 2027 before the drop", mineN3.getRowCount() == 1 && spring7375.getAvailableSeats() == 4 && newKid.getAcademicRecord().getTranscript().getCourseLoads().size() == 2);
+        mineN3.setRowSelectionInterval(0, 0);
+        clickYes(button(regN3, "Drop Selected Class"));
+        check("drop: confirming the drop frees the seat and removes the empty semester", lastDialogText.contains("dropped") && mineN3.getRowCount() == 0 && spring7375.getAvailableSeats() == 5
+                && newKid.getAcademicRecord().getCourseLoadBySemester("Spring 2027") == null && newKid.getAcademicRecord().getTranscript().getCourseLoads().size() == 1);
+        JPanel trN = (JPanel) Class.forName("UserInterface.WorkAreas.StudentRole.TranscriptWorkResp.TranscriptJPanel").getConstructor(Business.class, StudentProfile.class, JPanel.class).newInstance(b, newKid, upc);
+        JTable semestersN = null;
+        for (JTable t : all(trN, JTable.class)) if (t.getColumnCount() == 4) semestersN = t;
+        check("transcript: only the Fall 2026 semester is listed after the drop", semestersN.getRowCount() == 1 && "Fall 2026".equals(semestersN.getValueAt(0, 0)));
         StudentProfile emptyKid = b.getStudentDirectory().newStudentProfile(b.getPersonDirectory().newPerson("Empty Kid"), "912570002");
         UserAccount emptyKidAccount = b.getUserAccountDirectory().newUserAccount(emptyKid, "emptykid", "******");
         JPanel waE = (JPanel) Class.forName("UserInterface.WorkAreas.StudentRole.StudentWorkAreaJPanel").getConstructor(Business.class, UserAccount.class, JPanel.class).newInstance(b, emptyKidAccount, upc);

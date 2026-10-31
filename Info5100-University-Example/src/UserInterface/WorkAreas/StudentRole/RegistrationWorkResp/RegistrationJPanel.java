@@ -340,6 +340,9 @@ public class RegistrationJPanel extends javax.swing.JPanel {
         }
         CourseLoad load = loadFor(semester);
         load.dropSeatAssignment(sa);   // the seat opens up again for other students
+        if (load.getSeatAssignments().isEmpty()) {
+            record.getTranscript().removeCourseLoad(semester);   // no empty semester left on the transcript
+        }
         refreshTables();
         JOptionPane.showMessageDialog(this, "You dropped " + sa.getCourseOffer().getCourseNumber() + ".", "Dropped", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_btnDropActionPerformed

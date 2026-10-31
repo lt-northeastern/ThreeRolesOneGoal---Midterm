@@ -139,4 +139,12 @@ public class Transcript {
         }
         return getStudentTotalScore() / credits;
     }
+
+    // a semester with no classes left (its last class was dropped) comes off the transcript
+    public void removeCourseLoad(String semester) {
+        CourseLoad removed = courseloadlist.remove(semester);
+        if (removed != null && removed == currentcourseload) {
+            currentcourseload = null;
+        }
+    }
 }
