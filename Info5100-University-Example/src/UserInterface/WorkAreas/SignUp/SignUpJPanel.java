@@ -23,8 +23,9 @@ public class SignUpJPanel extends javax.swing.JPanel {
 
   
     /**
-     * Creates new form SignUpJPanel
-     * @param business
+     * Builds the Sign-up page and keeps the business and card panel for navigation.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
      */
     public SignUpJPanel(Business business, JPanel userProcessContainer) {
         initComponents();
@@ -148,6 +149,11 @@ public class SignUpJPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Removes the Sign-up page and returns to the welcome card.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         // TODO add your handling code here:
         userProcessContainer.remove(this);
@@ -155,6 +161,13 @@ public class SignUpJPanel extends javax.swing.JPanel {
         layout.previous(userProcessContainer);
     }//GEN-LAST:event_btnBackActionPerformed
 
+    /**
+     * Checks that every field is filled and both passwords match, then calls
+     * Business.signUpStudent. Shows the error message on failure; on success it confirms,
+     * clears the form and returns to the welcome card.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private void btnCreateAccountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateAccountActionPerformed
         // TODO add your handling code here:
          String name = txtFullName.getText().trim();

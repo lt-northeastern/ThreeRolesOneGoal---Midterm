@@ -34,12 +34,11 @@ public class StudentWorkAreaJPanel extends javax.swing.JPanel {
     private final StudentProfile student;   // the student behind the account; the screens work on their record
 
     /**
-     * Creates new form UnitRiskWorkArea
-     * @param b
-     * @param spp
-     * @param clp
+     * Builds the student work area from the logged-in student's account, so My Profile can
+     * show the login details as well as the profile.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
      */
-
     public StudentWorkAreaJPanel(Business b, UserAccount ua, JPanel clp) {
 
         business = b;
@@ -186,6 +185,11 @@ public class StudentWorkAreaJPanel extends javax.swing.JPanel {
 
     }//GEN-LAST:event_jButton4IdentifyResourceAssetsActionPerformed
 
+    /**
+     * Opens My Profile, showing the student's name and NUID.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private void btnMyProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMyProfileActionPerformed
         // TODO add your handling code here:
         MyProfileJPanel profile = new MyProfileJPanel(useraccount, CardSequencePanel);

@@ -23,7 +23,9 @@ public class MyProfileJPanel extends javax.swing.JPanel {
 
 
     /**
-     * Creates new form MyProfileJPanel
+     * Builds the My Profile page for the logged-in user, locks every field and fills it in.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
      */
     public MyProfileJPanel(UserAccount account, JPanel userProcessContainer) {
         initComponents();
@@ -32,6 +34,11 @@ public class MyProfileJPanel extends javax.swing.JPanel {
         makeFieldsReadOnly();
         populateProfile();
     }
+    /**
+     * Makes every text field non-editable; this page is view-only.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
      private void makeFieldsReadOnly() {
         txtName.setEditable(false);
         txtRole.setEditable(false);
@@ -47,6 +54,13 @@ public class MyProfileJPanel extends javax.swing.JPanel {
         txtLastLogin.setEditable(false);
         txtAccountLastUpdated.setEditable(false);
     }
+    /**
+     * Fills in the name, role, contact details, username and account times, then shows the
+     * rows for the user's role: NUID for students; Faculty ID, department and title for
+     * faculty; Employee ID, department, job title and hire date for admins.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
  private void populateProfile() {
         Profile profile = account.getAssociatedPersonProfile();
         Person person = profile.getPerson();
@@ -92,25 +106,50 @@ public class MyProfileJPanel extends javax.swing.JPanel {
         }
     }
 
+    /**
+     * Shows or hides the Department label and field.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private void setDepartmentRowVisible(boolean visible) {
         lblDepartment.setVisible(visible);
         txtDepartment.setVisible(visible);
     }
 
+    /**
+     * Shows or hides the Job Title label and field.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private void setJobTitleRowVisible(boolean visible) {
         lblJobTitle.setVisible(visible);
         txtJobTitle.setVisible(visible);
     }
 
+    /**
+     * Shows or hides the Hire Date label (jLabel1) and field.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private void setHireDateRowVisible(boolean visible) {
         jLabel1.setVisible(visible);   // jLabel1 = "Hire Date"
         txtHireDate.setVisible(visible);
     }
 
+    /**
+     * Returns "-" for blank values so empty fields don't look broken.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private String orDash(String s) {
         return (s == null || s.trim().isEmpty()) ? "-" : s;
     }
 
+    /**
+     * Formats a time as yyyy-MM-dd HH:mm:ss, or "Never" when null.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private String formatTime(LocalDateTime t) {
         if (t == null) {
             return "Never";
@@ -325,6 +364,11 @@ public class MyProfileJPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Removes this page and returns to the user's work area.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         // TODO add your handling code here:
         userProcessContainer.remove(this);
