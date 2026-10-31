@@ -47,4 +47,25 @@ public class StudentProfile extends Profile {
     public void setAcademicRecord(info5100.university.example.Persona.StudentProfile record) {
         academicRecord = record;
     }
+    
+    // ---- Added for the Faculty use case by Luke Tomlinson ----
+    // Hobbies and interests a professor can view on Student Profiles
+    private String hobbies = "";
+    private String interests = "";
+
+    public String getHobbies() {
+        return hobbies;
+    }
+
+    public void setHobbies(String hobbies) {
+        this.hobbies = hobbies == null ? "" : hobbies.trim();
+    }
+
+    public String getInterests() {
+        return interests;
+    }
+
+    public void setInterests(String interests) {
+        this.interests = interests == null ? "" : interests.trim();
+    }
 }
