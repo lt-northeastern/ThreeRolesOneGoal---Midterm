@@ -244,8 +244,6 @@ public class ManagePersonsJPanel extends javax.swing.JPanel {
         btnDelete = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        Back1 = new javax.swing.JButton();
-        Next1 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         btnAdd = new javax.swing.JButton();
@@ -302,24 +300,6 @@ public class ManagePersonsJPanel extends javax.swing.JPanel {
 
         jPanel1.setBackground(new java.awt.Color(0, 153, 153));
         jPanel1.setLayout(null);
-
-        Back1.setText("<< Back");
-        Back1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Back1ActionPerformed(evt);
-            }
-        });
-        jPanel1.add(Back1);
-        Back1.setBounds(20, 420, 80, 23);
-
-        Next1.setText("Next >>");
-        Next1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Next1ActionPerformed(evt);
-            }
-        });
-        jPanel1.add(Next1);
-        Next1.setBounds(110, 420, 80, 23);
 
         jLabel3.setText("Name");
         jPanel1.add(jLabel3);
@@ -504,14 +484,6 @@ public class ManagePersonsJPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_btnDeleteActionPerformed
 
 
-    private void Back1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Back1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_Back1ActionPerformed
-
-
-    private void Next1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Next1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_Next1ActionPerformed
 
     /**
      * Validates the form, then creates the person, employee profile and login, and confirms
@@ -605,8 +577,6 @@ public class ManagePersonsJPanel extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton Back1;
-    private javax.swing.JButton Next1;
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnClear;
