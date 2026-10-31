@@ -5,6 +5,8 @@
  */
 package info5100.university.example.Persona;
 
+import java.util.Comparator;
+import java.util.Collections;
 import info5100.university.example.CourseSchedule.CourseLoad;
 import info5100.university.example.CourseSchedule.SeatAssignment;
 import java.util.ArrayList;
@@ -91,4 +93,50 @@ public class Transcript {
 
     }
 
+    // ---- added for the Student use case by Hemanth Bezawada (NUID 002059527) ----
+    // course loads oldest semester first ("Fall 2025" before "Spring 2026")
+    public ArrayList<CourseLoad> getCourseLoads() {
+        ArrayList<CourseLoad> loads = new ArrayList<CourseLoad>(courseloadlist.values());
+        Collections.sort(loads, new Comparator<CourseLoad>() {
+            public int compare(CourseLoad a, CourseLoad b) {
+                return semesterOrder(a.getSemester()) - semesterOrder(b.getSemester());
+            }
+        });
+        return loads;
+    }
+
+    // "Spring 2026" -> 20261, "Summer 2026" -> 20262, "Fall 2026" -> 20263
+    public static int semesterOrder(String semester) {
+        String[] parts = semester.trim().split("\\s+");
+        int year = 0;
+        int season = 0;
+        for (String part : parts) {
+            if (part.matches("\\d{4}")) {
+                year = Integer.parseInt(part);
+            } else if (part.equalsIgnoreCase("Spring")) {
+                season = 1;
+            } else if (part.equalsIgnoreCase("Summer")) {
+                season = 2;
+            } else if (part.equalsIgnoreCase("Fall")) {
+                season = 3;
+            }
+        }
+        return year * 10 + season;
+    }
+
+    public int getTotalCreditsCompleted() {
+        int sum = 0;
+        for (CourseLoad cl : courseloadlist.values()) {
+            sum = sum + cl.getGradedCredits();
+        }
+        return sum;
+    }
+
+    public float getGPA() {
+        int credits = getTotalCreditsCompleted();
+        if (credits == 0) {
+            return 0;
+        }
+        return getStudentTotalScore() / credits;
+    }
 }

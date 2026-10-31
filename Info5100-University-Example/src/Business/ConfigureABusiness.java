@@ -17,6 +17,11 @@ import Business.Profiles.FacultyProfile;
 
 import Business.UserAccounts.UserAccount;
 import Business.UserAccounts.UserAccountDirectory;
+import info5100.university.example.CourseCatalog.Course;
+import info5100.university.example.CourseSchedule.CourseLoad;
+import info5100.university.example.CourseSchedule.CourseSchedule;
+import info5100.university.example.CourseSchedule.SeatAssignment;
+import info5100.university.example.Department.Department;
 
 
 /**
@@ -83,11 +88,104 @@ class ConfigureABusiness {
         UserAccount ua5 = uadirectory.newUserAccount(facultyprofile0, "faculty", "******");
         UserAccount ua6 = uadirectory.newUserAccount(employeeprofile1, "jack", "jack1234");    // Jack While
         UserAccount ua7 = uadirectory.newUserAccount(facultyprofile1, "laura", "laura1234");   // Laura Brown
+        UserAccount ua8 = uadirectory.newUserAccount(studentprofile1, "jim", "******");       // Jim Dellon, first-semester student
 
   
-    return business;
+        setUpUniversity(business, studentprofile0, studentprofile1);
+        return business;
         
         
     }
 
+    // ---- added for the Student use case by Hemanth Bezawada (NUID 002059527) ----
+    // Courses, degree requirements, three semesters of classes and the students'
+    // academic records live in the university model behind the business.
+    static void setUpUniversity(Business business, StudentProfile adam, StudentProfile jim) {
+        Department dept = business.getDepartment();
+
+        Course c5100 = dept.newCourse("Application Engineering and Development", "INFO 5100", 4);
+        Course c6150 = dept.newCourse("Web Design and User Experience", "INFO 6150", 4);
+        Course c6205 = dept.newCourse("Program Structures and Algorithms", "INFO 6205", 4);
+        Course c6250 = dept.newCourse("Web Development Tools and Methods", "INFO 6250", 4);
+        Course c6105 = dept.newCourse("Data Science Engineering Methods", "INFO 6105", 4);
+        Course c7250 = dept.newCourse("Big Data Architecture and Governance", "INFO 7250", 4);
+        Course c6350 = dept.newCourse("Smartphones Based Web Development", "INFO 6350", 4);
+        Course c7375 = dept.newCourse("Advanced Program Structures", "INFO 7375", 4);
+
+        // the MSIS degree: three core courses, everything else counts as an elective
+        dept.addCoreCourse(c5100);
+        dept.addCoreCourse(c6150);
+        dept.addCoreCourse(c6205);
+        dept.addElectiveCourse(c6250);
+        dept.addElectiveCourse(c6105);
+        dept.addElectiveCourse(c7250);
+        dept.addElectiveCourse(c6350);
+        dept.addElectiveCourse(c7375);
+
+        // professors who teach the classes (the same two faculty as on the access control side)
+        info5100.university.example.Persona.Faculty.FacultyProfile laura =
+                dept.getFacultyDirectory().newFacultyProfile(dept.getPersonDirectory().newPerson("Laura Brown"));
+        info5100.university.example.Persona.Faculty.FacultyProfile gina =
+                dept.getFacultyDirectory().newFacultyProfile(dept.getPersonDirectory().newPerson("Gina Montana"));
+
+        // two past semesters and the current one
+        CourseSchedule fall25 = dept.newCourseSchedule("Fall 2025");
+        offer(fall25, "INFO 5100", laura, 20);
+        offer(fall25, "INFO 6150", gina, 20);
+
+        CourseSchedule spring26 = dept.newCourseSchedule("Spring 2026");
+        offer(spring26, "INFO 6205", laura, 20);
+        offer(spring26, "INFO 6250", gina, 20);
+        offer(spring26, "INFO 6105", gina, 20);
+
+        CourseSchedule fall26 = dept.newCourseSchedule("Fall 2026");
+        offer(fall26, "INFO 7250", laura, 10);
+        offer(fall26, "INFO 6350", gina, 1);    // one seat: shows the "class is full" rule
+        offer(fall26, "INFO 7375", laura, 15);
+        offer(fall26, "INFO 6105", gina, 12);
+        offer(fall26, "INFO 5100", laura, 20);
+
+        // Adam: two graded semesters behind him and one class in progress this fall
+        info5100.university.example.Persona.StudentProfile adamRecord =
+                dept.getStudentDirectory().newStudentProfile(dept.getPersonDirectory().newPerson(adam.getPerson().getPersonId()));
+        CourseLoad load = adamRecord.newCourseLoad("Fall 2025");
+        grade(load.newSeatAssignment(fall25.getCourseOfferByNumber("INFO 5100")), 4.0f, true);
+        grade(load.newSeatAssignment(fall25.getCourseOfferByNumber("INFO 6150")), 3.3f, false);
+        load = adamRecord.newCourseLoad("Spring 2026");
+        grade(load.newSeatAssignment(spring26.getCourseOfferByNumber("INFO 6205")), 3.7f, true);
+        grade(load.newSeatAssignment(spring26.getCourseOfferByNumber("INFO 6250")), 3.0f, false);
+        load = adamRecord.newCourseLoad("Fall 2026");   // created last, so it is the current course load
+        SeatAssignment bigData = load.newSeatAssignment(fall26.getCourseOfferByNumber("INFO 7250"));
+        bigData.submitAssignment("Assignment 1 - Hadoop setup");
+        bigData.submitAssignment("Assignment 2 - MapReduce word count");
+        adam.setAcademicRecord(adamRecord);
+
+        // Jim: first semester, holding the single Smartphones seat
+        info5100.university.example.Persona.StudentProfile jimRecord =
+                dept.getStudentDirectory().newStudentProfile(dept.getPersonDirectory().newPerson(jim.getPerson().getPersonId()));
+        load = jimRecord.newCourseLoad("Fall 2026");
+        load.newSeatAssignment(fall26.getCourseOfferByNumber("INFO 6350"));
+        jim.setAcademicRecord(jimRecord);
+    }
+
+    static void offer(CourseSchedule schedule, String courseNumber,
+            info5100.university.example.Persona.Faculty.FacultyProfile teacher, int seats) {
+        info5100.university.example.CourseSchedule.CourseOffer co = schedule.newCourseOffer(courseNumber);
+        if (co == null) {
+            return;
+        }
+        co.generatSeats(seats);
+        co.AssignAsTeacher(teacher);
+    }
+
+    static void grade(SeatAssignment sa, float points, boolean liked) {
+        if (sa == null) {
+            return;
+        }
+        sa.setGrade(points);
+        sa.setLike(liked);
+        for (int i = 1; i <= sa.getAssignmentsDue(); i++) {
+            sa.submitAssignment("Assignment " + i);
+        }
+    }
 }
