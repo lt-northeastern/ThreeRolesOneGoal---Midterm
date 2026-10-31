@@ -10,6 +10,7 @@ import Business.Person.*;
 import Business.Profiles.*;
 import Business.UserAccounts.*;
 import java.awt.CardLayout;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import javax.swing.JPanel;
@@ -58,7 +59,7 @@ public class ManagePersonsJPanel extends javax.swing.JPanel {
             }
         });
         refreshTable();
-        setAddMode(true);
+        clearForm();
 
     }
     /**
@@ -148,7 +149,7 @@ public class ManagePersonsJPanel extends javax.swing.JPanel {
         txtEmployeeId.setText("");
         txtDepartment.setText("");
         txtJobTitle.setText("");
-        txtHireDate.setText("");
+        txtHireDate.setText(LocalDate.now().toString());   // Christopher Ogden NUID: 003959375 Admin use case: default hire date is today (yyyy-mm-dd)
         setAddMode(true); 
     }
     /**
@@ -185,8 +186,12 @@ public class ManagePersonsJPanel extends javax.swing.JPanel {
         if (!Validation.isValidEmail(email)) {
             return "The email address is not valid (example: name@northeastern.edu).";
         }
-        if (!phone.isEmpty() && !phone.matches("[0-9 +()\\-]{7,20}")) {
-            return "The phone number is not valid. Use digits, spaces, + ( ) and - only.";
+        // Christopher Ogden NUID: 003959375 Admin use case: one email address per person
+        if (business.isEmailTaken(email, existing == null ? null : existing.getPerson())) {
+            return "Another person is already registered with this email address.";
+        }
+        if (!Validation.isValidPhone(phone)) {   // Christopher Ogden NUID: 003959375 Admin use case: shared rule
+            return Validation.PHONE_RULE;
         }
         if (txtDepartment.getText().trim().isEmpty()) {
             return "Please enter the department.";

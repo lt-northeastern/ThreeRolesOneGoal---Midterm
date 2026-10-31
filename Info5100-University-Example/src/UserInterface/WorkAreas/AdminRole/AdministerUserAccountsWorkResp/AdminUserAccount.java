@@ -20,6 +20,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
+import Business.Profiles.Profile;
 
 /**
  *h
@@ -32,6 +33,8 @@ public class AdminUserAccount extends javax.swing.JPanel {
     private Business business;
     private UserAccount currentUser;
     private final List<UserAccount> rows = new ArrayList<>();
+     // Christopher Ogden NUID: 003959375 Admin use case: profiles with no login, in the order of cmbPerson
+    private final List<Profile> peopleWithoutLogin = new ArrayList<>();
 
     /**
      * Creates new form ManageSuppliersJPanel
@@ -77,13 +80,14 @@ public class AdminUserAccount extends javax.swing.JPanel {
         rows.clear();
         for (UserAccount ua : business.getUserAccountDirectory().getUserAccountList()) {
             rows.add(ua);
-            Object[] row = new Object[6];
+            Object[] row = new Object[7];
             row[0] = ua.getUserLoginName();
             row[1] = ua.getAssociatedPersonProfile().getPerson().getName();
             row[2] = ua.getRole();
             row[3] = formatTime(ua.getCreatedTime());
             row[4] = formatTime(ua.getLastLoginTime());
             row[5] = formatTime(ua.getLastUpdatedTime());
+            row[6] = ua.getStatus();   // Christopher Ogden NUID: 003959375 Admin use case
             model.addRow(row);
         }
     }
@@ -96,6 +100,29 @@ public class AdminUserAccount extends javax.swing.JPanel {
     private UserAccount selectedAccount() {
         int r = tblUserAccounts.getSelectedRow();
         return (r < 0 || r >= rows.size()) ? null : rows.get(r);
+    }
+    /**
+     * Fills the "Person without a login" list with every employee, faculty member and student
+     * who has a profile but no login account yet (for example a student the admin
+     * pre-registered, or a person whose login was deleted).
+     *
+     * Christopher Ogden NUID: 003959375 Admin use case.
+     */
+    private void refreshPeopleWithoutLogin() {
+        cmbPerson.removeAllItems();
+        peopleWithoutLogin.clear();
+        List<Profile> everyone = new ArrayList<>();
+        everyone.addAll(business.getEmployeeDirectory().getEmployeeList());
+        everyone.addAll(business.getFacultyDirectory().getFacultyList());
+        everyone.addAll(business.getStudentDirectory().getStudentList());
+        UserAccountDirectory uad = business.getUserAccountDirectory();
+        for (Profile p : everyone) {
+            if (uad.findUserAccount(p.getPerson().getPersonId()) == null) {
+                peopleWithoutLogin.add(p);
+                cmbPerson.addItem(p.getPerson().getName() + " (" + p.getRole() + ")");
+            }
+        }
+        btnCreate.setEnabled(!peopleWithoutLogin.isEmpty());
     }
 
     /**
@@ -159,6 +186,10 @@ public class AdminUserAccount extends javax.swing.JPanel {
         lblNewPassword = new javax.swing.JLabel();
         lblUserName = new javax.swing.JLabel();
         lblInfo = new javax.swing.JLabel();
+        btnEnableDisable = new javax.swing.JButton();
+        lblPerson = new javax.swing.JLabel();
+        cmbPerson = new javax.swing.JComboBox<>();
+        btnCreate = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(204, 204, 204));
         setLayout(null);
@@ -197,17 +228,17 @@ public class AdminUserAccount extends javax.swing.JPanel {
 
         tblUserAccounts.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "User Name", "Name", "Role", "Account Created", "Last Login", "Account Last Updated"
+                "User Name", "Name", "Role", "Account Created", "Last Login", "Account Last Updated", "Status"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -234,6 +265,31 @@ public class AdminUserAccount extends javax.swing.JPanel {
         lblInfo.setText("Select an account and update the password, username or delete the account. Keep the password field empty to keep the password. ");
         add(lblInfo);
         lblInfo.setBounds(10, 360, 790, 60);
+
+        btnEnableDisable.setText("Enable / Disable");
+        btnEnableDisable.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEnableDisableActionPerformed(evt);
+            }
+        });
+        add(btnEnableDisable);
+        btnEnableDisable.setBounds(360, 540, 130, 23);
+
+        lblPerson.setText("Person without a login");
+        add(lblPerson);
+        lblPerson.setBounds(20, 480, 130, 17);
+
+        add(cmbPerson);
+        cmbPerson.setBounds(160, 480, 210, 23);
+
+        btnCreate.setText("Create Account");
+        btnCreate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCreateActionPerformed(evt);
+            }
+        });
+        add(btnCreate);
+        btnCreate.setBounds(390, 480, 120, 23);
     }// </editor-fold>//GEN-END:initComponents
 
     /**
@@ -260,6 +316,7 @@ public class AdminUserAccount extends javax.swing.JPanel {
         }
         business.getUserAccountDirectory().removeUserAccount(ua);
         refreshTable();
+        refreshPeopleWithoutLogin();   // the person can now be given a new login
         clearFields();
         JOptionPane.showMessageDialog(this, "The account was deleted.");
     
@@ -330,15 +387,88 @@ UserAccount ua = selectedAccount();
         JOptionPane.showMessageDialog(this, "The account was updated.");
     
     }//GEN-LAST:event_btnUpdateActionPerformed
+    /**
+     * Disables the selected account so it can no longer log in, or enables it again. The
+     * person's profile and records are kept. The admin cannot disable their own account.
+     *
+     * Christopher Ogden NUID: 003959375 Admin use case.
+     */
+    private void btnEnableDisableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnableDisableActionPerformed
+        // TODO add your handling code here:
+        UserAccount ua = selectedAccount();
+        if (ua == null) {
+            JOptionPane.showMessageDialog(this, "Please select an account in the table first.", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (ua == currentUser) {
+            JOptionPane.showMessageDialog(this, "You cannot disable the account you are logged in with.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        boolean disable = ua.isActive();
+        String action = disable ? "Disable" : "Enable";
+        if (!confirm(action + " the login account \"" + ua.getUserLoginName() + "\"?"
+                + (disable ? "\nThe person will not be able to log in until the account is enabled again." : ""))) {
+            return;
+        }
+        ua.setActive(!disable);   // also updates "Account Last Updated"
+        refreshTable();
+        clearFields();
+        JOptionPane.showMessageDialog(this, "The account \"" + ua.getUserLoginName() + "\" was "
+                + (disable ? "disabled." : "enabled."));
+    }//GEN-LAST:event_btnEnableDisableActionPerformed
+    /**
+     * Creates a login for the person picked in "Person without a login", with the user name and
+     * password typed above. Both are checked with the same rules as everywhere else.
+     *
+     * Christopher Ogden NUID: 003959375 Admin use case.
+     */
+    private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
+        // TODO add your handling code here:
+          int index = cmbPerson.getSelectedIndex();
+        if (index < 0 || index >= peopleWithoutLogin.size()) {
+            JOptionPane.showMessageDialog(this, "Everyone who is registered already has a login account.", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        Profile profile = peopleWithoutLogin.get(index);
+        UserAccountDirectory uad = business.getUserAccountDirectory();
+        String username = txtUserName.getText().trim();
+        String password = new String(pwEntry.getPassword());
+
+        if (!Validation.isValidUsername(username)) {
+            JOptionPane.showMessageDialog(this, "The user name must be at least " + Validation.MIN_USERNAME_LENGTH
+                    + " characters long and cannot contain spaces.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (uad.isUsernameTaken(username, null)) {
+            JOptionPane.showMessageDialog(this, "The user name \"" + username + "\" is already taken. Please choose another one.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (!Validation.isValidPassword(password)) {
+            JOptionPane.showMessageDialog(this, "The password must be at least " + Validation.MIN_PASSWORD_LENGTH + " characters long.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        uad.newUserAccount(profile, username, password);
+        tblUserAccounts.clearSelection();
+        refreshTable();
+        refreshPeopleWithoutLogin();
+        clearFields();
+        JOptionPane.showMessageDialog(this, "A login account \"" + username + "\" was created for "
+                + profile.getPerson().getName() + ".");
+    }//GEN-LAST:event_btnCreateActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
+    private javax.swing.JButton btnCreate;
     private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnEnableDisable;
     private javax.swing.JButton btnUpdate;
+    private javax.swing.JComboBox<String> cmbPerson;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblInfo;
     private javax.swing.JLabel lblNewPassword;
+    private javax.swing.JLabel lblPerson;
     private javax.swing.JLabel lblTitle;
     private javax.swing.JLabel lblUserName;
     private javax.swing.JPasswordField pwEntry;
