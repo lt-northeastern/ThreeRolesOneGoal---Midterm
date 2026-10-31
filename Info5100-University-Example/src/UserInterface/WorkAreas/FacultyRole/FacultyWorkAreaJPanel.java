@@ -177,8 +177,8 @@ public class FacultyWorkAreaJPanel extends javax.swing.JPanel {
 
     private void btnPerformanceReportsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPerformanceReportsActionPerformed
         // TODO add your handling code here:
-        ManageStudentsProfileJPanel students = new ManageStudentsProfileJPanel(business, useraccount, CardSequencePanel);
-        CardSequencePanel.add("StudentProfiles", students);
+        PerformanceReportJPanel students = new PerformanceReportJPanel(business, useraccount, CardSequencePanel);
+        CardSequencePanel.add("Performance Reports", students);
         ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
 
 }//GEN-LAST:event_btnPerformanceReportsActionPerformed
