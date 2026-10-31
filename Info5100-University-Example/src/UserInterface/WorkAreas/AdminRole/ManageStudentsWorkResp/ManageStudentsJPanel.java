@@ -202,6 +202,9 @@ import java.util.List;
         if (!email.isEmpty() && !Validation.isValidEmail(email)) {
             return "Please enter a valid email address (for example name@northeastern.edu).";
         }
+        if (!Validation.isValidPhone(txtPhone.getText())) {   // Christopher Ogden NUID: 003959375 Admin use case
+            return Validation.PHONE_RULE;
+        }
 
         String username = txtUserName.getText().trim();
         String password = new String(pwEntry.getPassword());

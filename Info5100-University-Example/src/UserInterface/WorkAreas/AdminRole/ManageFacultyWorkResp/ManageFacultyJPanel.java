@@ -168,6 +168,9 @@ public class ManageFacultyJPanel extends javax.swing.JPanel {
         if (!email.isEmpty() && !Validation.isValidEmail(email)) {
             return "Please enter a valid email address (for example name@northeastern.edu).";
         }
+        if (!Validation.isValidPhone(txtPhone.getText())) {   // Christopher Ogden NUID: 003959375 Admin use case
+            return Validation.PHONE_RULE;
+        }
         if (!Validation.isValidUsername(txtUserName.getText())) {
             return "The user name must be at least 3 characters and cannot contain spaces.";
         }

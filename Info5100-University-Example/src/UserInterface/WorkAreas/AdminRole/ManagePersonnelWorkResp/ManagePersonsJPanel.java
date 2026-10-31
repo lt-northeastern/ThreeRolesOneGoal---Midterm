@@ -185,8 +185,8 @@ public class ManagePersonsJPanel extends javax.swing.JPanel {
         if (!Validation.isValidEmail(email)) {
             return "The email address is not valid (example: name@northeastern.edu).";
         }
-        if (!phone.isEmpty() && !phone.matches("[0-9 +()\\-]{7,20}")) {
-            return "The phone number is not valid. Use digits, spaces, + ( ) and - only.";
+        if (!Validation.isValidPhone(phone)) {   // Christopher Ogden NUID: 003959375 Admin use case: shared rule
+            return Validation.PHONE_RULE;
         }
         if (txtDepartment.getText().trim().isEmpty()) {
             return "Please enter the department.";
