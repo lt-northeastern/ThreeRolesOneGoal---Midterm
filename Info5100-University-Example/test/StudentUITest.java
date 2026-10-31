@@ -430,6 +430,33 @@ public class StudentUITest {
         JLabel hdrCw = label((JPanel) upc.getComponent(upc.getComponentCount() - 1), "Student:");
         check("course work: the long name fits the header as well", hdrCw.getText().endsWith("(NUID 912570009)") && hdrCw.getPreferredSize().width <= hdrCw.getWidth());
 
+        // ---- About Me: hobbies and interests the professors can see
+        click(button(wa, "About Me"));
+        JPanel about = (JPanel) upc.getComponent(upc.getComponentCount() - 1);
+        JTextField hob = all(about, JTextField.class).get(0), intr = all(about, JTextField.class).get(1);
+        check("about me: opens with the student's name and empty boxes", about.getClass().getSimpleName().equals("AboutMeJPanel") && label(about, "Student:").getText().contains("New Kid") && hob.getText().isEmpty() && intr.getText().isEmpty());
+        StringBuilder longText = new StringBuilder();
+        for (int i = 0; i < 121; i++) longText.append('x');
+        hob.setText(longText.toString());
+        intr.setText("Data engineering");
+        click(button(about, "Save"));
+        check("about me: 121 characters are refused and nothing is saved", lastDialogText.contains("at most 120") && newKid.getHobbies().isEmpty() && newKid.getInterests().isEmpty());
+        hob.setText("???");
+        click(button(about, "Save"));
+        check("about me: punctuation only is refused", lastDialogText.contains("letters or digits") && newKid.getHobbies().isEmpty());
+        hob.setText("  Climbing, piano ");
+        click(button(about, "Save"));
+        check("about me: valid values are saved and trimmed", lastDialogText.contains("saved") && "Climbing, piano".equals(newKid.getHobbies()) && "Data engineering".equals(newKid.getInterests()) && "Climbing, piano".equals(hob.getText()));
+        click(button(about, "Save"));
+        check("about me: saving again says nothing changed", lastDialogText.contains("Nothing was changed"));
+        hob.setText("something else");
+        click(button(about, "Undo Changes"));
+        check("about me: undo brings the saved values back", "Climbing, piano".equals(hob.getText()) && "Climbing, piano".equals(newKid.getHobbies()));
+        click(button(about, "<< Back"));
+        click(button(wa, "About Me"));
+        JPanel about2 = (JPanel) upc.getComponent(upc.getComponentCount() - 1);
+        check("about me: reopening shows the saved values", "Climbing, piano".equals(all(about2, JTextField.class).get(0).getText()) && "Data engineering".equals(all(about2, JTextField.class).get(1).getText()));
+
         // ---- deleting a student from the administrator side frees the seats and removes the university record
         StudentProfile jimProfile = b.getStudentDirectory().findStudentByNuid("912564001");
         info5100.university.example.Persona.StudentProfile jimRecord = jimProfile.getAcademicRecord();
