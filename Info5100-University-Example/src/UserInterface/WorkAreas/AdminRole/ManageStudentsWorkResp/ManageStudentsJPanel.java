@@ -10,6 +10,8 @@ import Business.Profiles.StudentProfile;
 import Business.UserAccounts.UserAccount;
 import Business.UserAccounts.UserAccountDirectory;
 import Business.Validation;
+import info5100.university.example.CourseSchedule.CourseLoad;
+import info5100.university.example.CourseSchedule.SeatAssignment;
 import java.awt.CardLayout;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -59,6 +61,7 @@ import java.util.List;
      * login and last updated.
      *
      * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     * Christopher Ogden NUID: 003959375 Admin use case: added the Credits, GPA and Current Classes columns.
      */
     private void refreshTable() {
         DefaultTableModel model = (DefaultTableModel) tblStudentData.getModel();
@@ -75,7 +78,12 @@ import java.util.List;
                 account == null ? "(not signed up yet)" : account.getUserLoginName(),
                 person.getEmail(),
                 account == null ? "" : formatTime(account.getLastLoginTime()),
-                account == null ? "" : formatTime(account.getLastUpdatedTime())
+                account == null ? "" : formatTime(account.getLastUpdatedTime()),
+                reditsCompleted(student),   // Christopher Ogden NUID: 003959375 Admin use case
+                gpa(student),
+                currentClasses(student)
+    
+                
             });
         }
     }
@@ -139,6 +147,61 @@ import java.util.List;
      */
     private String formatTime(LocalDateTime t) {
         return t == null ? "Never" : t.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    }
+    /**
+     * Credits the student has completed with a grade; 0 when they have no academic record yet.
+     *
+     * Christopher Ogden NUID: 003959375 Admin use case.
+     */
+    private int creditsCompleted(StudentProfile student) {
+        return student.getAcademicRecord() == null ? 0
+            : student.getAcademicRecord().getTranscript().getTotalCreditsCompleted();
+    }
+
+    /**
+     * The student's GPA with two decimals, or "-" when nothing has been graded yet.
+     *
+     * Christopher Ogden NUID: 003959375 Admin use case.
+     */
+    private String gpa(StudentProfile student) {
+        if (creditsCompleted(student) == 0) {
+            return "-";
+        }
+        return String.format("%.2f", student.getAcademicRecord().getTranscript().getGPA());
+    }
+
+    /**
+     * The student's course load in the current semester (the latest one with a schedule, the
+     * same rule the student's Registration screen uses), or null.
+     *
+     * Christopher Ogden NUID: 003959375 Admin use case.
+     */
+    private CourseLoad currentCourseLoad(StudentProfile student) {
+        ArrayList<String> semesters = business.getDepartment().getSemesters();
+        if (student.getAcademicRecord() == null || semesters.isEmpty()) {
+            return null;
+        }
+        return student.getAcademicRecord().getCourseLoadBySemester(semesters.get(semesters.size() - 1));
+    }
+
+    /**
+     * The course numbers the student is taking this semester, for example "INFO 7250", or "-".
+     *
+     * Christopher Ogden NUID: 003959375 Admin use case.
+     */
+    private String currentClasses(StudentProfile student) {
+        CourseLoad load = currentCourseLoad(student);
+        if (load == null || load.getSeatAssignments().isEmpty()) {
+            return "-";
+        }
+        StringBuilder classes = new StringBuilder();
+        for (SeatAssignment sa : load.getSeatAssignments()) {
+            if (classes.length() > 0) {
+                classes.append(", ");
+            }
+            classes.append(sa.getCourseOffer().getCourseNumber());
+        }
+        return classes.toString();
     }
 
 
@@ -299,17 +362,17 @@ import java.util.List;
 
         tblStudentData.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Name", "NU ID", "User Name", "Email", "Last Login", "Account Updated"
+                "Name", "NU ID", "User Name", "Email", "Last Login", "Acct. Updated", "Credits", "GPA", "Classes"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -501,8 +564,15 @@ import java.util.List;
             JOptionPane.showMessageDialog(this, "You cannot delete the account you are logged in with.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
+        String message = "Delete " + student.getPerson().getName() + " and the login account (if any)?";
+        // Christopher Ogden NUID: 003959375 Admin use case: warn when the student is in classes this semester
+        CourseLoad load = currentCourseLoad(student);
+        if (load != null && !load.getSeatAssignments().isEmpty()) {
+            message += "\n" + student.getPerson().getName() + " is enrolled in " + load.getSeatAssignments().size()
+                + " class(es) this semester (" + currentClasses(student) + "). Those seats will be freed.";
+        }
         int answer = JOptionPane.showConfirmDialog(this,
-            "Delete " + student.getPerson().getName() + " and the login account (if any)? This cannot be undone.",
+            message + "\nThis cannot be undone.",
             "Please confirm", JOptionPane.YES_NO_OPTION);
         if (answer != JOptionPane.YES_OPTION) {
             return;
