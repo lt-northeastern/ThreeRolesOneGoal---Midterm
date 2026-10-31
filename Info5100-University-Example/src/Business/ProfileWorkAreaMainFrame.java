@@ -162,6 +162,11 @@ public class ProfileWorkAreaMainFrame extends javax.swing.JFrame {
 
         String un = UserNameTextField.getText();
         String pw = new String(pwEntry.getPassword());
+        if (un.trim().isEmpty() || pw.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter your user name and password.",
+                    "Login", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
 
         UserAccountDirectory uad = business.getUserAccountDirectory();
         UserAccount useraccount = uad.AuthenticateUser(un, pw);

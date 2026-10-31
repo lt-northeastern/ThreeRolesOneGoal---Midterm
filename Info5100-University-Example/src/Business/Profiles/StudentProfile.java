@@ -35,4 +35,16 @@ public class StudentProfile extends Profile {
         }
         return nuid.equals(other.trim());
     }
+
+    // ---- added for the Student use case by Hemanth Bezawada (NUID 002059527) ----
+    // the student's academic record in the university model (transcript, course loads)
+    info5100.university.example.Persona.StudentProfile academicRecord;
+
+    public info5100.university.example.Persona.StudentProfile getAcademicRecord() {
+        return academicRecord;
+    }
+
+    public void setAcademicRecord(info5100.university.example.Persona.StudentProfile record) {
+        academicRecord = record;
+    }
 }

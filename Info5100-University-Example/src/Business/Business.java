@@ -11,6 +11,7 @@ import Business.Profiles.EmployeeDirectory;
 import Business.Profiles.StudentDirectory;
 import Business.Profiles.*;
 import Business.UserAccounts.*;
+import info5100.university.example.Department.Department;
 
 import Business.UserAccounts.UserAccountDirectory;
 
@@ -27,6 +28,7 @@ public class Business {
     UserAccountDirectory useraccountdirectory;
     StudentDirectory studentdirectory;
     FacultyDirectory facultydirectory;
+    Department department; // the university model: courses, schedules, transcripts, degree
     
 
 
@@ -38,6 +40,7 @@ public class Business {
         useraccountdirectory = new UserAccountDirectory();
         facultydirectory = new FacultyDirectory();
         studentdirectory = new StudentDirectory();
+        department = new Department(n);
 
 
     }
@@ -119,6 +122,10 @@ public class Business {
             employeedirectory.removeEmployee((EmployeeProfile) profile);
         }
         persondirectory.removePerson(person);
-    }  
+    }
 
+    // ---- added for the Student use case by Hemanth Bezawada (NUID 002059527) ----
+    public Department getDepartment() {
+        return department;
+    }
 }
