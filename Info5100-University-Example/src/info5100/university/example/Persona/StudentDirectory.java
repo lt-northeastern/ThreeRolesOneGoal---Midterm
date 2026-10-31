@@ -42,4 +42,9 @@ public class StudentDirectory {
             return null; //not found after going through the whole list
          }
     
+
+    // ---- added for the Student use case by Hemanth Bezawada (NUID 002059527) ----
+    public void removeStudent(StudentProfile sp) {
+        studentlist.remove(sp);
+    }
 }

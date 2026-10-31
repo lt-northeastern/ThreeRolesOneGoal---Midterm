@@ -7,8 +7,8 @@ INFO 5100 Application Engineering and Development, Fall 2026 – Midterm Project
 | Member | NUID | Use case | Responsibilities |
 |---|---|---|---|
 | Hemanth Bezawada | 002059527 | Student | Course work, class registration, graduation audit, transcript, student profile; integration of the university model with the access control layer |
-| Luke Tomlinson | (add NUID) | (add use case) | (add responsibilities) |
-| Christopher Ogden | (add NUID) | (add use case) | (add responsibilities) |
+| Luke Tomlinson | (add NUID) | Faculty | (add responsibilities) |
+| Christopher Ogden | 003959375 | Administrator | Authentication layer (login, sign up, My Profile, NUID validation), administrator screens for persons, students, faculty and user accounts, access control checks |
 
 ## Project Overview
 
@@ -23,8 +23,8 @@ Key features implemented:
 
 - Login with role-based routing: a student, a faculty member and an administrator each land in their own work area and see only their own functions.
 - Student use case (see below): register for and drop classes, hand in course work and track progress, run a graduation audit, review the transcript.
-- (Admin use case – add)
-- (Faculty use case – add)
+- Administrator use case: register persons, manage student and faculty profiles and their user accounts; a disabled account (`anna` in the seed data) is refused at login, and every administrator screen checks the logged-in account before it opens.
+- Faculty use case: work area with My Profile; the Manage Courses, Student Profiles and Performance Reports screens are in progress on the faculty branch.
 
 ## Installation & Setup Instructions
 
@@ -50,27 +50,29 @@ Demo accounts from the seed data (`Business.ConfigureABusiness`):
 | `jim` | `******` | first-semester student (Jim Dellon) |
 | `faculty` | `******` | faculty (Gina Montana) |
 | `laura` | `laura1234` | faculty (Laura Brown) |
+| `anna` | `anna1234` | student whose account is disabled (Anna Shnider) – the login is refused |
 
 ## Authentication & Access Control
 
 - **Login:** the user name and password typed on the left of the main frame are checked by `UserAccountDirectory.AuthenticateUser`, which compares them with every `UserAccount`. A wrong user name or password, or an empty field, is refused with a message box and no work area opens. Logout clears the work area, and Sign Up lets a new student create an account against their NUID.
+- **Disabled accounts:** every `UserAccount` has an active flag. A disabled account (`anna` in the seed data) is refused at login with "This account has been disabled", even with the right password.
 - **Role:** every `UserAccount` is attached to a `Profile`. The subclass of the profile (`StudentProfile`, `FacultyProfile`, `EmployeeProfile`) is the role. The main frame checks the profile type and opens the matching work area in its `CardLayout` container, clearing whatever was there before.
-- **Authorization:** each work area only contains the buttons of its role, and each screen is created with the profile of the logged-in user, so a student can only reach the student screens and only sees and changes their own record. There is no way to open another role's screens without logging in with an account of that role.
+- **Authorization:** each work area only contains the buttons of its role, and each screen is created with the profile of the logged-in user, so a student can only reach the student screens and only sees and changes their own record. There is no way to open another role's screens without logging in with an account of that role. The administrator screens also ask `Business.isAdministrator` before they open, so only an active employee account reaches them.
 
 ## Features Implemented
 
 ### Student (Hemanth Bezawada)
 
-All student screens live in `UserInterface.WorkAreas.StudentRole` and are NetBeans GUI Builder forms. The student work area takes the logged-in user account, opens each screen with the business object, the student's profile and the card container, and creates the academic record for a student that does not have one yet (for example a student the administrator just registered, or one who just signed up). The **My Profile** button opens the shared profile screen of the access control layer.
+All student screens live in `UserInterface.WorkAreas.StudentRole` and are NetBeans GUI Builder forms. The student work area takes the logged-in user account, opens each screen with the business object, the student's profile and the card container, and creates the academic record for a student that does not have one yet (for example a student the administrator just registered, or one who just signed up). The **My Profile** button opens the shared profile screen of the access control layer. Every student screen shows the student's name and NUID in its header.
 
 | Screen | What it does |
 |---|---|
-| Registration | Pick a semester, see every class offered with professor and seats left, register for a class, drop a class. Rules: only the current semester is open; no duplicate registration; a course already completed, or still in progress from an earlier semester, cannot be registered again; at most four classes a semester; a full class cannot be joined; graded classes cannot be dropped; dropping needs confirmation and frees the seat. |
+| Registration | Pick a semester, see every class offered with professor and seats left, register for a class, drop a class. Rules: only the current semester is open; no duplicate registration; a course already completed, or still in progress from an earlier semester, cannot be registered again; at most four classes a semester; a full class cannot be joined; graded classes cannot be dropped; dropping needs confirmation and frees the seat; dropping the last class of a semester takes the empty semester off the transcript. |
 | Course Work | Classes of a semester with assignments submitted out of five, progress percentage, grade and whether the student liked the class. Submit an assignment by title (empty, duplicate, sixth and graded-class submissions are refused), like or unlike a class. |
 | Transcript | Every class by semester with credits, letter grade and grade points, a per-semester table with semester GPA, and a summary with credits completed, overall GPA and classes in progress. |
 | Graduation Audit | Core courses and electives against the MSIS degree, each completed, in progress or not taken; credits completed against the 32 required; a verdict that says ready or lists what is outstanding. |
 
-Changes to the shared model for the student use case, each in a block marked "added for the Student use case": `Business.getDepartment()`, `StudentProfile.getAcademicRecord()`, grade, like and submission helpers on `SeatAssignment`, semester GPA and drop on `CourseLoad`, seat release on `Seat`, ordered course loads and overall GPA on `Transcript`, `getPerson()` on the university `StudentProfile` and `FacultyProfile`, name and teacher/seat helpers on `Course`, `CourseOffer` and `CourseSchedule`, getters and the semester list on `Department`, getters on `Degree` plus the 32-credit and graded-core rules in `Degree.isStudentReadyToGraduate`.
+Changes to the shared model for the student use case, each in a block marked "added for the Student use case": `Business.getDepartment()`, `StudentProfile.getAcademicRecord()`, grade, like and submission helpers on `SeatAssignment`, semester GPA and drop on `CourseLoad`, seat release on `Seat`, ordered course loads, overall GPA, `removeCourseLoad` and `releaseSeats` on `Transcript`, `removeStudent` on the university `StudentDirectory`, `getPerson()` on the university `StudentProfile` and `FacultyProfile`, name and teacher/seat helpers on `Course`, `CourseOffer` and `CourseSchedule`, getters and the semester list on `Department`, getters on `Degree` plus the 32-credit and graded-core rules in `Degree.isStudentReadyToGraduate`. `Business.deleteProfile` releases every seat the student held and removes the university record together with the profile.
 
 ### Administrator ((add name))
 
@@ -98,7 +100,7 @@ Student scenario:
 
 ## Testing Guide
 
-The student screens were tested with a harness that drives the real panels (selects rows, types text, clicks buttons, reads the message boxes) and then checks the university model: 54 checks in total. It is in the repository as `Info5100-University-Example/test/StudentUITest.java`; after compiling the project run it with a folder for its screenshots:
+The student screens were tested with a harness that drives the real panels (selects rows, types text, clicks buttons, reads the message boxes) and then checks the university model: 63 checks in total. It is in the repository as `Info5100-University-Example/test/StudentUITest.java`; after compiling the project run it with a folder for its screenshots:
 
     javac -d build/test -cp build/classes test/StudentUITest.java
     java -cp build/classes:build/test StudentUITest screenshots
@@ -119,6 +121,9 @@ Sample cases to repeat by hand:
 | Empty assignment title | Course Work → select class → Submit with blank title | message asking for a title |
 | Sixth submission | submit five titles then a sixth | "already submitted" message |
 | Audit | Graduation Audit for `adam` and for `jim` | 16 of 32 credits vs 0 of 32 and three core courses outstanding |
+| Disabled account | log in as `anna` / `anna1234` | "account has been disabled" message, no work area opens |
+| Drop the last class | register a new student for one class → select it → Drop → Yes | class removed, seat count back up, the semester disappears from the Transcript |
+| Delete a student | log in as `admin` → Manage Students → select Jim Dellon → Delete → Yes; log out and try `jim` / `******`; log in as `adam` → Registration | "Student deleted" message; `jim` gets "Invalid user name or password"; INFO 6350 shows 1 of 1 seats and Open |
 
 Authentication and authorization check: log in with each demo account and confirm that only that role's buttons are available and that a student only sees their own transcript.
 
@@ -128,6 +133,7 @@ Authentication and authorization check: log in with each demo account and confir
 - The university model stores course loads in a `HashMap`, so semesters came out in random order. A semester sort key (year, then Spring/Summer/Fall) orders every table oldest first.
 - Dropping a class had no model support. `Seat.release()` and `CourseLoad.dropSeatAssignment()` free the seat so another student can take it.
 - The main branch was replaced with the new authentication layer after the student use case had been merged, so the student screens disappeared from `main`. Instead of forcing the old history back, the old `main` was merged into a branch of the new one: the authentication files were kept as they are and the student hooks were re-added on top (`Business.getDepartment`, `StudentProfile.getAcademicRecord`, the university seed data and the work area handlers, now built from the logged-in `UserAccount`).
+- Deleting a student from the administrator screen left the seats occupied and the university record in place. `Business.deleteProfile` now releases every seat the student held and removes the record, so another student can take the seat.
 
 ## Future Enhancements
 
@@ -140,6 +146,6 @@ Authentication and authorization check: log in with each demo account and confir
 
 | Member | Coding | Documentation | Testing | Other |
 |---|---|---|---|---|
-| Hemanth Bezawada | Student use case (4 screens, 9 pull requests), model integration, university seed data, empty-login check | this README's shared sections and the student sections | student UI harness (54 checks) | restoring the student work onto the new authentication layer |
+| Hemanth Bezawada | Student use case (4 screens, 10 pull requests), model integration, university seed data, empty-login check, post-merge fixes (name headers, empty semesters, seat release on delete) | this README's shared sections and the student sections | student UI harness (63 checks) | restoring the student work onto the new authentication layer, reviewing the team's pull requests |
 | Luke Tomlinson | (add) | (add) | (add) | (add) |
 | Christopher Ogden | (add) | (add) | (add) | (add) |

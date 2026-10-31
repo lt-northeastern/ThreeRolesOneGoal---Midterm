@@ -32,7 +32,8 @@ public class CourseWorkJPanel extends javax.swing.JPanel {
         department = b.getDepartment();
         CardSequencePanel = clp;
         initComponents();
-        lblStudent.setText("Student: " + student.getPerson().getPersonId());
+        lblStudent.setText("Student: " + student.getPerson().getName() + " (NUID " + student.getNuid() + ")");
+        lblStudent.setToolTipText(lblStudent.getText());
         populateSemesters();
         refreshTable();
     }
@@ -131,11 +132,12 @@ public class CourseWorkJPanel extends javax.swing.JPanel {
         lblTitle.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
         lblTitle.setText("Course Work");
         add(lblTitle);
-        lblTitle.setBounds(21, 14, 500, 32);
+        lblTitle.setBounds(21, 14, 300, 32);
 
+        lblStudent.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblStudent.setText("Student:");
         add(lblStudent);
-        lblStudent.setBounds(560, 22, 320, 20);
+        lblStudent.setBounds(330, 22, 550, 20);
 
         lblSemester.setText("Semester");
         add(lblSemester);

@@ -36,7 +36,8 @@ public class RegistrationJPanel extends javax.swing.JPanel {
         department = b.getDepartment();
         CardSequencePanel = clp;
         initComponents();
-        lblStudent.setText("Student: " + student.getPerson().getPersonId());
+        lblStudent.setText("Student: " + student.getPerson().getName() + " (NUID " + student.getNuid() + ")");
+        lblStudent.setToolTipText(lblStudent.getText());
         populateSemesters();
         refreshTables();
     }
@@ -158,11 +159,12 @@ public class RegistrationJPanel extends javax.swing.JPanel {
         lblTitle.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
         lblTitle.setText("Course Registration");
         add(lblTitle);
-        lblTitle.setBounds(21, 14, 500, 32);
+        lblTitle.setBounds(21, 14, 300, 32);
 
+        lblStudent.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblStudent.setText("Student:");
         add(lblStudent);
-        lblStudent.setBounds(560, 22, 320, 20);
+        lblStudent.setBounds(330, 22, 550, 20);
 
         lblSemester.setText("Semester");
         add(lblSemester);
@@ -340,6 +342,9 @@ public class RegistrationJPanel extends javax.swing.JPanel {
         }
         CourseLoad load = loadFor(semester);
         load.dropSeatAssignment(sa);   // the seat opens up again for other students
+        if (load.getSeatAssignments().isEmpty()) {
+            record.getTranscript().removeCourseLoad(semester);   // no empty semester left on the transcript
+        }
         refreshTables();
         JOptionPane.showMessageDialog(this, "You dropped " + sa.getCourseOffer().getCourseNumber() + ".", "Dropped", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_btnDropActionPerformed

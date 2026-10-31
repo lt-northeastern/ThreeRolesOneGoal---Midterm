@@ -147,6 +147,7 @@ public class Business {
             useraccountdirectory.removeUserAccount(ua);
         }
         if (profile instanceof StudentProfile) {
+            releaseStudentRecord((StudentProfile) profile);   // seats and university record go with the student
             studentdirectory.removeStudent((StudentProfile) profile);
         } else if (profile instanceof FacultyProfile) {
             facultydirectory.removeFaculty((FacultyProfile) profile);
@@ -171,5 +172,17 @@ public class Business {
     // ---- added for the Student use case by Hemanth Bezawada (NUID 002059527) ----
     public Department getDepartment() {
         return department;
+    }
+
+    // the student's university record goes with the profile: every seat the student held opens up
+    // again and the record leaves the department's student directory
+    private void releaseStudentRecord(StudentProfile sp) {
+        info5100.university.example.Persona.StudentProfile record = sp.getAcademicRecord();
+        if (record == null || department == null) {
+            return;
+        }
+        record.getTranscript().releaseSeats();
+        department.getStudentDirectory().removeStudent(record);
+        sp.setAcademicRecord(null);
     }
 }
