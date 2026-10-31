@@ -6,11 +6,16 @@ package UserInterface.WorkAreas.FacultyRole;
 
 import Business.Business;
 import Business.UserAccounts.UserAccount;
+import Business.Validation;
 import info5100.university.example.CourseSchedule.CourseOffer;
 import info5100.university.example.CourseSchedule.CourseSchedule;
 import info5100.university.example.Department.Department;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.ListSelectionModel;
 
 /**
  *
@@ -24,6 +29,8 @@ public class ManageCourseJPanel extends javax.swing.JPanel {
     private final Business business;
     private final UserAccount useraccount;
     private final JPanel CardSequencePanel;
+    
+    private final List<CourseOffer> rows = new ArrayList<>();
 
     /**
      * Creates new form ManageCourseJPanel
@@ -35,6 +42,13 @@ public class ManageCourseJPanel extends javax.swing.JPanel {
         this.useraccount = currentUser;
         this.CardSequencePanel = userProcessContainer;
         
+        tblCourses.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        tblCourses.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                populateFormFromSelection();
+            }
+        });
+        
         refreshTable();
 
     }
@@ -43,6 +57,7 @@ public class ManageCourseJPanel extends javax.swing.JPanel {
     private void refreshTable() {
         DefaultTableModel model = (DefaultTableModel) tblCourses.getModel();
         model.setRowCount(0);   // clear old rows
+        rows.clear();
 
         Department department = business.getDepartment();
         String myName = useraccount.getAssociatedPersonProfile().getPerson().getName();
@@ -51,6 +66,7 @@ public class ManageCourseJPanel extends javax.swing.JPanel {
             CourseSchedule schedule = department.getCourseSchedule(semester);
             for (CourseOffer co : schedule.getSchedule()) {
                 if (co.getTeacherName().equals(myName)) {   // only my sections
+                    rows.add(co);
                     model.addRow(new Object[]{
                         co.getCourseNumber(),
                         co.getSubjectCourse().getName(),
@@ -61,6 +77,76 @@ public class ManageCourseJPanel extends javax.swing.JPanel {
                 }
             }
         }
+    }
+    
+    // Author: Luke Tomlinson
+    // Returns the course section for the selected row, or null if nothing is selected
+    private CourseOffer selectedCourse() {
+        int row = tblCourses.getSelectedRow();
+        return (row < 0 || row >= rows.size()) ? null : rows.get(row);
+    }
+
+    // Author: Luke Tomlinson
+    // Copies the selected course into the form fields
+    private void populateFormFromSelection() {
+        CourseOffer co = selectedCourse();
+        if (co == null) {
+            clearForm();
+            return;
+        }
+        int row = tblCourses.getSelectedRow();
+        txtCourseNum.setText(co.getCourseNumber());
+        txtCourseName.setText(co.getSubjectCourse().getName());
+        txtCredits.setText(String.valueOf(co.getCreditHours()));
+        txtSemester.setText(String.valueOf(tblCourses.getValueAt(row, 3)));
+        txtEnrolled.setText(String.valueOf(tblCourses.getValueAt(row, 4)));
+        
+        txtDescription.setText(co.getDescription());
+        txtRoom.setText(co.getRoom());
+        txtTime.setText(co.getMeetingTime());
+        cmbDay.setSelectedItem(co.getMeetingDay().isEmpty() ? "Monday" : co.getMeetingDay());
+    }
+
+    // Author: Luke Tomlinson
+    // Empties every field and clears the table selection
+    private void clearForm() {
+        txtCourseNum.setText("");
+        txtCourseName.setText("");
+        txtCredits.setText("");
+        txtSemester.setText("");
+        txtEnrolled.setText("");
+        txtDescription.setText("");
+        txtRoom.setText("");
+        txtTime.setText("");
+        cmbDay.setSelectedIndex(0);
+        tblCourses.clearSelection();
+    }
+    
+     // Author: Luke Tomlinson
+    // Checks the editable fields; returns a message describing the first problem, or null if OK
+    private String validateForm() {
+        if (Validation.isBlank(txtRoom.getText())) {
+            return "Please enter a room (for example Snell 108).";
+        }
+        if (Validation.isBlank(txtTime.getText())) {
+            return "Please enter a meeting time (for example 6:00-9:00 PM).";
+        }
+        return null;
+    }
+
+    // Author: Luke Tomlinson
+    // Copies the editable fields into the selected course section
+    private void applyForm(CourseOffer co) {
+        co.setDescription(txtDescription.getText());
+        co.setRoom(txtRoom.getText());
+        co.setMeetingTime(txtTime.getText());
+        co.setMeetingDay((String) cmbDay.getSelectedItem());
+    }
+
+    // Author: Luke Tomlinson
+    // One string of the editable values, used to tell whether anything actually changed
+    private String snapshot(CourseOffer co) {
+        return co.getDescription() + "|" + co.getRoom() + "|" + co.getMeetingTime() + "|" + co.getMeetingDay();
     }
 
     /**
@@ -153,7 +239,7 @@ public class ManageCourseJPanel extends javax.swing.JPanel {
 
         txtCourseName.setEditable(false);
         add(txtCourseName);
-        txtCourseName.setBounds(215, 335, 168, 23);
+        txtCourseName.setBounds(215, 335, 260, 23);
 
         txtSemester.setEditable(false);
         add(txtSemester);
@@ -226,10 +312,20 @@ public class ManageCourseJPanel extends javax.swing.JPanel {
         btnBack.setBounds(50, 544, 80, 23);
 
         btnUpdate.setText("Update");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
         add(btnUpdate);
         btnUpdate.setBounds(514, 544, 73, 23);
 
         btnClear.setText("Clear");
+        btnClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClearActionPerformed(evt);
+            }
+        });
         add(btnClear);
         btnClear.setBounds(624, 544, 72, 23);
     }// </editor-fold>//GEN-END:initComponents
@@ -260,6 +356,39 @@ public class ManageCourseJPanel extends javax.swing.JPanel {
          CardSequencePanel.remove(this);
         ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
     }//GEN-LAST:event_btnBackActionPerformed
+
+    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
+        // TODO add your handling code here:
+        
+         clearForm();
+    }//GEN-LAST:event_btnClearActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        // TODO add your handling code here:
+        
+        CourseOffer co = selectedCourse();
+        if (co == null) {
+            JOptionPane.showMessageDialog(this, "Please select a row in the table first.", "Warning",
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        String problem = validateForm();
+        if (problem != null) {
+            JOptionPane.showMessageDialog(this, problem, "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        String before = snapshot(co);
+        applyForm(co);
+        if (before.equals(snapshot(co))) {
+            JOptionPane.showMessageDialog(this, "Nothing was changed.", "Information",
+                JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        refreshTable();
+        clearForm();
+        JOptionPane.showMessageDialog(this, "The changes were saved.", "Information",
+            JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_btnUpdateActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
