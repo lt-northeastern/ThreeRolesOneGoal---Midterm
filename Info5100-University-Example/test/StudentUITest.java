@@ -428,6 +428,12 @@ public class StudentUITest {
         b.deleteProfile(jimProfile);
         boolean freed = !jimClasses.isEmpty();
         for (int i = 0; i < jimClasses.size(); i++) freed &= jimClasses.get(i).getCourseOffer().getAvailableSeats() == seatsBeforeDelete[i] + 1;
+        StudentProfile adamProfile = b.getStudentDirectory().findStudentByNuid("912568888");
+        List<SeatAssignment> adamClasses = new ArrayList<SeatAssignment>(adamProfile.getAcademicRecord().getCourseList());
+        b.deleteProfile(adamProfile);
+        boolean adamFreed = !adamClasses.isEmpty();
+        for (SeatAssignment sa : adamClasses) adamFreed &= !sa.getSeat().isOccupied();
+        check("delete: removing Adam frees his graded seats as well as the one in progress", adamFreed && adamProfile.getAcademicRecord() == null);
         check("delete: removing Jim frees his seats and drops his university record and login", freed
                 && b.getDepartment().getStudentDirectory().findStudent(jimRecord.getPerson().getPersonId()) == null
                 && jimProfile.getAcademicRecord() == null && b.getUserAccountDirectory().findByUsername("jim") == null);

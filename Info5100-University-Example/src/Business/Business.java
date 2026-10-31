@@ -174,7 +174,7 @@ public class Business {
         return department;
     }
 
-    // the student's university record goes with the profile: seats in ungraded classes open up
+    // the student's university record goes with the profile: every seat the student held opens up
     // again and the record leaves the department's student directory
     private void releaseStudentRecord(StudentProfile sp) {
         info5100.university.example.Persona.StudentProfile record = sp.getAcademicRecord();
