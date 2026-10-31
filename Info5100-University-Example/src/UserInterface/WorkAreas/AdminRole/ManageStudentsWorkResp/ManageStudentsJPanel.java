@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package UserInterface.WorkAreas.StudentRole;
+package UserInterface.WorkAreas.AdminRole.ManageStudentsWorkResp;
 
 import Business.Business;
 import Business.Person.Person;
@@ -611,7 +611,6 @@ import java.util.List;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnBack;
-    private javax.swing.JButton btnClear;
     private javax.swing.JButton btnClear1;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnUpdate;

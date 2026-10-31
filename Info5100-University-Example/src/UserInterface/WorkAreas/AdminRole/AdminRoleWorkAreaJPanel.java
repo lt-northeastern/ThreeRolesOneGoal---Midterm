@@ -10,13 +10,14 @@
  */
 package UserInterface.WorkAreas.AdminRole;
 
+import UserInterface.WorkAreas.AdminRole.ManageStudentsWorkResp.ManageStudentsJPanel;
 import Business.Business;
 import UserInterface.WorkAreas.AdminRole.ManagePersonnelWorkResp.ManagePersonsJPanel;
 import Business.UserAccounts.*;
 import UserInterface.WorkAreas.MyProfile.*;
 import UserInterface.WorkAreas.AdminRole.AdministerUserAccountsWorkResp.AdminUserAccount;
 import UserInterface.WorkAreas.FacultyRole.ManageFacultyJPanel;
-import UserInterface.WorkAreas.StudentRole.*;
+import UserInterface.WorkAreas.AdminRole.ManageStudentsWorkResp.ManageStudentsJPanel;
 
 import javax.swing.JPanel;
 
