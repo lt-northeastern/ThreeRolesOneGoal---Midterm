@@ -31,7 +31,10 @@ import java.util.List;
     private final List<StudentProfile> rows = new ArrayList<>();
 
     /**
-     * Creates new form ManageStudentsJPanel
+     * Builds the Manage Students screen: single-row selection, a selected row loads into the
+     * form, then the table is filled and the screen starts in Add mode.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
      */
     public ManageStudentsJPanel(Business business, UserAccount currentUser, JPanel userProcessContainer) {
         initComponents();
@@ -51,6 +54,12 @@ import java.util.List;
 
     // ---------------------------------------------------------------- helpers
 
+    /**
+     * Reloads the student table: name, NUID, username (or "(not signed up yet)"), email, last
+     * login and last updated.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private void refreshTable() {
         DefaultTableModel model = (DefaultTableModel) tblStudentData.getModel();
         model.setRowCount(0);
@@ -71,12 +80,23 @@ import java.util.List;
         }
     }
 
-    /** The NU ID column is unique, so it identifies the selected student. */
+    /**
+     * Returns the student for the selected row (looked up in the row list kept by
+     * refreshTable), or null.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private StudentProfile selectedStudent() {
         int row = tblStudentData.getSelectedRow();
         return (row < 0 || row >= rows.size()) ? null : rows.get(row);
     }
 
+    /**
+     * Copies the selected student's details and username into the form (the password is left
+     * blank) and switches to edit mode.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private void populateFormFromSelection() {
          StudentProfile student = selectedStudent();
         if (student == null) {
@@ -95,6 +115,11 @@ import java.util.List;
         setAddMode(false);
     }
 
+    /**
+     * Empties every field, clears the table selection and returns to Add mode.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private void clearForm() {
         txtName.setText("");
         txtEmail.setText("");
@@ -107,15 +132,22 @@ import java.util.List;
         setAddMode(true);
     }
 
+    /**
+     * Formats a time as yyyy-MM-dd HH:mm:ss, or "Never" when null.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private String formatTime(LocalDateTime t) {
         return t == null ? "Never" : t.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
 
     /**
-     * Add mode (no row selected): only the name and the NU ID can be entered.
-     * Everything else is filled in by the student on the Sign-up page, or edited
-     * here after selecting the student's row.
+     * In Add mode (no row selected) only the name and NUID can be entered; the student fills
+     * in the rest on the Sign-up page. In edit mode the other fields unlock and the NUID
+     * locks.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
      */
     private void setAddMode(boolean addMode) {
         txtEmail.setEnabled(!addMode);
@@ -127,7 +159,12 @@ import java.util.List;
         txtEmployeeId.setEditable(addMode);   // the NU ID of an existing student is not changed here
     }
 
-    /** Checks used by Add: only a name and a new, valid NU ID are needed. */
+    /**
+     * Checks used by Add: the name is required and the NUID must be exactly 9 digits and not
+     * already used. Returns the first problem as a message, or null.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private String validateNewStudent() {
         if (Validation.isBlank(txtName.getText())) {
             return "Please enter the student's name.";
@@ -142,7 +179,13 @@ import java.util.List;
         return null;
     }
 
-    /** Returns an error message, or null when the form is fine. 'editing' is null when adding. */
+    /**
+     * Checks used by Update; returns the first problem as a message, or null. Checks the name,
+     * NUID format and uniqueness, email format, and, unless username and password are both
+     * blank (pre-registration only), the username rules, uniqueness and password length.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private String validateForm(StudentProfile editing) {
         if (Validation.isBlank(txtName.getText())) {
             return "Please enter the student's name.";
@@ -184,6 +227,11 @@ import java.util.List;
         return null;
     }
 
+    /**
+     * Copies the form values into the student profile and its person record.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private void applyForm(StudentProfile student) {
         Person person = student.getPerson();
         person.setName(txtName.getText().trim());
@@ -192,6 +240,12 @@ import java.util.List;
         person.setAddress(txtAddress.getText().trim());
         student.setNuid(txtEmployeeId.getText());
     }
+    /**
+     * Builds a one-line string of the student's fields so Update can tell whether anything
+     * actually changed.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private String snapshot(StudentProfile x) {
         Person p = x.getPerson();
         return p.getName() + "|" + p.getEmail() + "|" + p.getPhone() + "|" + p.getAddress() + "|" + x.getNuid();
@@ -406,10 +460,16 @@ import java.util.List;
         );
     }// </editor-fold>//GEN-END:initComponents
 
+
     private void txtEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEmailActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtEmailActionPerformed
 
+    /**
+     * Removes this screen and returns to the admin work area.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         // TODO add your handling code here:
         userProcessContainer.remove(this);
@@ -417,6 +477,12 @@ import java.util.List;
         layout.previous(userProcessContainer);
     }//GEN-LAST:event_btnBackActionPerformed
 
+    /**
+     * Deletes the selected student, their person record and login (if any) after confirmation.
+     * You cannot delete the account you are logged in with.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // TODO add your handling code here:
     StudentProfile student = selectedStudent();
@@ -442,6 +508,12 @@ import java.util.List;
     
     }//GEN-LAST:event_btnDeleteActionPerformed
 
+    /**
+     * Pre-registers a student with a name and NUID only; the student then creates the login on
+     * the Sign-up page.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         // TODO add your handling code here:
         String problem = validateNewStudent();
@@ -461,6 +533,13 @@ import java.util.List;
    
     }//GEN-LAST:event_btnAddActionPerformed
 
+    /**
+     * Validates and saves edits to the selected student. Updates or creates the login when a
+     * username is given, refreshes the last-updated time only when something changed, and says
+     * "Nothing was changed" otherwise.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         // TODO add your handling code here:
            StudentProfile student = selectedStudent();
@@ -513,10 +592,16 @@ import java.util.List;
 
     }//GEN-LAST:event_btnUpdateActionPerformed
 
+
     private void txtNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNameActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNameActionPerformed
 
+    /**
+     * Clears the form and returns to Add mode.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private void btnClear1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClear1ActionPerformed
         // TODO add your handling code here:
         clearForm();

@@ -29,7 +29,11 @@ public class ManageFacultyJPanel extends javax.swing.JPanel {
     private JPanel userProcessContainer;
 
     /**
-     * Creates new form ManageFacultyJPanel
+     * Builds the Manage Faculty screen: the Faculty ID is read-only (it is generated), single-
+     * row selection, a selected row loads into the form, then the table is filled and the
+     * screen starts in Add mode.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
      */
     public ManageFacultyJPanel(Business business, UserAccount currentUser, JPanel userProcessContainer) {
         initComponents();
@@ -47,6 +51,12 @@ public class ManageFacultyJPanel extends javax.swing.JPanel {
         refreshTable();
         setAddMode(true); 
         }
+    /**
+     * Finds the faculty profile for the selected row by matching the Faculty ID in column 1;
+     * null when nothing is selected.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private FacultyProfile selectedFaculty() {
         int row = tblFacultyData.getSelectedRow();
         if (row < 0) {
@@ -61,6 +71,12 @@ public class ManageFacultyJPanel extends javax.swing.JPanel {
         return null;
     }
     
+    /**
+     * Reloads the faculty table: name, faculty ID, department, title, username, last login and
+     * last updated.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private void refreshTable() {
         DefaultTableModel model = (DefaultTableModel) tblFacultyData.getModel();
         model.setRowCount(0);
@@ -78,6 +94,12 @@ public class ManageFacultyJPanel extends javax.swing.JPanel {
             });
         }
     }
+    /**
+     * Copies the selected faculty member's details and username into the form (the password is
+     * left blank) and disables Add.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
       private void populateFormFromSelection() {
         FacultyProfile faculty = selectedFaculty();
         if (faculty == null) {
@@ -97,6 +119,11 @@ public class ManageFacultyJPanel extends javax.swing.JPanel {
         pwEntry.setText("");   // never show the password
         setAddMode(false);     // add this line: a row is selected -> Add disabled
     }
+    /**
+     * Empties every field, clears the table selection and returns to Add mode.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
      private void clearForm() {
         txtName.setText("");
         txtEmail.setText("");
@@ -108,13 +135,31 @@ public class ManageFacultyJPanel extends javax.swing.JPanel {
         txtUserName.setText("");
         pwEntry.setText("");
         tblFacultyData.clearSelection();
+        setAddMode(true);   // nothing selected -> Add is available again
     }  
+    /**
+     * Enables the Add button only when no row is selected.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private void setAddMode(boolean addMode) {
         btnAdd.setEnabled(addMode);
     }
+    /**
+     * Formats a time as yyyy-MM-dd HH:mm:ss, or "Never" when null.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private String formatTime(LocalDateTime t) {
         return t == null ? "Never" : t.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
+    /**
+     * Returns the first problem with the form as a message, or null when it is valid: name
+     * required, email format if given, username rules and uniqueness, a password for a new
+     * login, and new password length.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
       private String validateForm(FacultyProfile editing) {
         if (Validation.isBlank(txtName.getText())) {
             return "Please enter the faculty member's name.";
@@ -142,6 +187,11 @@ public class ManageFacultyJPanel extends javax.swing.JPanel {
         return null;
     }
 
+    /**
+     * Copies the form values into the faculty profile and its person record.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private void applyForm(FacultyProfile faculty) {
         Person person = faculty.getPerson();
         person.setName(txtName.getText().trim());
@@ -387,6 +437,11 @@ public class ManageFacultyJPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Removes this screen and returns to the admin work area.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         // TODO add your handling code here:
         userProcessContainer.remove(this);
@@ -394,6 +449,12 @@ public class ManageFacultyJPanel extends javax.swing.JPanel {
         layout.previous(userProcessContainer);
     }//GEN-LAST:event_btnBackActionPerformed
 
+    /**
+     * Deletes the selected faculty member, their person record and login after confirmation.
+     * You cannot delete the account you are logged in with.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // TODO add your handling code here:
         FacultyProfile faculty = selectedFaculty();
@@ -417,6 +478,12 @@ public class ManageFacultyJPanel extends javax.swing.JPanel {
         JOptionPane.showMessageDialog(this, "Faculty member deleted.", "Information", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_btnDeleteActionPerformed
 
+    /**
+     * Validates the form, then creates the person, faculty profile and login, and confirms
+     * with a message.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         // TODO add your handling code here:
         String problem = validateForm(null);
@@ -436,6 +503,13 @@ public class ManageFacultyJPanel extends javax.swing.JPanel {
             JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_btnAddActionPerformed
 
+    /**
+     * Validates and saves edits to the selected faculty member. Updates the username and/or
+     * password when changed (or creates a login if there is none) and refreshes the last-
+     * updated time.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         // TODO add your handling code here:
         FacultyProfile faculty = selectedFaculty();
@@ -474,6 +548,7 @@ public class ManageFacultyJPanel extends javax.swing.JPanel {
     
     }//GEN-LAST:event_btnUpdateActionPerformed
 
+
     private void txtNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNameActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNameActionPerformed
@@ -482,6 +557,11 @@ public class ManageFacultyJPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtEmailActionPerformed
 
+    /**
+     * Clears the form and returns to Add mode.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
         // TODO add your handling code here:
         clearForm();

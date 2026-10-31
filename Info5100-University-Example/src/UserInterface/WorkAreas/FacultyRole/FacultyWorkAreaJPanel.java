@@ -30,9 +30,11 @@ public class FacultyWorkAreaJPanel extends javax.swing.JPanel {
     private final JPanel CardSequencePanel;
 
     /**
-     * Creates new form UnitRiskWorkArea
+     * Builds the faculty work area and keeps the logged-in faculty member's account for My
+     * Profile.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
      */
-
         public FacultyWorkAreaJPanel(Business b, UserAccount ua, JPanel clp) {
         initComponents();
             business = b;
@@ -152,18 +154,33 @@ public class FacultyWorkAreaJPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Placeholder: shows "This function is not available."
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private void btnManageCoursesIdentifyResourceAssetsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManageCoursesIdentifyResourceAssetsActionPerformed
         // TODO add your handling code here:
          JOptionPane.showMessageDialog(this, "This function is not available.", "Not available", JOptionPane.INFORMATION_MESSAGE);
 
     }//GEN-LAST:event_btnManageCoursesIdentifyResourceAssetsActionPerformed
 
+    /**
+     * Placeholder: shows "This function is not available."
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private void btnManageStudentProfilesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManageStudentProfilesActionPerformed
         // TODO add your handling code here:
          JOptionPane.showMessageDialog(this, "This function is not available.", "Not available", JOptionPane.INFORMATION_MESSAGE);
   
     }//GEN-LAST:event_btnManageStudentProfilesActionPerformed
 
+    /**
+     * Opens My Profile for the logged-in faculty member.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private void btnMyProfileIdentifyEventsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMyProfileIdentifyEventsActionPerformed
         // TODO add your handling code here:
         MyProfileJPanel profile = new MyProfileJPanel(useraccount, CardSequencePanel);
@@ -173,6 +190,11 @@ public class FacultyWorkAreaJPanel extends javax.swing.JPanel {
  
 }//GEN-LAST:event_btnMyProfileIdentifyEventsActionPerformed
 
+    /**
+     * Placeholder: shows "This function is not available."
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private void btnPerformanceReportsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPerformanceReportsActionPerformed
         // TODO add your handling code here:
         JOptionPane.showMessageDialog(this, "This function is not available.", "Not available", JOptionPane.INFORMATION_MESSAGE);

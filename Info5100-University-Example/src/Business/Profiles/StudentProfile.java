@@ -11,6 +11,12 @@ public class StudentProfile extends Profile {
 
     private String nuid;
 
+    /**
+     * Creates a student profile for a person with an NUID; a null NUID becomes an empty
+     * string.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     public StudentProfile(Person p, String nuid) {
         super(p);
         this.nuid = nuid == null ? "" : nuid.trim();
@@ -21,14 +27,30 @@ public class StudentProfile extends Profile {
         return "Student";
     }
 
+    /**
+     * Returns the student's 9-digit NUID.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     public String getNuid() {
         return nuid;
     }
 
+    /**
+     * Sets the student's NUID, trimming spaces; null becomes an empty string.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     public void setNuid(String nuid) {
         this.nuid = nuid == null ? "" : nuid.trim();
     }
 
+    /**
+     * Returns true when this student's NUID equals the one given. A blank NUID never matches
+     * anyone.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     public boolean hasNuid(String other) {
         if (other == null || other.trim().isEmpty() || nuid.isEmpty()) {
             return false;   // a blank NUID never matches anyone

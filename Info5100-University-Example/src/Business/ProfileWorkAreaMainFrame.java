@@ -32,9 +32,11 @@ public class ProfileWorkAreaMainFrame extends javax.swing.JFrame {
     UserAccount currentUser;
 
     /**
-     * Creates new form PricingMainFrame
+     * Builds the main window: sets the title and size (1150 x 750), centers it, lets Enter in
+     * the username or password field trigger Login, then loads the seeded business data.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
      */
-
     public ProfileWorkAreaMainFrame() {
         initComponents();
         UserNameTextField.addActionListener(e -> jButton1.doClick());
@@ -155,6 +157,14 @@ public class ProfileWorkAreaMainFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Logs a user in. Warns when a field is blank and shows a "Login failed" message for a
+     * wrong username or password. On success it remembers the current user, records the login
+     * time, clears the password and opens the Admin, Student or Faculty work area based on the
+     * profile type.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private void LoginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginButtonActionPerformed
         // TODO add your handling code here:
         //      WorkAreaJPanel ura = new WorkAreaJPanel(workareajpanl);
@@ -214,6 +224,12 @@ public class ProfileWorkAreaMainFrame extends javax.swing.JFrame {
 
     }//GEN-LAST:event_LoginButtonActionPerformed
 
+    /**
+     * Logs the current user out: clears the login fields, returns to the welcome card and
+     * confirms with a message. Warns when nobody is logged in.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private void btnLogoutLoginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutLoginButtonActionPerformed
         // TODO add your handling code here:
         if (currentUser == null) {
@@ -232,6 +248,12 @@ public class ProfileWorkAreaMainFrame extends javax.swing.JFrame {
          JOptionPane.showMessageDialog(this, "You have been logged out.");
     }//GEN-LAST:event_btnLogoutLoginButtonActionPerformed
 
+    /**
+     * Opens the Sign-up page to create a new student account. Blocked with a message while
+     * someone is logged in.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private void btnSignupLoginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSignupLoginButtonActionPerformed
         // TODO add your handling code here:
         if (currentUser != null) {

@@ -24,6 +24,11 @@ public class StudentDirectory {
 
     }
 
+    /**
+     * Creates a student profile with an NUID and adds it to the list.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
      public StudentProfile newStudentProfile(Person p, String nuid) {
 
         StudentProfile sp = new StudentProfile(p, nuid);
@@ -42,6 +47,11 @@ public class StudentDirectory {
             return null; //not found after going through the whole list
          }
     
+    /**
+     * Returns the student with this NUID, or null; used by Sign-up and Manage Students.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
        public StudentProfile findStudentByNuid(String nuid) {
         for (StudentProfile sp : studentlist) {
             if (sp.hasNuid(nuid)) {
@@ -50,10 +60,20 @@ public class StudentDirectory {
         }
         return null;
     }
+    /**
+     * Removes a student profile from the directory.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
       public void removeStudent(StudentProfile sp) {
         studentlist.remove(sp);
     }
        
+    /**
+     * Returns every student profile.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     public ArrayList<StudentProfile> getStudentList() {
         return studentlist;
     }

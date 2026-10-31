@@ -32,6 +32,12 @@ public class Business {
     
 
 
+    /**
+     * Creates the business and all of its directories, including the FacultyDirectory added
+     * for faculty profiles.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     public Business(String n) {
         name = n;
 
@@ -48,6 +54,11 @@ public class Business {
     public PersonDirectory getPersonDirectory() {
         return persondirectory;
     }
+    /**
+     * Returns the directory that holds all faculty profiles.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
      public FacultyDirectory getFacultyDirectory() {
         return facultydirectory;
     }
@@ -65,6 +76,15 @@ public class Business {
         return studentdirectory;
     }
     
+    /**
+     * Registers a student from the Sign-up page. Validates every field and rejects a username
+     * that is already taken. If an administrator pre-registered this NUID, the account is
+     * linked to that student (the name must match); otherwise a new person and student profile
+     * are created. Then the login account is created. Throws IllegalArgumentException with a
+     * user-facing message when anything is wrong.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
        public UserAccount signUpStudent(String fullName, String nuid, String username, String password) {
         if (Validation.isBlank(fullName)) {
             throw new IllegalArgumentException("Please enter your full name.");
@@ -103,11 +123,23 @@ public class Business {
         }
         return useraccountdirectory.newUserAccount(student, username.trim(), password);
     }
+    /**
+     * Compares two names ignoring case and extra spaces, so "adam  rollen" matches "Adam
+     * Rollen".
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
        private static boolean sameName(String a, String b) {
         String x = a == null ? "" : a.trim().replaceAll("\\s+", " ");
         String y = b == null ? "" : b.trim().replaceAll("\\s+", " ");
         return x.equalsIgnoreCase(y);
     }
+    /**
+     * Deletes a person completely: removes the login account, the role profile (student,
+     * faculty or employee) and the person record.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
          public void deleteProfile(Profile profile) {
         Person person = profile.getPerson();
         UserAccount ua = useraccountdirectory.findUserAccount(person.getPersonId());
