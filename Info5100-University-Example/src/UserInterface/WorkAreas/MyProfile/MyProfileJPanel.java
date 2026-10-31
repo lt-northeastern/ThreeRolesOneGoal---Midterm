@@ -1,9 +1,11 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
+ * modified by Christopher Ogden NUID: 003959375 for admin use case. 
  */
 package UserInterface.WorkAreas.MyProfile;
 
+import Business.Business;
 import Business.Person.*;
 import Business.Profiles.*;
 import Business.UserAccounts.*;
@@ -18,6 +20,7 @@ import javax.swing.JPanel;
  */
 public class MyProfileJPanel extends javax.swing.JPanel {
     
+    private final Business business;   // Christopher Ogden NUID: 003959375 Admin use case: null means view only
     private final JPanel userProcessContainer;
     private final UserAccount account;
 
@@ -26,13 +29,26 @@ public class MyProfileJPanel extends javax.swing.JPanel {
      * Builds the My Profile page for the logged-in user, locks every field and fills it in.
      *
      * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     * Christopher Ogden NUID: 003959375 Admin use case: now passes no business to the constructor below (view only).
      */
     public MyProfileJPanel(UserAccount account, JPanel userProcessContainer) {
+        this(null, account, userProcessContainer);   // student and faculty: view only, as before
+    }
+
+    /**
+     * Builds the My Profile page with access to the business, so an administrator can edit
+     * their own details. Called from the administrator work area.
+     *
+     * Christopher Ogden NUID: 003959375 Admin use case.
+     */
+    public MyProfileJPanel(Business business, UserAccount account, JPanel userProcessContainer) {
         initComponents();
+        this.business = business;
         this.account = account;
         this.userProcessContainer = userProcessContainer;
         makeFieldsReadOnly();
         populateProfile();
+    
     }
     /**
      * Makes every text field non-editable; this page is view-only.
