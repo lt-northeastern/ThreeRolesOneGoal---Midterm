@@ -37,6 +37,13 @@ public class ManagePersonsJPanel extends javax.swing.JPanel {
     private final List<EmployeeProfile> rows = new ArrayList<>();
 
 
+    /**
+     * Builds the employee (HR) screen: Employee ID is read-only, single-row selection, a
+     * selected row loads into the form, then the table is filled and the screen starts in Add
+     * mode.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
  public ManagePersonsJPanel(Business business, UserAccount currentUser, JPanel userProcessContainer)  {
         initComponents();
         this.business = business;
@@ -54,6 +61,12 @@ public class ManagePersonsJPanel extends javax.swing.JPanel {
         setAddMode(true);
 
     }
+    /**
+     * Reloads the employee table: name, employee ID, department, job title, username, last
+     * login and last updated.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     public void refreshTable() {
         DefaultTableModel model = (DefaultTableModel) tblEmployeeData.getModel();
         model.setRowCount(0);
@@ -73,16 +86,32 @@ public class ManagePersonsJPanel extends javax.swing.JPanel {
             model.addRow(row);
         }
     }
+    /**
+     * Formats a time as yyyy-MM-dd HH:mm:ss, or "Never" when null.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
         private String formatTime(LocalDateTime t) {
         if (t == null) {
             return "Never";
         }
         return t.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
+    /**
+     * Returns the employee for the selected row, or null.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
      private EmployeeProfile selectedEmployee() {
         int r = tblEmployeeData.getSelectedRow();
         return (r < 0 || r >= rows.size()) ? null : rows.get(r);
     }
+    /**
+     * Copies the selected employee's person, job and login details into the form (the password
+     * is left blank) and switches to edit mode.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
         private void loadSelectedIntoForm() {
         EmployeeProfile e = selectedEmployee();
         if (e == null) {
@@ -103,6 +132,11 @@ public class ManagePersonsJPanel extends javax.swing.JPanel {
         txtHireDate.setText(e.getHireDate() == null ? "" : e.getHireDate().toString());
         setAddMode(false);
     }
+    /**
+     * Clears the table selection and every field, then re-enables Add.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
             private void clearForm() {
         tblEmployeeData.clearSelection();
         txtName.setText("");
@@ -117,10 +151,21 @@ public class ManagePersonsJPanel extends javax.swing.JPanel {
         txtHireDate.setText("");
         setAddMode(true); 
     }
+    /**
+     * Enables the Add button only when no row is selected.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
          private void setAddMode(boolean addMode) {
         btnAdd.setEnabled(addMode);
     }
-/** Returns a message describing the first problem with the form, or null if everything is fine. */
+    /**
+     * Checks the form and returns the first problem as a message, or null when everything is
+     * valid: name, email format, phone characters, department, job title, hire date, username
+     * rules, a password for new logins, and a unique username.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private String validateForm(EmployeeProfile existing) {
         UserAccountDirectory uad = business.getUserAccountDirectory();
         UserAccount account = existing == null ? null : uad.findUserAccount(existing.getPerson().getPersonId());
@@ -169,7 +214,11 @@ public class ManagePersonsJPanel extends javax.swing.JPanel {
         }
         return null;
     }
-    /** Copies the form into the employee (and its person). The form must already be validated. */
+    /**
+     * Copies the validated form values into the employee and its person record.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private void applyForm(EmployeeProfile e) {
         Person person = e.getPerson();
         person.setName(txtName.getText());
@@ -408,6 +457,11 @@ public class ManagePersonsJPanel extends javax.swing.JPanel {
         btnClear.setBounds(400, 540, 100, 23);
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Removes this screen and returns to the admin work area.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         // TODO add your handling code here:
         userProcessContainer.remove(this);
@@ -416,6 +470,12 @@ public class ManagePersonsJPanel extends javax.swing.JPanel {
 
     }//GEN-LAST:event_btnBackActionPerformed
 
+    /**
+     * Deletes the selected employee, their person record and login after confirmation. You
+     * cannot delete the account you are logged in with.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // TODO add your handling code here:
         
@@ -443,14 +503,22 @@ public class ManagePersonsJPanel extends javax.swing.JPanel {
 
     }//GEN-LAST:event_btnDeleteActionPerformed
 
+
     private void Back1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Back1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_Back1ActionPerformed
+
 
     private void Next1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Next1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_Next1ActionPerformed
 
+    /**
+     * Validates the form, then creates the person, employee profile and login, and confirms
+     * with a message.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         // TODO add your handling code here:
         String problem = validateForm(null);
@@ -472,6 +540,12 @@ public class ManagePersonsJPanel extends javax.swing.JPanel {
 
     }//GEN-LAST:event_btnAddActionPerformed
 
+    /**
+     * Validates and saves edits to the selected employee. Updates the username and/or password
+     * when changed (or creates a login if there is none) and refreshes the last-updated time.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         // TODO add your handling code here:
         EmployeeProfile employee = selectedEmployee();
@@ -509,14 +583,21 @@ public class ManagePersonsJPanel extends javax.swing.JPanel {
                 JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_btnUpdateActionPerformed
 
+
     private void txtNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNameActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNameActionPerformed
+
 
     private void txtEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEmailActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtEmailActionPerformed
 
+    /**
+     * Clears the form and returns to Add mode.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
         // TODO add your handling code here:
         clearForm();

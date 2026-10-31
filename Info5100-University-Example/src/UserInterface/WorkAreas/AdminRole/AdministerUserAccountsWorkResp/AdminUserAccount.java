@@ -40,6 +40,12 @@ public class AdminUserAccount extends javax.swing.JPanel {
 
     UserAccount selecteduseraccount;
 
+    /**
+     * Builds the Administer User Accounts screen: single-row selection, a listener that copies
+     * the selected username into the form, then fills the table.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     public AdminUserAccount(Business bz, UserAccount currentUser, JPanel jp) {
 
        initComponents();
@@ -59,6 +65,12 @@ public class AdminUserAccount extends javax.swing.JPanel {
         refreshTable();
 
     }
+    /**
+     * Reloads the table with every login: username, name, role, created, last login and last
+     * updated.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     public void refreshTable() {
         DefaultTableModel model = (DefaultTableModel) tblUserAccounts.getModel();
         model.setRowCount(0);
@@ -76,15 +88,30 @@ public class AdminUserAccount extends javax.swing.JPanel {
         }
     }
         
+    /**
+     * Returns the account for the selected table row, or null when no row is selected.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private UserAccount selectedAccount() {
         int r = tblUserAccounts.getSelectedRow();
         return (r < 0 || r >= rows.size()) ? null : rows.get(r);
     }
 
+    /**
+     * Empties the username and password fields.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private void clearFields() {
         txtUserName.setText("");
         pwEntry.setText("");
     }
+    /**
+     * Formats a Date or java.time value as yyyy-MM-dd HH:mm; shows "-" when the value is null.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private String formatTime(Object time) {
         if (time == null) {
             return "-";
@@ -102,6 +129,11 @@ public class AdminUserAccount extends javax.swing.JPanel {
         return time.toString();
     }
 
+    /**
+     * Shows a Yes/No dialog and returns true when the user clicks Yes.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private boolean confirm(String message) {
         int choice = JOptionPane.showConfirmDialog(this, message, "Confirm", JOptionPane.YES_NO_OPTION);
         return choice == JOptionPane.YES_OPTION;
@@ -204,6 +236,12 @@ public class AdminUserAccount extends javax.swing.JPanel {
         lblInfo.setBounds(10, 360, 790, 60);
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Deletes the selected login after confirmation. You cannot delete the account you are
+     * logged in with; the person's profile is kept.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // TODO add your handling code here:
 
@@ -228,6 +266,11 @@ public class AdminUserAccount extends javax.swing.JPanel {
 
     }//GEN-LAST:event_btnDeleteActionPerformed
 
+    /**
+     * Removes this screen and returns to the previous card.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         // TODO add your handling code here:
         cards.remove(this);
@@ -238,6 +281,12 @@ public class AdminUserAccount extends javax.swing.JPanel {
 
     }//GEN-LAST:event_btnBackActionPerformed
 
+    /**
+     * Saves a new username and/or password for the selected login after checking length,
+     * spaces and that the username is not taken. A blank password keeps the old one.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         // TODO add your handling code here:
 UserAccount ua = selectedAccount();

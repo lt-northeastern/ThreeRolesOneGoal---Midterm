@@ -31,9 +31,11 @@ public class AdminRoleWorkAreaJPanel extends javax.swing.JPanel {
     UserAccount useraccount;
 
     /**
-     * Creates new form UnitRiskWorkArea
+     * Builds the admin work area. Keeps the logged-in admin's account so the screens it opens
+     * can use it (My Profile, protection against deleting yourself).
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
      */
-
    public AdminRoleWorkAreaJPanel(Business b, UserAccount ua, JPanel clp) {
         business = b;
         useraccount = ua;
@@ -164,6 +166,11 @@ public class AdminRoleWorkAreaJPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Opens the Administer User Accounts screen to view, update and delete logins.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private void btnAdminUserAccountsIdentifyResourceAssetsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdminUserAccountsIdentifyResourceAssetsActionPerformed
         // TODO add your handling code here:
 
@@ -174,6 +181,12 @@ public class AdminRoleWorkAreaJPanel extends javax.swing.JPanel {
 
     }//GEN-LAST:event_btnAdminUserAccountsIdentifyResourceAssetsActionPerformed
 
+    /**
+     * Opens the Register Persons (HR) screen to add, update and delete employee/admin
+     * profiles.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private void btnRegisterPersonsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterPersonsActionPerformed
         // TODO add your handling code here:
 
@@ -184,6 +197,11 @@ public class AdminRoleWorkAreaJPanel extends javax.swing.JPanel {
 
     }//GEN-LAST:event_btnRegisterPersonsActionPerformed
 
+    /**
+     * Opens the Manage Students screen.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private void btnManageStudentsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManageStudentsActionPerformed
         // TODO add your handling code here:
         ManageStudentsJPanel manage = new ManageStudentsJPanel(business, useraccount, CardSequencePanel);
@@ -192,12 +210,22 @@ public class AdminRoleWorkAreaJPanel extends javax.swing.JPanel {
 
     }//GEN-LAST:event_btnManageStudentsActionPerformed
 
+    /**
+     * Opens My Profile for the logged-in admin.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private void btnMyprofileIdentifyEventsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMyprofileIdentifyEventsActionPerformed
     MyProfileJPanel profile = new MyProfileJPanel(useraccount, CardSequencePanel);
     CardSequencePanel.add("MyProfile", profile);
     ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
     }//GEN-LAST:event_btnMyprofileIdentifyEventsActionPerformed
 
+    /**
+     * Opens the Manage Faculty screen.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private void btnManageFacultyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManageFacultyActionPerformed
     ManageFacultyJPanel manage = new ManageFacultyJPanel(business, useraccount, CardSequencePanel);
     CardSequencePanel.add("ManageFaculty", manage);

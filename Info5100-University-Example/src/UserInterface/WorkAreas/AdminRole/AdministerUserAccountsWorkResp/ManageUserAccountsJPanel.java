@@ -141,6 +141,12 @@ public class ManageUserAccountsJPanel extends javax.swing.JPanel {
 
     }//GEN-LAST:event_BackActionPerformed
 
+    /**
+     * Moves to the next card. The call that opened AdminUserAccount is commented out because
+     * its constructor changed; the admin menu now opens AdminUserAccount directly.
+     *
+     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     */
     private void NextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NextActionPerformed
         // TODO add your handling code here:
         if(selecteduseraccount==null) return;
