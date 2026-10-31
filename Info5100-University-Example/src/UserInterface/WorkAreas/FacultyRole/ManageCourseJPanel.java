@@ -6,7 +6,11 @@ package UserInterface.WorkAreas.FacultyRole;
 
 import Business.Business;
 import Business.UserAccounts.UserAccount;
+import info5100.university.example.CourseSchedule.CourseOffer;
+import info5100.university.example.CourseSchedule.CourseSchedule;
+import info5100.university.example.Department.Department;
 import javax.swing.JPanel;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -30,7 +34,33 @@ public class ManageCourseJPanel extends javax.swing.JPanel {
         this.business = business;
         this.useraccount = currentUser;
         this.CardSequencePanel = userProcessContainer;
+        
+        refreshTable();
 
+    }
+    // Author: Luke Tomlinson
+    // Fills the table with every course section the logged-in professor teaches
+    private void refreshTable() {
+        DefaultTableModel model = (DefaultTableModel) tblCourses.getModel();
+        model.setRowCount(0);   // clear old rows
+
+        Department department = business.getDepartment();
+        String myName = useraccount.getAssociatedPersonProfile().getPerson().getName();
+
+        for (String semester : department.getSemesters()) {
+            CourseSchedule schedule = department.getCourseSchedule(semester);
+            for (CourseOffer co : schedule.getSchedule()) {
+                if (co.getTeacherName().equals(myName)) {   // only my sections
+                    model.addRow(new Object[]{
+                        co.getCourseNumber(),
+                        co.getSubjectCourse().getName(),
+                        co.getCreditHours(),
+                        semester,
+                        co.getTotalSeats() - co.getAvailableSeats()   // enrolled
+                    });
+                }
+            }
+        }
     }
 
     /**
@@ -44,7 +74,7 @@ public class ManageCourseJPanel extends javax.swing.JPanel {
 
         titleManageCourses = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblCourses = new javax.swing.JTable();
         lblCourseNum = new javax.swing.JLabel();
         lblCourseName = new javax.swing.JLabel();
         Semester = new javax.swing.JLabel();
@@ -76,7 +106,7 @@ public class ManageCourseJPanel extends javax.swing.JPanel {
         add(titleManageCourses);
         titleManageCourses.setBounds(64, 29, 138, 23);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblCourses.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -87,7 +117,7 @@ public class ManageCourseJPanel extends javax.swing.JPanel {
                 "Course #", "Course Name", "Credits", "Semester", "Enrolled"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblCourses);
 
         add(jScrollPane1);
         jScrollPane1.setBounds(50, 70, 668, 185);
@@ -245,9 +275,9 @@ public class ManageCourseJPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JLabel lblCourseName;
     private javax.swing.JLabel lblCourseNum;
+    private javax.swing.JTable tblCourses;
     private javax.swing.JLabel titleManageCourses;
     private javax.swing.JTextField txtCourseName;
     private javax.swing.JTextField txtCourseNum;
