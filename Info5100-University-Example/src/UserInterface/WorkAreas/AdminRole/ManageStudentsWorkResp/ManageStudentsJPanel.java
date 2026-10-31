@@ -79,7 +79,7 @@ import java.util.List;
                 person.getEmail(),
                 account == null ? "" : formatTime(account.getLastLoginTime()),
                 account == null ? "" : formatTime(account.getLastUpdatedTime()),
-                reditsCompleted(student),   // Christopher Ogden NUID: 003959375 Admin use case
+                creditsCompleted(student),   // Christopher Ogden NUID: 003959375 Admin use case
                 gpa(student),
                 currentClasses(student)
     
