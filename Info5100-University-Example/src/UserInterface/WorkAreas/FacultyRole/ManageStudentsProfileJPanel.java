@@ -4,17 +4,29 @@
  */
 package UserInterface.WorkAreas.FacultyRole;
 
+import Business.Business;
+import Business.UserAccounts.UserAccount;
+import javax.swing.JPanel;
+
 /**
  *
  * @author luke
  */
 public class ManageStudentsProfileJPanel extends javax.swing.JPanel {
+    
+    private final Business business;
+    private final UserAccount useraccount;
+    private final JPanel CardSequencePanel;
 
     /**
      * Creates new form ManageStudentsJPanel
      */
-    public ManageStudentsProfileJPanel() {
+    public ManageStudentsProfileJPanel(Business business, UserAccount currentUser, JPanel userProcessContainer) {
         initComponents();
+        
+        this.business = business;
+        this.useraccount = currentUser;
+        this.CardSequencePanel = userProcessContainer;
     }
 
     /**
@@ -48,8 +60,13 @@ public class ManageStudentsProfileJPanel extends javax.swing.JPanel {
         lblCourse = new javax.swing.JLabel();
         cmbCourses = new javax.swing.JComboBox<>();
 
+        setBackground(new java.awt.Color(0, 153, 153));
+        setLayout(null);
+
         titleManageStudents.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         titleManageStudents.setText("Manage Students Profile");
+        add(titleManageStudents);
+        titleManageStudents.setBounds(15, 16, 201, 23);
 
         tblStudents.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -67,23 +84,44 @@ public class ManageStudentsProfileJPanel extends javax.swing.JPanel {
             tblStudents.getColumnModel().getColumn(3).setResizable(false);
         }
 
+        add(jScrollPane1);
+        jScrollPane1.setBounds(26, 91, 692, 185);
+
         lblName.setText("Name");
+        add(lblName);
+        lblName.setBounds(53, 297, 34, 17);
 
         lblNUID.setText("NU ID");
+        add(lblNUID);
+        lblNUID.setBounds(53, 340, 34, 17);
 
         lblHobbies.setText("Hobbies");
+        add(lblHobbies);
+        lblHobbies.setBounds(38, 383, 49, 17);
 
         lblGrade.setText("Grade");
+        add(lblGrade);
+        lblGrade.setBounds(51, 424, 36, 17);
 
         lblInterests.setText("Interests");
+        add(lblInterests);
+        lblInterests.setBounds(410, 383, 50, 17);
 
         lblGPA.setText("GPA");
+        add(lblGPA);
+        lblGPA.setBounds(434, 340, 26, 17);
 
         lblEmail.setText("Email");
+        add(lblEmail);
+        lblEmail.setBounds(428, 297, 32, 17);
 
         txtName.setEditable(false);
+        add(txtName);
+        txtName.setBounds(132, 294, 170, 23);
 
         txtNUID.setEditable(false);
+        add(txtNUID);
+        txtNUID.setBounds(132, 337, 170, 23);
 
         txtHobbies.setEditable(false);
         txtHobbies.addActionListener(new java.awt.event.ActionListener() {
@@ -91,118 +129,56 @@ public class ManageStudentsProfileJPanel extends javax.swing.JPanel {
                 txtHobbiesActionPerformed(evt);
             }
         });
+        add(txtHobbies);
+        txtHobbies.setBounds(132, 380, 170, 23);
 
         txtGrade.setEditable(false);
+        add(txtGrade);
+        txtGrade.setBounds(132, 421, 170, 23);
 
         txtEmail.setEditable(false);
+        add(txtEmail);
+        txtEmail.setBounds(515, 294, 170, 23);
 
         txtGPA.setEditable(false);
+        add(txtGPA);
+        txtGPA.setBounds(515, 337, 170, 23);
 
         txtInterests.setEditable(false);
+        add(txtInterests);
+        txtInterests.setBounds(515, 380, 170, 23);
 
         btnBack.setText("<< Back");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
+        add(btnBack);
+        btnBack.setBounds(120, 538, 80, 23);
 
         btnClear.setText("Clear");
+        add(btnClear);
+        btnClear.setBounds(534, 538, 72, 23);
 
         lblCourse.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
         lblCourse.setText("Course");
+        add(lblCourse);
+        lblCourse.setBounds(390, 53, 45, 17);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(120, 120, 120)
-                .addComponent(btnBack)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnClear)
-                .addGap(144, 144, 144))
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(26, 26, 26)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 692, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(38, 38, 38)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lblGrade)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(lblHobbies)
-                                .addComponent(lblNUID, javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(lblName, javax.swing.GroupLayout.Alignment.TRAILING)))
-                        .addGap(45, 45, 45)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(txtNUID, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtHobbies, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(108, 108, 108)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblInterests)
-                                    .addComponent(lblGPA, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(lblEmail, javax.swing.GroupLayout.Alignment.TRAILING))
-                                .addGap(55, 55, 55)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtInterests, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtGPA, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(txtGrade, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(15, 15, 15)
-                        .addComponent(titleManageStudents)))
-                .addContainerGap(32, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lblCourse)
-                .addGap(38, 38, 38)
-                .addComponent(cmbCourses, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(84, 84, 84))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addComponent(titleManageStudents)
-                .addGap(11, 11, 11)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblCourse)
-                    .addComponent(cmbCourses, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblEmail)
-                    .addComponent(lblName)
-                    .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(20, 20, 20)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblGPA)
-                    .addComponent(lblNUID)
-                    .addComponent(txtGPA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtNUID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(20, 20, 20)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblHobbies)
-                    .addComponent(lblInterests)
-                    .addComponent(txtInterests, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtHobbies, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblGrade)
-                    .addComponent(txtGrade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 94, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnBack)
-                    .addComponent(btnClear))
-                .addGap(39, 39, 39))
-        );
+        add(cmbCourses);
+        cmbCourses.setBounds(473, 50, 193, 23);
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtHobbiesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtHobbiesActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtHobbiesActionPerformed
+
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        // TODO add your handling code here:
+         CardSequencePanel.remove(this);
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+    }//GEN-LAST:event_btnBackActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

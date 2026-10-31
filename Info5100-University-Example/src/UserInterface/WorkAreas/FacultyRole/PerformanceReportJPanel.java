@@ -4,17 +4,30 @@
  */
 package UserInterface.WorkAreas.FacultyRole;
 
+import Business.Business;
+import Business.UserAccounts.UserAccount;
+import javax.swing.JPanel;
+
 /**
  *
  * @author luke
  */
 public class PerformanceReportJPanel extends javax.swing.JPanel {
+    
+    private final Business business;
+    private final UserAccount useraccount;
+    private final JPanel CardSequencePanel;
 
     /**
      * Creates new form PerformanceReportJPanel
      */
-    public PerformanceReportJPanel() {
+    public PerformanceReportJPanel(Business business, UserAccount currentUser, JPanel userProcessContainer) {
         initComponents();
+        
+        this.business = business;
+        this.useraccount = currentUser;
+        this.CardSequencePanel = userProcessContainer;
+
     }
 
     /**
@@ -42,21 +55,41 @@ public class PerformanceReportJPanel extends javax.swing.JPanel {
         btnBack = new javax.swing.JButton();
         btnGenerate = new javax.swing.JButton();
 
+        setBackground(new java.awt.Color(0, 153, 153));
+        setLayout(null);
+
         txtAverage.setEditable(false);
+        add(txtAverage);
+        txtAverage.setBounds(573, 314, 170, 23);
 
         txtLowestScore.setEditable(false);
+        add(txtLowestScore);
+        txtLowestScore.setBounds(573, 357, 170, 23);
 
         lblLowestScore.setText("Lowest");
+        add(lblLowestScore);
+        lblLowestScore.setBounds(487, 360, 42, 17);
 
         lblCourse.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
         lblCourse.setText("Course");
+        add(lblCourse);
+        lblCourse.setBounds(231, 52, 45, 17);
 
         titlePerformanceReports.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         titlePerformanceReports.setText("Performance Reports");
+        add(titlePerformanceReports);
+        titlePerformanceReports.setBounds(16, 14, 173, 23);
 
         lblAverage.setText("Average");
+        add(lblAverage);
+        lblAverage.setBounds(482, 317, 47, 17);
+
+        add(cmbCoursesPR);
+        cmbCoursesPR.setBounds(314, 49, 193, 23);
 
         txtNumberofStudents.setEditable(false);
+        add(txtNumberofStudents);
+        txtNumberofStudents.setBounds(224, 314, 170, 23);
 
         tblPerformanceReport.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -71,11 +104,20 @@ public class PerformanceReportJPanel extends javax.swing.JPanel {
         ));
         jScrollPane1.setViewportView(tblPerformanceReport);
 
+        add(jScrollPane1);
+        jScrollPane1.setBounds(52, 90, 692, 185);
+
         txtHighestScore.setEditable(false);
+        add(txtHighestScore);
+        txtHighestScore.setBounds(224, 357, 170, 23);
 
         lblStudentCount.setText("Number of Students");
+        add(lblStudentCount);
+        lblStudentCount.setBounds(62, 317, 117, 17);
 
         lblHighestScore.setText("Highest");
+        add(lblHighestScore);
+        lblHighestScore.setBounds(135, 360, 44, 17);
 
         btnBack.setText("<< Back");
         btnBack.addActionListener(new java.awt.event.ActionListener() {
@@ -83,6 +125,8 @@ public class PerformanceReportJPanel extends javax.swing.JPanel {
                 btnBackActionPerformed(evt);
             }
         });
+        add(btnBack);
+        btnBack.setBounds(83, 528, 80, 23);
 
         btnGenerate.setText("Generate Report");
         btnGenerate.addActionListener(new java.awt.event.ActionListener() {
@@ -90,81 +134,15 @@ public class PerformanceReportJPanel extends javax.swing.JPanel {
                 btnGenerateActionPerformed(evt);
             }
         });
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 692, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26))
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(16, 16, 16)
-                        .addComponent(titlePerformanceReports))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(231, 231, 231)
-                        .addComponent(lblCourse)
-                        .addGap(38, 38, 38)
-                        .addComponent(cmbCoursesPR, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(63, 63, 63)
-                        .addComponent(btnGenerate))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(62, 62, 62)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lblHighestScore)
-                            .addComponent(lblStudentCount))
-                        .addGap(45, 45, 45)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtHighestScore, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtNumberofStudents, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(88, 88, 88)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lblAverage)
-                            .addComponent(lblLowestScore))
-                        .addGap(44, 44, 44)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtLowestScore, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtAverage, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(83, 83, 83)
-                        .addComponent(btnBack)))
-                .addContainerGap(27, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addComponent(titlePerformanceReports)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblCourse)
-                    .addComponent(cmbCoursesPR, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnGenerate))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(39, 39, 39)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblAverage)
-                    .addComponent(lblStudentCount)
-                    .addComponent(txtNumberofStudents, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtAverage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(20, 20, 20)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblLowestScore)
-                    .addComponent(lblHighestScore)
-                    .addComponent(txtLowestScore, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtHighestScore, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 148, Short.MAX_VALUE)
-                .addComponent(btnBack)
-                .addGap(49, 49, 49))
-        );
+        add(btnGenerate);
+        btnGenerate.setBounds(570, 49, 126, 23);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         // TODO add your handling code here:
+        
+         CardSequencePanel.remove(this);
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
     }//GEN-LAST:event_btnBackActionPerformed
 
     private void btnGenerateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateActionPerformed
