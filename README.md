@@ -71,7 +71,7 @@ All student screens live in `UserInterface.WorkAreas.StudentRole` and are NetBea
 | Course Work | Classes of a semester with assignments submitted out of five, progress percentage, grade and whether the student liked the class. Submit an assignment by title (empty, duplicate, sixth and graded-class submissions are refused), like or unlike a class. |
 | Transcript | Every class by semester with credits, letter grade and grade points, a per-semester table with semester GPA, and a summary with credits completed, overall GPA and classes in progress. |
 | Graduation Audit | Core courses and electives against the MSIS degree, each completed, in progress or not taken; credits completed against the 32 required; a verdict that says ready or lists what is outstanding. |
-| About Me | Hobbies and interests the student wants their professors to see; they are kept on the student's profile (fields added by the faculty use case) and shown read-only on the faculty Manage Student Profiles screen. Rules: plain text, at most 120 characters each, not only punctuation; an empty box clears the value; saving with nothing changed says so; Undo Changes restores the saved values. |
+| About Me | Hobbies and interests the student wants their professors to see; they are kept on the student's profile (fields added by the faculty use case) so the faculty Manage Students Profiles screen can show them once that branch merges. Rules: plain text, at most 120 characters each, not only punctuation; an empty box clears the value; saving with nothing changed says so; Undo Changes restores the saved values. |
 
 Changes to the shared model for the student use case, each in a block marked "added for the Student use case": `Business.getDepartment()`, `StudentProfile.getAcademicRecord()`, grade, like and submission helpers on `SeatAssignment`, semester GPA and drop on `CourseLoad`, seat release on `Seat`, ordered course loads, overall GPA, `removeCourseLoad` and `releaseSeats` on `Transcript`, `removeStudent` on the university `StudentDirectory`, `getPerson()` on the university `StudentProfile` and `FacultyProfile`, name and teacher/seat helpers on `Course`, `CourseOffer` and `CourseSchedule`, getters and the semester list on `Department`, getters on `Degree` plus the 32-credit and graded-core rules in `Degree.isStudentReadyToGraduate`. `Business.deleteProfile` releases every seat the student held and removes the university record together with the profile.
 
@@ -92,7 +92,7 @@ Student scenario:
 3. Click **Course Work**. Select *INFO 7250*, type an assignment title and click *Submit Assignment*: the submitted count and progress rise. Click *Like / Unlike Course* to rate the class.
 4. Click **Transcript** to see the two graded semesters, the semester GPAs and the overall GPA of 3.50.
 5. Click **Graduation Audit**: all three core courses are done but only 16 of 32 credits, so the verdict lists the missing credits.
-6. Click **About Me**, type a hobby and an interest and click *Save*; a professor sees them on Manage Student Profiles. Click **My Profile** for the account and profile details, then **Logout**.
+6. Click **About Me**, type a hobby and an interest and click *Save* (the faculty Manage Students Profiles screen will show them). Click **My Profile** for the account and profile details, then **Logout**.
 7. Log in as `jim` / `******` for a first-semester student with nothing graded yet.
 
 (Admin scenario – add)
@@ -101,7 +101,7 @@ Student scenario:
 
 ## Testing Guide
 
-The student screens were tested with a harness that drives the real panels (selects rows, types text, clicks buttons, reads the message boxes) and then checks the university model: 70 checks in total. It is in the repository as `Info5100-University-Example/test/StudentUITest.java`; after compiling the project run it with a folder for its screenshots:
+The student screens were tested with a harness that drives the real panels (selects rows, types text, clicks buttons, reads the message boxes) and then checks the university model: 76 checks in total. It is in the repository as `Info5100-University-Example/test/StudentUITest.java`; after compiling the project run it with a folder for its screenshots:
 
     javac -d build/test -cp build/classes test/StudentUITest.java
     java -cp build/classes:build/test StudentUITest screenshots
@@ -149,6 +149,6 @@ Authentication and authorization check: log in with each demo account and confir
 
 | Member | Coding | Documentation | Testing | Other |
 |---|---|---|---|---|
-| Hemanth Bezawada | Student use case (5 screens, 11 pull requests), model integration, university seed data, empty-login check, post-merge fixes (name headers, empty semesters, seat release on delete) | this README's shared sections and the student sections | student UI harness (70 checks) | restoring the student work onto the new authentication layer, reviewing the team's pull requests |
+| Hemanth Bezawada | Student use case (5 screens, 11 pull requests), model integration, university seed data, empty-login check, post-merge fixes (name headers, empty semesters, seat release on delete) | this README's shared sections and the student sections | student UI harness (76 checks) | restoring the student work onto the new authentication layer, reviewing the team's pull requests |
 | Luke Tomlinson | (add) | (add) | (add) | (add) |
 | Christopher Ogden | (add) | (add) | (add) | (add) |
