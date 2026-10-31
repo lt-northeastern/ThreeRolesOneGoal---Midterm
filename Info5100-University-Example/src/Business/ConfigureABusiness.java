@@ -96,7 +96,9 @@ class ConfigureABusiness {
         UserAccount ua6 = uadirectory.newUserAccount(employeeprofile1, "jack", "jack1234");    // Jack While
         UserAccount ua7 = uadirectory.newUserAccount(facultyprofile1, "laura", "laura1234");   // Laura Brown
         UserAccount ua8 = uadirectory.newUserAccount(studentprofile1, "jim", "******");       // Jim Dellon, first-semester student
-
+        // Christopher Ogden NUID: 003959375 Admin use case: a disabled demo account to test the login rule
+        UserAccount ua9 = uadirectory.newUserAccount(studentprofile2, "anna", "anna1234");     // Anna Shnider
+        ua9.setActive(false);
   
         setUpUniversity(business, studentprofile0, studentprofile1);
         return business;

@@ -22,6 +22,7 @@ public class UserAccount {
     private final LocalDateTime createdTime;
     private LocalDateTime lastLoginTime;   
     private LocalDateTime lastUpdatedTime;
+    private boolean active = true;   // Christopher Ogden NUID: 003959375 Admin use case: disabled accounts cannot log in
     
     /**
      * Creates a login account for a profile and stamps the created and last-updated times with
@@ -133,7 +134,34 @@ public class UserAccount {
     public void checkLogin() {
         lastUpdatedTime = LocalDateTime.now();
     }
-        
+     /**
+     * True while the account may log in. An administrator can disable an account without
+     * deleting it, for example while a student is on leave.
+     *
+     * Christopher Ogden NUID: 003959375 Admin use case.
+     */
+    public boolean isActive() {
+        return active;
+    }
+
+    /**
+     * Enables or disables the account and updates its last-updated time.
+     *
+     * Christopher Ogden NUID: 003959375 Admin use case.
+     */
+    public void setActive(boolean active) {
+        this.active = active;
+        touch();
+    }
+
+    /**
+     * "Active" or "Disabled", for the account tables.
+     *
+     * Christopher Ogden NUID: 003959375 Admin use case.
+     */
+    public String getStatus() {
+        return active ? "Active" : "Disabled";
+    } 
     @Override
         public String toString(){
             

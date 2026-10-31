@@ -180,11 +180,21 @@ public class ProfileWorkAreaMainFrame extends javax.swing.JFrame {
 
         UserAccountDirectory uad = business.getUserAccountDirectory();
         UserAccount useraccount = uad.AuthenticateUser(un, pw);
+        
         if (useraccount == null) {
             JOptionPane.showMessageDialog(this, "Invalid user name or password. Please try again.",
                     "Login failed", JOptionPane.ERROR_MESSAGE);
             return;
         }
+        
+        // Christopher Ogden NUID: 003959375 Admin use case: a disabled account cannot log in
+        if (!useraccount.isActive()) {
+            pwEntry.setText("");
+            JOptionPane.showMessageDialog(this, "This account has been disabled. Please contact an administrator.",
+                    "Login failed", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
         StudentWorkAreaJPanel studentworkareajpanel;
         FacultyWorkAreaJPanel facultyworkarea;
         AdminRoleWorkAreaJPanel adminworkarea;
