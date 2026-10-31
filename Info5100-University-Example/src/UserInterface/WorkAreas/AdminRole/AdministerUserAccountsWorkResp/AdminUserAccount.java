@@ -66,6 +66,8 @@ public class AdminUserAccount extends javax.swing.JPanel {
         });
 
         refreshTable();
+        refreshPeopleWithoutLogin();   // Christopher Ogden NUID: 003959375 Admin use case: fill the list when the screen opens
+
 
     }
     /**
