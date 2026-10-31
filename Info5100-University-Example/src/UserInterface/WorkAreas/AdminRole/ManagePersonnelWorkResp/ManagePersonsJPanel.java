@@ -185,6 +185,10 @@ public class ManagePersonsJPanel extends javax.swing.JPanel {
         if (!Validation.isValidEmail(email)) {
             return "The email address is not valid (example: name@northeastern.edu).";
         }
+        // Christopher Ogden NUID: 003959375 Admin use case: one email address per person
+        if (business.isEmailTaken(email, existing == null ? null : existing.getPerson())) {
+            return "Another person is already registered with this email address.";
+        }
         if (!Validation.isValidPhone(phone)) {   // Christopher Ogden NUID: 003959375 Admin use case: shared rule
             return Validation.PHONE_RULE;
         }

@@ -205,6 +205,10 @@ import java.util.List;
         if (!Validation.isValidPhone(txtPhone.getText())) {   // Christopher Ogden NUID: 003959375 Admin use case
             return Validation.PHONE_RULE;
         }
+        // Christopher Ogden NUID: 003959375 Admin use case: one email address per person
+        if (business.isEmailTaken(email, editing == null ? null : editing.getPerson())) {
+            return "Another person is already registered with this email address.";
+        }
 
         String username = txtUserName.getText().trim();
         String password = new String(pwEntry.getPassword());

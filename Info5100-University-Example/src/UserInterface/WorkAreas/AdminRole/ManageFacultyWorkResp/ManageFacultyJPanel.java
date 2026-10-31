@@ -171,6 +171,10 @@ public class ManageFacultyJPanel extends javax.swing.JPanel {
         if (!Validation.isValidPhone(txtPhone.getText())) {   // Christopher Ogden NUID: 003959375 Admin use case
             return Validation.PHONE_RULE;
         }
+        // Christopher Ogden NUID: 003959375 Admin use case: one email address per person
+        if (business.isEmailTaken(email, editing == null ? null : editing.getPerson())) {
+            return "Another person is already registered with this email address.";
+        }
         if (!Validation.isValidUsername(txtUserName.getText())) {
             return "The user name must be at least 3 characters and cannot contain spaces.";
         }
