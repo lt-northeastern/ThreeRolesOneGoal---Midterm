@@ -90,4 +90,26 @@ public class CourseOffer {
         return course.getCredits();
     }
 
+    // ---- added for the Student use case by Hemanth Bezawada (NUID 002059527) ----
+    // the professor's name, or TBA when nobody has been assigned yet
+    public String getTeacherName() {
+        if (facultyassignment == null || facultyassignment.getFacultyProfile() == null) {
+            return "TBA";
+        }
+        return facultyassignment.getFacultyProfile().getPerson().getPersonId();
+    }
+
+    public int getTotalSeats() {
+        return seatlist.size();
+    }
+
+    public int getAvailableSeats() {
+        int free = 0;
+        for (Seat s : seatlist) {
+            if (!s.isOccupied()) {
+                free = free + 1;
+            }
+        }
+        return free;
+    }
 }

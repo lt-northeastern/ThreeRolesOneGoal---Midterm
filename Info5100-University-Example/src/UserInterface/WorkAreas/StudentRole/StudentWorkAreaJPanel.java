@@ -14,8 +14,12 @@ import Business.Business;
 import Business.Profiles.StudentProfile;
 import Business.UserAccounts.UserAccount;
 import UserInterface.WorkAreas.MyProfile.MyProfileJPanel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import java.awt.CardLayout;
+import UserInterface.WorkAreas.StudentRole.GraduationAuditWorkResp.GraduationAuditJPanel;
+import UserInterface.WorkAreas.StudentRole.TranscriptWorkResp.TranscriptJPanel;
+import UserInterface.WorkAreas.StudentRole.CourseWorkResp.CourseWorkJPanel;
+import UserInterface.WorkAreas.StudentRole.RegistrationWorkResp.RegistrationJPanel;
 import UserInterface.WorkAreas.MyProfile.MyProfileJPanel;
 
 /**
@@ -27,6 +31,7 @@ public class StudentWorkAreaJPanel extends javax.swing.JPanel {
     private final Business business;
     private final UserAccount useraccount;
     private final JPanel CardSequencePanel;
+    private final StudentProfile student;   // the student behind the account; the screens work on their record
 
     /**
      * Creates new form UnitRiskWorkArea
@@ -40,6 +45,7 @@ public class StudentWorkAreaJPanel extends javax.swing.JPanel {
         business = b;
         useraccount = ua;
         this.CardSequencePanel = clp;
+        student = (StudentProfile) ua.getAssociatedPersonProfile();
         initComponents();
 
     }
@@ -174,7 +180,9 @@ public class StudentWorkAreaJPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton4IdentifyResourceAssetsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4IdentifyResourceAssetsActionPerformed
-    JOptionPane.showMessageDialog(this, "This function is not available.", "Not available", JOptionPane.INFORMATION_MESSAGE);
+        getRecord();
+        CourseWorkJPanel screen = new CourseWorkJPanel(business, student, CardSequencePanel);
+        open("CourseWork", screen);
 
     }//GEN-LAST:event_jButton4IdentifyResourceAssetsActionPerformed
 
@@ -189,22 +197,40 @@ public class StudentWorkAreaJPanel extends javax.swing.JPanel {
 }//GEN-LAST:event_btnMyProfileActionPerformed
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
-        // TODO add your handling code here:
-        JOptionPane.showMessageDialog(this, "This function is not available.", "Not available", JOptionPane.INFORMATION_MESSAGE);
+        getRecord();
+        GraduationAuditJPanel screen = new GraduationAuditJPanel(business, student, CardSequencePanel);
+        open("GraduationAudit", screen);
 
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
-        // TODO add your handling code here:
-
-        JOptionPane.showMessageDialog(this, "This function is not available.", "Not available", JOptionPane.INFORMATION_MESSAGE);
+        getRecord();
+        RegistrationJPanel screen = new RegistrationJPanel(business, student, CardSequencePanel);
+        open("Registration", screen);
 }//GEN-LAST:event_jButton11ActionPerformed
 
     private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
-        // TODO add your handling code here:
-        JOptionPane.showMessageDialog(this, "This function is not available.", "Not available", JOptionPane.INFORMATION_MESSAGE);
+        getRecord();
+        TranscriptJPanel screen = new TranscriptJPanel(business, student, CardSequencePanel);
+        open("Transcript", screen);
     }//GEN-LAST:event_jButton12ActionPerformed
 
+
+    // ---- added for the Student use case by Hemanth Bezawada (NUID 002059527) ----
+    // a student the administrator just added, or who just signed up, has no record yet
+    private info5100.university.example.Persona.StudentProfile getRecord() {
+        if (student.getAcademicRecord() == null) {
+            info5100.university.example.Department.Department department = business.getDepartment();
+            info5100.university.example.Persona.Person person = department.getPersonDirectory().newPerson(student.getPerson().getPersonId());
+            student.setAcademicRecord(department.getStudentDirectory().newStudentProfile(person));
+        }
+        return student.getAcademicRecord();
+    }
+
+    private void open(String name, JPanel screen) {
+        CardSequencePanel.add(name, screen);
+        ((CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnMyProfile;

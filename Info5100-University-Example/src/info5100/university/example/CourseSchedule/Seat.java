@@ -38,4 +38,15 @@ public class Seat {
     public int getCourseCredits(){
         return courseoffer.getCreditHours();
     }
+
+    // ---- added for the Student use case by Hemanth Bezawada (NUID 002059527) ----
+    public int getNumber() {
+        return number;
+    }
+
+    // the student dropped the class: the seat opens up again
+    public void release() {
+        occupied = false;
+        seatassignment = null;
+    }
 }
