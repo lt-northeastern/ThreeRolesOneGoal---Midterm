@@ -23,8 +23,8 @@ Key features implemented:
 
 - Login with role-based routing: a student, a faculty member and an administrator each land in their own work area and see only their own functions.
 - Student use case (see below): register for and drop classes, hand in course work and track progress, run a graduation audit, review the transcript.
-- Administrator use case: register persons, manage student and faculty profiles and their user accounts, disable an account; every administrator screen checks the logged-in account before it opens.
-- Faculty use case: manage courses, student profiles and performance reports (screens in progress).
+- Administrator use case: register persons, manage student and faculty profiles and their user accounts; a disabled account (`anna` in the seed data) is refused at login, and every administrator screen checks the logged-in account before it opens.
+- Faculty use case: work area with My Profile; the Manage Courses, Student Profiles and Performance Reports screens are in progress on the faculty branch.
 
 ## Installation & Setup Instructions
 
@@ -100,7 +100,7 @@ Student scenario:
 
 ## Testing Guide
 
-The student screens were tested with a harness that drives the real panels (selects rows, types text, clicks buttons, reads the message boxes) and then checks the university model: 60 checks in total. It is in the repository as `Info5100-University-Example/test/StudentUITest.java`; after compiling the project run it with a folder for its screenshots:
+The student screens were tested with a harness that drives the real panels (selects rows, types text, clicks buttons, reads the message boxes) and then checks the university model: 63 checks in total. It is in the repository as `Info5100-University-Example/test/StudentUITest.java`; after compiling the project run it with a folder for its screenshots:
 
     javac -d build/test -cp build/classes test/StudentUITest.java
     java -cp build/classes:build/test StudentUITest screenshots
@@ -123,7 +123,7 @@ Sample cases to repeat by hand:
 | Audit | Graduation Audit for `adam` and for `jim` | 16 of 32 credits vs 0 of 32 and three core courses outstanding |
 | Disabled account | log in as `anna` / `anna1234` | "account has been disabled" message, no work area opens |
 | Drop the last class | register a new student for one class → select it → Drop → Yes | class removed, seat count back up, the semester disappears from the Transcript |
-| Delete a student | log in as `admin` → Manage Students → select Jim Dellon → Delete → Yes | `jim` can no longer log in and his Fall 2026 seats show as available again |
+| Delete a student | log in as `admin` → Manage Students → select Jim Dellon → Delete → Yes; log out and try `jim` / `******`; log in as `adam` → Registration | "Student deleted" message; `jim` gets "Invalid user name or password"; INFO 6350 shows 1 of 1 seats and Open |
 
 Authentication and authorization check: log in with each demo account and confirm that only that role's buttons are available and that a student only sees their own transcript.
 
@@ -146,6 +146,6 @@ Authentication and authorization check: log in with each demo account and confir
 
 | Member | Coding | Documentation | Testing | Other |
 |---|---|---|---|---|
-| Hemanth Bezawada | Student use case (4 screens, 10 pull requests), model integration, university seed data, empty-login check, post-merge fixes (name headers, empty semesters, seat release on delete) | this README's shared sections and the student sections | student UI harness (60 checks) | restoring the student work onto the new authentication layer, reviewing the team's pull requests |
+| Hemanth Bezawada | Student use case (4 screens, 10 pull requests), model integration, university seed data, empty-login check, post-merge fixes (name headers, empty semesters, seat release on delete) | this README's shared sections and the student sections | student UI harness (63 checks) | restoring the student work onto the new authentication layer, reviewing the team's pull requests |
 | Luke Tomlinson | (add) | (add) | (add) | (add) |
 | Christopher Ogden | (add) | (add) | (add) | (add) |
