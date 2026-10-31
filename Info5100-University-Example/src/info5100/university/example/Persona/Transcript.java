@@ -147,4 +147,15 @@ public class Transcript {
             currentcourseload = null;
         }
     }
+
+    // frees every seat the student still holds in an ungraded class; used when the administrator removes the student
+    public void releaseSeats() {
+        for (CourseLoad cl : courseloadlist.values()) {
+            for (SeatAssignment sa : new ArrayList<SeatAssignment>(cl.getSeatAssignments())) {
+                if (!sa.isGraded()) {
+                    cl.dropSeatAssignment(sa);
+                }
+            }
+        }
+    }
 }

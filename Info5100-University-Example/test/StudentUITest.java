@@ -418,6 +418,19 @@ public class StudentUITest {
         check("course work: an empty record says to register first", label(cwE, "You are not registered").getText().contains("Registration"));
         click(button(cwE, "Submit Assignment"));
         check("course work: submit with no classes explains what to do", lastDialogText.contains("Registration"));
+
+        // ---- deleting a student from the administrator side frees the seats and removes the university record
+        StudentProfile jimProfile = b.getStudentDirectory().findStudentByNuid("912564001");
+        info5100.university.example.Persona.StudentProfile jimRecord = jimProfile.getAcademicRecord();
+        List<SeatAssignment> jimClasses = new ArrayList<SeatAssignment>(jimRecord.getCourseList());
+        int[] seatsBeforeDelete = new int[jimClasses.size()];
+        for (int i = 0; i < jimClasses.size(); i++) seatsBeforeDelete[i] = jimClasses.get(i).getCourseOffer().getAvailableSeats();
+        b.deleteProfile(jimProfile);
+        boolean freed = !jimClasses.isEmpty();
+        for (int i = 0; i < jimClasses.size(); i++) freed &= jimClasses.get(i).getCourseOffer().getAvailableSeats() == seatsBeforeDelete[i] + 1;
+        check("delete: removing Jim frees his seats and drops his university record and login", freed
+                && b.getDepartment().getStudentDirectory().findStudent(jimRecord.getPerson().getPersonId()) == null
+                && jimProfile.getAcademicRecord() == null && b.getUserAccountDirectory().findByUsername("jim") == null);
         finish();
     }
 
