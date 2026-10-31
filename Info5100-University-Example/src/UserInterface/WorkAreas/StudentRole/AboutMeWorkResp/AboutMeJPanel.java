@@ -45,7 +45,7 @@ public class AboutMeJPanel extends javax.swing.JPanel {
                 return what + " contains characters that cannot be shown. Please use plain text.";
             }
         }
-        if (!value.isEmpty() && !value.matches(".*[A-Za-z0-9].*")) {
+        if (!value.isEmpty() && !value.matches(".*[\\p{L}\\p{N}].*")) {   // a letter or digit of any script
             return what + " should contain some letters or digits, not only punctuation.";
         }
         return null;
@@ -142,13 +142,14 @@ public class AboutMeJPanel extends javax.swing.JPanel {
             return;
         }
         if (hobbies.equals(student.getHobbies()) && interests.equals(student.getInterests())) {
+            showSaved();   // drops any surrounding spaces the student typed
             JOptionPane.showMessageDialog(this, "Nothing was changed.", "About Me", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
         student.setHobbies(hobbies);
         student.setInterests(interests);
         showSaved();
-        JOptionPane.showMessageDialog(this, "Your hobbies and interests were saved. Your professors can see them now.", "About Me", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this, "Your hobbies and interests were saved.", "About Me", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnUndoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUndoActionPerformed
