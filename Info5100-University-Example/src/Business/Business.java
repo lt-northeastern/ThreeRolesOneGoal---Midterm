@@ -156,7 +156,7 @@ public class Business {
         persondirectory.removePerson(person);
     }
     /**
-     * Authorization check for the administrator screens: true only for an account that still
+     * Authorization check for the administrator screens: true only for an  active account that still
      * exists in the directory and belongs to an administrator (EmployeeProfile). Every button
      * of the admin work area asks this before it opens a screen.
      *
@@ -164,6 +164,7 @@ public class Business {
      */
     public boolean isAdministrator(UserAccount ua) {
         return ua != null
+                && ua.isActive()
                 && useraccountdirectory.getUserAccountList().contains(ua)
                 && ua.getAssociatedPersonProfile() instanceof EmployeeProfile;
     }    
