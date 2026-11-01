@@ -22,6 +22,7 @@ import UserInterface.WorkAreas.AdminRole.ManageFacultyWorkResp.ManageFacultyJPan
 import UserInterface.WorkAreas.AdminRole.ManageStudentsWorkResp.ManageStudentsJPanel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import UserInterface.WorkAreas.AdminRole.AccountHealthWorkResp.AccountHealthJPanel;
 
 /**
  *
@@ -76,6 +77,7 @@ public class AdminRoleWorkAreaJPanel extends javax.swing.JPanel {
         btnMyprofile = new javax.swing.JButton();
         btnManageStudents = new javax.swing.JButton();
         btnUniversityReports = new javax.swing.JButton();
+        btnAccountHealth = new javax.swing.JButton();
 
         setForeground(new java.awt.Color(51, 51, 51));
 
@@ -163,6 +165,20 @@ public class AdminRoleWorkAreaJPanel extends javax.swing.JPanel {
             }
         });
 
+        btnAccountHealth.setBackground(new java.awt.Color(102, 153, 255));
+        btnAccountHealth.setFont(getFont());
+        btnAccountHealth.setForeground(new java.awt.Color(255, 255, 255));
+        btnAccountHealth.setText("Account Health");
+        btnAccountHealth.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnAccountHealth.setMaximumSize(new java.awt.Dimension(145, 40));
+        btnAccountHealth.setMinimumSize(new java.awt.Dimension(20, 20));
+        btnAccountHealth.setPreferredSize(new java.awt.Dimension(240, 25));
+        btnAccountHealth.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAccountHealthIdentifyEventsActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -175,6 +191,7 @@ public class AdminRoleWorkAreaJPanel extends javax.swing.JPanel {
                     .addComponent(btnMyprofile, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(75, 75, 75)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnAccountHealth, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnUniversityReports, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnRegisterPersons, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnManageStudents, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -187,15 +204,17 @@ public class AdminRoleWorkAreaJPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnRegisterPersons, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnAdminUserAccounts, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(54, 54, 54)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnManageFaculty, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnManageStudents, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(54, 54, 54)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnMyprofile, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnUniversityReports, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(127, Short.MAX_VALUE))
+                    .addComponent(btnUniversityReports, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnMyprofile, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(btnAccountHealth, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(141, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -293,9 +312,25 @@ public class AdminRoleWorkAreaJPanel extends javax.swing.JPanel {
         CardSequencePanel.add("UniversityReports", reports);
         ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
     }//GEN-LAST:event_btnUniversityReportsIdentifyEventsActionPerformed
+    /**
+     * Opens the Account Health screen (disabled and unused logins, people without a login or
+     * an email address).
+     *
+     * Christopher Ogden NUID: 003959375 Admin use case.
+     */
+    private void btnAccountHealthIdentifyEventsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAccountHealthIdentifyEventsActionPerformed
+        // TODO add your handling code here:
+        if (!isAllowed()) {
+            return;
+        }
+        AccountHealthJPanel health = new AccountHealthJPanel(business, useraccount, CardSequencePanel);
+        CardSequencePanel.add("AccountHealth", health);
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+    }//GEN-LAST:event_btnAccountHealthIdentifyEventsActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAccountHealth;
     private javax.swing.JButton btnAdminUserAccounts;
     private javax.swing.JButton btnManageFaculty;
     private javax.swing.JButton btnManageStudents;
