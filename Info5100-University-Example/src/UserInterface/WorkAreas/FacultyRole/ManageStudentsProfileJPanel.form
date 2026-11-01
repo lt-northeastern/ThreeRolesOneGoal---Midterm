@@ -28,11 +28,11 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Helvetica Neue" size="18" style="0"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Manage Students Profile"/>
+        <Property name="text" type="java.lang.String" value="Manage Students Profiles"/>
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="15" y="16" width="-1" height="-1"/>
+          <AbsoluteConstraints x="15" y="16" width="230" height="-1"/>
         </Constraint>
       </Constraints>
     </Component>
@@ -54,8 +54,8 @@
               <Table columnCount="4" rowCount="4">
                 <Column editable="false" title="Name" type="java.lang.Object"/>
                 <Column editable="false" title="NU ID" type="java.lang.Object"/>
-                <Column editable="true" title="Email" type="java.lang.Object"/>
-                <Column editable="true" title="Grade" type="java.lang.Object"/>
+                <Column editable="false" title="Email" type="java.lang.Object"/>
+                <Column editable="false" title="Grade" type="java.lang.Object"/>
               </Table>
             </Property>
             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">

@@ -19,7 +19,7 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author luke
+ * @author Luke Tomlinson (003989857)
  */
 public class ManageStudentsProfileJPanel extends javax.swing.JPanel {
     
@@ -201,9 +201,9 @@ public class ManageStudentsProfileJPanel extends javax.swing.JPanel {
         setLayout(null);
 
         titleManageStudents.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
-        titleManageStudents.setText("Manage Students Profile");
+        titleManageStudents.setText("Manage Students Profiles");
         add(titleManageStudents);
-        titleManageStudents.setBounds(15, 16, 201, 23);
+        titleManageStudents.setBounds(15, 16, 230, 23);
 
         tblStudents.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -217,7 +217,7 @@ public class ManageStudentsProfileJPanel extends javax.swing.JPanel {
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, true, true
+                false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -339,10 +339,7 @@ public class ManageStudentsProfileJPanel extends javax.swing.JPanel {
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
         // TODO add your handling code here:
         
-          refreshTable();
-
-        btnClear.addActionListener(e -> clearForm());          // Clear button empties the form for the user
-        tblStudents.setDefaultEditor(Object.class, null);       // table is read-only 
+       clearForm();
     
     }//GEN-LAST:event_btnClearActionPerformed
 
