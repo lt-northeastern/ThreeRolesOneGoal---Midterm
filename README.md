@@ -7,7 +7,7 @@ INFO 5100 Application Engineering and Development, Fall 2026 – Midterm Project
 | Member | NUID | Use case | Responsibilities |
 |---|---|---|---|
 | Hemanth Bezawada | 002059527 | Student | Course work, class registration, graduation audit, transcript, student profile; integration of the university model with the access control layer |
-| Luke Tomlinson | (add NUID) | Faculty | (add responsibilities) |
+| Luke Tomlinson | 003989857 | Faculty | Manage Courses (view own sections, update description, meeting day/time and room), Manage Students Profiles (enrolled students with grade, GPA, hobbies and interests), Performance Reports (class grades with count, average, highest and lowest); faculty demo data |
 | Christopher Ogden | 003959375 | Administrator | Access control layer from Assignment 3 (login, roles, user accounts, sign up, My Profile); administrator use case: user accounts, personnel, student and faculty records, own profile; admin UI test harness |
 
 ## Project Overview
@@ -24,7 +24,7 @@ Key features implemented:
 - Login with role-based routing: a student, a faculty member and an administrator each land in their own work area and see only their own functions.
 - Student use case (see below): register for and drop classes, hand in course work and track progress, run a graduation audit, review the transcript, tell professors about hobbies and interests.
 - Administrator use case (see below): create, update, disable and delete login accounts; register and manage staff, students and faculty; see each student's credits, GPA and current classes; university reports (course enrollment, student standing, faculty load) and an account health report; edit their own profile and change their password.
-- Faculty use case: work area with My Profile; the Manage Courses, Student Profiles and Performance Reports screens are in progress on the faculty branch.
+- Faculty use case (see below): see only your own course sections; update section details (description, meeting day and time, room); view the students in a section with grade, GPA, hobbies and interests; generate a performance report for a class with student count, average, highest and lowest grade.
 
 ## Installation & Setup Instructions
 
@@ -72,7 +72,7 @@ All student screens live in `UserInterface.WorkAreas.StudentRole` and are NetBea
 | Course Work | Classes of a semester with assignments submitted out of five, progress percentage, grade and whether the student liked the class. Submit an assignment by title (empty, duplicate, sixth and graded-class submissions are refused), like or unlike a class. |
 | Transcript | Every class by semester with credits, letter grade and grade points, a per-semester table with semester GPA, and a summary with credits completed, overall GPA and classes in progress. |
 | Graduation Audit | Core courses and electives against the MSIS degree, each completed, in progress or not taken; credits completed against the 32 required; a verdict that says ready or lists what is outstanding. |
-| About Me | Hobbies and interests the student wants their professors to see; they are kept on the student's profile (fields added by the faculty use case) so the faculty Manage Students Profiles screen can show them once that branch merges. Rules: plain text, at most 120 characters each, not only punctuation; an empty box clears the value; saving with nothing changed says so; Undo Changes restores the saved values. |
+| About Me | Hobbies and interests the student wants their professors to see; they are kept on the student's profile (fields added by the faculty use case) so the faculty Manage Students Profiles screen shows them. Rules: plain text, at most 120 characters each, not only punctuation; an empty box clears the value; saving with nothing changed says so; Undo Changes restores the saved values. |
 
 Changes to the shared model for the student use case, each in a block marked "added for the Student use case": `Business.getDepartment()`, `StudentProfile.getAcademicRecord()`, grade, like and submission helpers on `SeatAssignment`, semester GPA and drop on `CourseLoad`, seat release on `Seat`, ordered course loads, overall GPA, `removeCourseLoad` on `Transcript`, `getPerson()` on the university `StudentProfile` and `FacultyProfile`, name and teacher/seat helpers on `Course`, `CourseOffer` and `CourseSchedule`, getters and the semester list on `Department`, getters on `Degree` plus the 32-credit and graded-core rules in `Degree.isStudentReadyToGraduate`.
 
@@ -94,9 +94,18 @@ Rules shared by the staff, student and faculty forms: name required, a valid ema
 
 Changes to the shared code for the administrator use case, each commented "Christopher Ogden NUID: 003959375 Admin use case": the active flag on `UserAccount` and the disabled-login check in `ProfileWorkAreaMainFrame`; `Business.isAdministrator`, `Business.isEmailTaken` and freeing a student's seats in `Business.deleteProfile`; `Validation.isValidPhone`; `StudentDirectory.removeStudent` in the university model; a second `MyProfileJPanel` constructor that takes the business (the old one is unchanged).
 
-### Faculty ((add name))
+### Faculty (Luke Tomlinson)
 
-(add)
+All faculty screens live in `UserInterface.WorkAreas.FacultyRole` and are NetBeans GUI Builder forms (Null Layout, opened through the `CardLayout` container). Each screen takes the business object, the logged-in user account and the card container. A professor only sees course sections whose teacher is the logged-in person, so Gina Montana (`faculty`) and Laura Brown (`laura`) see different courses.
+
+| Screen | What it does |
+|---|---|
+| Manage Courses | Table of the professor's sections (course #, name, credits, semester, enrolled). Clicking a row fills the form; catalog data (course #, name, credits, semester, enrolled) is read-only because the department owns it. Description, meeting day, meeting time and room can be updated. Rules: a row must be selected; room and meeting time are required; saving with nothing changed says so; Clear empties the form. |
+| Manage Students Profiles | Course dropdown with the professor's sections; the table lists the students enrolled in that section with NU ID, email and grade. Clicking a student shows name, email, NU ID, overall GPA, hobbies, interests and grade in that class (all read-only; hobbies and interests come from the student's About Me screen). Clear empties the form. |
+| Performance Reports | Course dropdown with the professor's sections; *Generate Report* lists each student's letter grade and grade points, plus the number of students, average, highest and lowest grade. Average, highest and lowest use graded students only, so an in-progress class shows "No grades yet"; an empty class says "No students are enrolled in this course yet."; changing the course clears the old report. |
+| My Profile | The shared profile screen of the access control layer. |
+
+All three tables are read-only. Changes to the shared code for the faculty use case, each commented "Luke Tomlinson NUID: 003989857 - Faculty use case": description, meeting day, meeting time and room on `CourseOffer`; hobbies and interests on the access control `StudentProfile`; faculty demo data in `ConfigureABusiness.setUpFacultyDemo` (hobbies and interests for the seeded students, Anna Shnider enrolled in three of Gina Montana's classes).
 
 ## Usage Instructions
 
@@ -122,7 +131,13 @@ Administrator scenario:
 8. Click **Account Health**: anna is a disabled account and the logins nobody has used yet are listed; choose *Show → Disabled account* to see only anna.
 9. Click **My Profile** → *Edit Profile*, change the phone and *Save*; then *Change Password*. Log out and log in with the new password.
 
-(Faculty scenario – add)
+Faculty scenario:
+
+1. Log in as `faculty` / `******` (Gina Montana). The faculty work area opens.
+2. Click **Manage Courses**: Gina's five sections are listed. Select INFO 6250 – Spring 2026, type a description, pick a meeting day, enter a meeting time and a room and click *Update*: "The changes were saved." Select the row again to see the new values. Click *Update* again without changes: "Nothing was changed."
+3. Click **Manage Students Profiles** and choose INFO 6150 – Fall 2025: Adam Rollen and Anna Shnider are listed. Click Adam to see his GPA 3.50, hobbies, interests and grade B+. Click *Clear*.
+4. Click **Performance Reports**, choose INFO 6150 – Fall 2025 and click *Generate Report*: two students with average 3.65, highest 4.0 and lowest 3.3. Choose INFO 6105 – Fall 2026 and generate: "No students are enrolled in this course yet."
+5. Log out and log in as `laura` / `laura1234`: a different list of courses (INFO 5100, INFO 6205, INFO 7250, INFO 7375).
 
 ## Testing Guide
 
@@ -179,6 +194,20 @@ Administrator cases to repeat by hand:
 | Edit own profile | My Profile → Edit Profile → blank name → Save | "Please enter your name."; valid values save, Cancel discards |
 | Change password | My Profile → Change Password with a wrong current password / a mismatch / valid values | refused / refused / "Your password was changed." and only the new password works |
 
+Faculty cases to repeat by hand:
+
+| Test | Steps | Expected |
+|---|---|---|
+| Update with no selection | Manage Courses → Update | "Please select a row in the table first." |
+| Blank room or time | Manage Courses → select a row → clear Room → Update | "Please enter a room (for example Snell 108)." |
+| Nothing changed | Manage Courses → select a row → Update without edits | "Nothing was changed." |
+| Save section details | Manage Courses → select a row → fill description, day, time, room → Update | "The changes were saved."; re-selecting the row shows the values |
+| Own courses only | log in as `faculty`, then as `laura` | each professor sees only their own sections on all three screens |
+| Student profile | Manage Students Profiles → INFO 6150 – Fall 2025 → click Adam | GPA 3.50, hobbies, interests and grade B+ fill in; Clear empties them |
+| Empty class report | Performance Reports → INFO 6105 – Fall 2026 → Generate Report | "No students are enrolled in this course yet." |
+| In-progress class report | Performance Reports → INFO 6350 – Fall 2026 → Generate Report | 1 student; average "No grades yet", highest and lowest "-" |
+| Read-only tables | double-click any cell on the three faculty tables | nothing can be typed |
+
 ## Challenges & Solutions
 
 - The two packages each have a `StudentProfile` and a `Person` class. We kept both and linked them: the access control profile holds a reference to the university record, using the fully qualified name where both are in scope.
@@ -188,6 +217,9 @@ Administrator cases to repeat by hand:
 - Compiled `.class` files in `build/` were committed, so after a pull NetBeans ran stale classes (`NoSuchMethodError`). The `build/`, `dist/` and `nbproject/private/` folders and `.DS_Store` are now in `.gitignore` and no longer tracked.
 - My Profile is shared by all three roles. Editing was added through a second constructor that takes the business and is only used by the administrator work area, so the student and faculty pages did not change.
 - The administrator pull requests were stacked (each branch built on the previous one) so work could continue while reviews were pending; each was merged in order with a merge commit and the next one retargeted to `main`.
+- The faculty screens need to know which sections belong to the logged-in professor. Every course offer knows its teacher, so each screen loops every semester's schedule and keeps the offers whose teacher is the logged-in person.
+- Each faculty table row stands for two objects (the student and their seat in the class). Lists kept in the same order as the table rows map a selected row back to both, the same way the administrator screens map rows to profiles.
+- The first faculty demo data added students without logins, which broke six administrator test checks that count logins and seats. The demo data was reduced to the existing students (Anna enrolled in Gina's classes), and both test harnesses pass again.
 - The main branch was replaced with the new authentication layer after the student use case had been merged, so the student screens disappeared from `main`. Instead of forcing the old history back, the old `main` was merged into a branch of the new one: the authentication files were kept as they are and the student hooks were re-added on top (`Business.getDepartment`, `StudentProfile.getAcademicRecord`, the university seed data and the work area handlers, now built from the logged-in `UserAccount`).
 
 ## Future Enhancements
@@ -198,6 +230,8 @@ Administrator cases to repeat by hand:
 - Profile editing and password change for students and faculty (administrators can already do both on My Profile).
 - An audit log of administrator actions and of every login attempt (who disabled, created or deleted which account, failed logins), shown as another Account Health issue.
 - Exporting the university reports to CSV.
+- Matching course sections to professors by an ID instead of the display name (renaming a professor currently empties their faculty screens).
+- Faculty entering and changing grades from Performance Reports.
 - Storing passwords as salted hashes instead of plain text, and locking an account after several failed logins.
 
 ## Contribution Breakdown
@@ -205,5 +239,5 @@ Administrator cases to repeat by hand:
 | Member | Coding | Documentation | Testing | Other |
 |---|---|---|---|---|
 | Hemanth Bezawada | Student use case (5 screens, 11 pull requests), model integration, university seed data, empty-login check, post-merge fixes (name headers, empty semesters) | this README's shared sections and the student sections | student UI harness (76 checks) | restoring the student work onto the new authentication layer, reviewing the team's pull requests |
-| Luke Tomlinson | (add) | (add) | (add) | (add) |
+| Luke Tomlinson | Faculty use case (Manage Courses, Manage Students Profiles, Performance Reports), section details on `CourseOffer`, hobbies and interests on `StudentProfile`, faculty demo data, read-only tables and review fixes (10 pull requests) | this README's faculty sections; method comments with name and NUID on the faculty screens | manual tests of every faculty screen and message (faculty table above) | repository owner; branch protection on `main`; team kickoff plan and project sign-up |
 | Christopher Ogden | Access control layer from Assignment 3 (login, roles, user accounts, sign up, My Profile); administrator use case: admin check and disabled accounts, Administer User Accounts (status, disable/enable, create login), shared phone and email rules, Manage Students credits/GPA and seat release on delete, University Reports and Account Health screens, edit own profile and change password (10 pull requests) | Javadoc comments across the access control code; this README's administrator sections | admin UI harness (51 checks); manual test tables above | removed compiled `build/` files from git and added `.gitignore` |
