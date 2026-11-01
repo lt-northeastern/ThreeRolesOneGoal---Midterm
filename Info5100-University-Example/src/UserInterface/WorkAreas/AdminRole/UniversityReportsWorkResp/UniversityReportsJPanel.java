@@ -50,6 +50,7 @@ public class UniversityReportsJPanel extends javax.swing.JPanel {
     public UniversityReportsJPanel(Business business, UserAccount currentUser, JPanel userProcessContainer) {
         initComponents();
         this.business = business;
+        tblReport.setDefaultEditor(Object.class, null);
         this.userProcessContainer = userProcessContainer;
         cmbReport.removeAllItems();
         cmbReport.addItem(COURSE_ENROLLMENT);
