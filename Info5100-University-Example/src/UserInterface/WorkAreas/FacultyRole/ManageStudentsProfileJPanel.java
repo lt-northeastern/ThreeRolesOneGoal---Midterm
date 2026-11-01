@@ -295,6 +295,11 @@ public class ManageStudentsProfileJPanel extends javax.swing.JPanel {
         btnBack.setBounds(120, 538, 80, 23);
 
         btnClear.setText("Clear");
+        btnClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClearActionPerformed(evt);
+            }
+        });
         add(btnClear);
         btnClear.setBounds(534, 538, 72, 23);
 
@@ -325,6 +330,16 @@ public class ManageStudentsProfileJPanel extends javax.swing.JPanel {
     private void cmbCoursesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCoursesActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cmbCoursesActionPerformed
+
+    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
+        // TODO add your handling code here:
+        
+          refreshTable();
+
+        btnClear.addActionListener(e -> clearForm());          // Clear button empties the form
+        tblStudents.setDefaultEditor(Object.class, null);       // table is read-only
+    
+    }//GEN-LAST:event_btnClearActionPerformed
 
     
 
