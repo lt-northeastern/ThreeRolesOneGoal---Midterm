@@ -539,9 +539,9 @@ public class MyProfileJPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     /**
-     * Removes this page and returns to the user's work area.
+     * Christopher Ogden NUID: 003959375 Admin use case: asks first when there are unsaved profile edits.
      *
-     * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     * .
      */
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         // TODO add your handling code here:
@@ -561,6 +561,7 @@ public class MyProfileJPanel extends javax.swing.JPanel {
      /**
      * Edit Profile unlocks the name, email, phone and address. Pressed again (now labelled
      * Save) it checks the values, saves them to the person record and locks the fields again.
+     * 
      *
      * Christopher Ogden NUID: 003959375 Admin use case.
      */

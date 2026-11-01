@@ -575,8 +575,8 @@ import java.util.List;
         // Christopher Ogden NUID: 003959375 Admin use case: warn when the student is in classes this semester
         CourseLoad load = currentCourseLoad(student);
         if (load != null && !load.getSeatAssignments().isEmpty()) {
-            message += "\n" + student.getPerson().getName() + " is enrolled in " + load.getSeatAssignments().size()
-                + "class. All of their class seats will be freed and this will impact previous semester reporting";
+                    message += "\n" + student.getPerson().getName() + " is enrolled in " + load.getSeatAssignments().size()
+                + " class(es) this semester (" + currentClasses(student) + ").\nAll of their class seats, including past semesters, will be freed, which changes the past semester reports.";
         }
         int answer = JOptionPane.showConfirmDialog(this,
             message + "\nThis cannot be undone.",
