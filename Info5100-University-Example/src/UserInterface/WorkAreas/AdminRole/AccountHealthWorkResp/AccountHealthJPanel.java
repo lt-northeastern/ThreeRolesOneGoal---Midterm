@@ -34,11 +34,13 @@ public class AccountHealthJPanel extends javax.swing.JPanel {
     static final String ALL = "All issues";
     static final String DISABLED = "Disabled account";
     static final String NEVER_LOGGED_IN = "Never logged in";
+    static final String NO_LOGIN = "No login account";
+    static final String NO_EMAIL = "No email address";
 
     private final Business business;
     private final JPanel userProcessContainer;
     private boolean loading = true;   // ignore the dropdown event while it is filled
-    private int disabled, neverLoggedIn;   // issue counts for the summary line
+    private int disabled, neverLoggedIn, noLogin, noEmail;   // issue counts for the summary line
 
     /**
      * Builds the Account Health screen: fills the Show dropdown and lists every issue.
@@ -53,6 +55,8 @@ public class AccountHealthJPanel extends javax.swing.JPanel {
         cmbShow.addItem(ALL);
         cmbShow.addItem(DISABLED);
         cmbShow.addItem(NEVER_LOGGED_IN);
+        cmbShow.addItem(NO_LOGIN);
+        cmbShow.addItem(NO_EMAIL);
         loading = false;
         refreshTable();
     }
@@ -74,7 +78,7 @@ public class AccountHealthJPanel extends javax.swing.JPanel {
             }
         };
         tblHealth.setModel(model);
-        disabled = neverLoggedIn = 0;
+        disabled = neverLoggedIn = noLogin = noEmail = 0;
         String show = String.valueOf(cmbShow.getSelectedItem());
         UserAccountDirectory uad = business.getUserAccountDirectory();
 
@@ -91,8 +95,27 @@ public class AccountHealthJPanel extends javax.swing.JPanel {
             }
         }
 
-        int total = disabled + neverLoggedIn;
-        lblSummary.setText(total + " issues: " + disabled + " disabled, " + neverLoggedIn + " never logged in.");
+        // people: no login account, or no email address
+        for (Profile profile : everyone()) {
+            Person person = profile.getPerson();
+            UserAccount ua = uad.findUserAccount(person.getPersonId());
+            if (ua == null) {
+                noLogin++;
+                String details = profile instanceof StudentProfile
+                    ? "Pre-registered; can sign up with NU ID " + ((StudentProfile) profile).getNuid()
+                    : "Create a login on Administer User Accounts";
+                addRow(model, show, NO_LOGIN, profile, "-", details);
+            }
+            
+            if (Validation.isBlank(person.getEmail())) {
+                noEmail++;
+                addRow(model, show, NO_EMAIL, profile, ua == null ? "-" : ua.getUserLoginName(), "Add an email address on the Manage screen for this role");
+            }
+        }
+
+        int total = disabled + neverLoggedIn + noLogin + noEmail;
+        lblSummary.setText(total + " issues: " + disabled + " disabled, " + neverLoggedIn + " never logged in, "
+            + noLogin + " without a login, " + noEmail + " without an email address.");
     }
 
     /**
@@ -105,7 +128,18 @@ public class AccountHealthJPanel extends javax.swing.JPanel {
             model.addRow(new Object[]{profile.getPerson().getName(), profile.getRole(), username, issue, details});
         }
     }
-
+    /**
+     * Every employee, faculty and student profile.
+     *
+     * Christopher Ogden NUID: 003959375 Admin use case.
+     */
+    private List<Profile> everyone() {
+        List<Profile> all = new ArrayList<>();
+        all.addAll(business.getEmployeeDirectory().getEmployeeList());
+        all.addAll(business.getFacultyDirectory().getFacultyList());
+        all.addAll(business.getStudentDirectory().getStudentList());
+        return all;
+    }
     /**
      * Formats a time as yyyy-MM-dd HH:mm, or "unknown" when null.
      *
