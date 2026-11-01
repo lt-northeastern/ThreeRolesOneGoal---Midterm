@@ -43,7 +43,7 @@ public class ProfileWorkAreaMainFrame extends javax.swing.JFrame {
         UserNameTextField.addActionListener(e -> jButton1.doClick());
         pwEntry.addActionListener(e -> jButton1.doClick());
         setTitle("Info 5100 - Profile Work Area");   // text in the window's title bar
-        setSize(1150, 750);                           // width x height in pixels
+        setSize(1300, 800);                           // width x height in pixels
         setLocationRelativeTo(null);
         business = ConfigureABusiness.initialize();
         
