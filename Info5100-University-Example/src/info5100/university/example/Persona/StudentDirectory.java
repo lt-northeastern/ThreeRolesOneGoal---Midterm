@@ -9,7 +9,7 @@ import info5100.university.example.Department.Department;
 import java.util.ArrayList;
 
 /**
- *
+ * modified by Christopher Ogden NUID: 003959375 Admin use case.
  * @author kal bugrara
  */
 public class StudentDirectory {
@@ -41,5 +41,14 @@ public class StudentDirectory {
         }
             return null; //not found after going through the whole list
          }
+    /**
+     * Removes a student's academic record from the department, used when the administrator
+     * deletes the student.
+     *
+     * Christopher Ogden NUID: 003959375 Admin use case.
+     */
+    public void removeStudent(StudentProfile sp) {
+        studentlist.remove(sp);
+    }
     
 }

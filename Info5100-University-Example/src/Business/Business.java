@@ -2,6 +2,7 @@
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
+ * modified by Christopher Ogden NUID: 003959375 Admin use case.
  */
 package Business;
 
@@ -136,9 +137,11 @@ public class Business {
     }
     /**
      * Deletes a person completely: removes the login account, the role profile (student,
-     * faculty or employee) and the person record.
+     * faculty or employee) and the person record. For a student it also frees every class
+     * seat they hold and removes their academic record, so a full class opens up again.
      *
      * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     * Christopher Ogden NUID: 003959375 Admin use case: frees seats and removes the academic record.
      */
          public void deleteProfile(Profile profile) {
         Person person = profile.getPerson();
@@ -147,6 +150,7 @@ public class Business {
             useraccountdirectory.removeUserAccount(ua);
         }
         if (profile instanceof StudentProfile) {
+            removeAcademicRecord((StudentProfile) profile);   // Christopher Ogden NUID: 003959375 Admin use case
             studentdirectory.removeStudent((StudentProfile) profile);
         } else if (profile instanceof FacultyProfile) {
             facultydirectory.removeFaculty((FacultyProfile) profile);
@@ -154,6 +158,27 @@ public class Business {
             employeedirectory.removeEmployee((EmployeeProfile) profile);
         }
         persondirectory.removePerson(person);
+    }
+         /**
+     * Drops every class the student is in (each seat is released so another student can take
+     * it) and removes the student's academic record from the department.
+     *
+     * Christopher Ogden NUID: 003959375 Admin use case.
+     */
+    private void removeAcademicRecord(StudentProfile student) {
+        info5100.university.example.Persona.StudentProfile record = student.getAcademicRecord();
+        if (record == null) {
+            return;   // pre-registered students have no classes yet
+        }
+        for (info5100.university.example.CourseSchedule.CourseLoad load : record.getTranscript().getCourseLoads()) {
+            // copy the list first: dropping a seat removes it from the list we are looping over
+            for (info5100.university.example.CourseSchedule.SeatAssignment sa
+                    : new java.util.ArrayList<>(load.getSeatAssignments())) {
+                load.dropSeatAssignment(sa);
+            }
+        }
+        department.getStudentDirectory().removeStudent(record);
+        student.setAcademicRecord(null);
     }
     /**
      * Authorization check for the administrator screens: true only for an  active account that still
