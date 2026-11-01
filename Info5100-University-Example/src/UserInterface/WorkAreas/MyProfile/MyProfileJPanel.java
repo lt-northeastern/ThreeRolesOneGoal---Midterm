@@ -220,7 +220,10 @@ public class MyProfileJPanel extends javax.swing.JPanel {
             return "Please enter your name.";
         }
         String email = txtEmail.getText().trim();
-        if (!email.isEmpty() && !Validation.isValidEmail(email)) {
+        if (email.isEmpty()) {   // same rule as Manage Personnel: staff always have an email address
+            return "Please enter an email address.";
+        }
+        if (!Validation.isValidEmail(email)) {
             return "Please enter a valid email address (for example name@northeastern.edu).";
         }
         if (business.isEmailTaken(email, account.getAssociatedPersonProfile().getPerson())) {
@@ -542,6 +545,14 @@ public class MyProfileJPanel extends javax.swing.JPanel {
      */
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         // TODO add your handling code here:
+        if (editing) {
+            int answer = JOptionPane.showConfirmDialog(this,
+                "You have unsaved changes to your profile. Leave without saving them?",
+                "Unsaved changes", JOptionPane.YES_NO_OPTION);
+            if (answer != JOptionPane.YES_OPTION) {
+                return;   // stay on My Profile; Save or Cancel the edits
+            }
+        }
         userProcessContainer.remove(this);
         CardLayout layout = (CardLayout) userProcessContainer.getLayout();
         layout.previous(userProcessContainer);
@@ -582,14 +593,12 @@ public class MyProfileJPanel extends javax.swing.JPanel {
         setEditing(false);
         JOptionPane.showMessageDialog(this, "Your profile was saved.");
 
-
-    /**
+    }//GEN-LAST:event_btnEditActionPerformed
+      /**
      * Throws away the unsaved edits, shows the saved details again and locks the fields.
      *
      * Christopher Ogden NUID: 003959375 Admin use case.
      */
-    }//GEN-LAST:event_btnEditActionPerformed
-
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         // TODO add your handling code here:
         setEditing(false);

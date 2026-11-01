@@ -84,7 +84,7 @@ public class Validation {
      * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
      */
     public static boolean isValidPassword(String s) {
-        return s != null && s.length() >= MIN_PASSWORD_LENGTH;
+        return s != null && s.length() >= MIN_PASSWORD_LENGTH && !s.trim().isEmpty(); // Christopher Ogden NUID: 003959375 Admin use case: a password of only spaces is refused
     }
 
     /**
