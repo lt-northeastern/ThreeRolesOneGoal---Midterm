@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 import java.awt.CardLayout;
 import UserInterface.WorkAreas.StudentRole.GraduationAuditWorkResp.GraduationAuditJPanel;
 import UserInterface.WorkAreas.StudentRole.TranscriptWorkResp.TranscriptJPanel;
+import UserInterface.WorkAreas.StudentRole.AboutMeWorkResp.AboutMeJPanel;
 import UserInterface.WorkAreas.StudentRole.CourseWorkResp.CourseWorkJPanel;
 import UserInterface.WorkAreas.StudentRole.RegistrationWorkResp.RegistrationJPanel;
 import UserInterface.WorkAreas.MyProfile.MyProfileJPanel;
@@ -64,6 +65,7 @@ public class StudentWorkAreaJPanel extends javax.swing.JPanel {
         jButton11 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jButton12 = new javax.swing.JButton();
+        btnAboutMe = new javax.swing.JButton();
 
         setForeground(new java.awt.Color(51, 51, 51));
 
@@ -140,6 +142,20 @@ public class StudentWorkAreaJPanel extends javax.swing.JPanel {
             }
         });
 
+        btnAboutMe.setBackground(new java.awt.Color(102, 153, 255));
+        btnAboutMe.setFont(getFont());
+        btnAboutMe.setForeground(new java.awt.Color(255, 255, 255));
+        btnAboutMe.setText("About Me");
+        btnAboutMe.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnAboutMe.setMaximumSize(new java.awt.Dimension(200, 40));
+        btnAboutMe.setMinimumSize(new java.awt.Dimension(20, 20));
+        btnAboutMe.setPreferredSize(new java.awt.Dimension(240, 25));
+        btnAboutMe.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAboutMeActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -156,7 +172,8 @@ public class StudentWorkAreaJPanel extends javax.swing.JPanel {
                         .addGap(75, 75, 75)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jButton11, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnAboutMe, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(590, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -173,7 +190,9 @@ public class StudentWorkAreaJPanel extends javax.swing.JPanel {
                     .addComponent(btnMyProfile, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(43, 43, 43)
-                .addComponent(jButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAboutMe, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(122, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -219,6 +238,11 @@ public class StudentWorkAreaJPanel extends javax.swing.JPanel {
         open("Transcript", screen);
     }//GEN-LAST:event_jButton12ActionPerformed
 
+    private void btnAboutMeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAboutMeActionPerformed
+        AboutMeJPanel screen = new AboutMeJPanel(business, student, CardSequencePanel);
+        open("AboutMe", screen);
+    }//GEN-LAST:event_btnAboutMeActionPerformed
+
 
     // ---- added for the Student use case by Hemanth Bezawada (NUID 002059527) ----
     // a student the administrator just added, or who just signed up, has no record yet
@@ -237,6 +261,7 @@ public class StudentWorkAreaJPanel extends javax.swing.JPanel {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAboutMe;
     private javax.swing.JButton btnMyProfile;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
