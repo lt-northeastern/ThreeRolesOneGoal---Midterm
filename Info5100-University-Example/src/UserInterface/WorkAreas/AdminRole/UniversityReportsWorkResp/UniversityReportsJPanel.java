@@ -95,13 +95,9 @@ public class UniversityReportsJPanel extends javax.swing.JPanel {
      * Christopher Ogden NUID: 003959375 Admin use case.
      */
     private DefaultTableModel newTable(String... columns) {
-        DefaultTableModel model = new DefaultTableModel(columns, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;   // a report is read only
-            }
-        };
-        tblReport.setModel(model);
+        DefaultTableModel model = (DefaultTableModel) tblReport.getModel();   // the model set up in the designer
+        model.setRowCount(0);                  // clear the previous report's rows
+        model.setColumnIdentifiers(columns);   // each report has its own column titles
         return model;
     }
 
@@ -265,7 +261,7 @@ public class UniversityReportsJPanel extends javax.swing.JPanel {
         lblSummary = new javax.swing.JLabel();
 
         lblTitle.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
-        lblTitle.setText("Univeristy Reports");
+        lblTitle.setText("University Reports");
 
         lblReport.setText("Report");
 

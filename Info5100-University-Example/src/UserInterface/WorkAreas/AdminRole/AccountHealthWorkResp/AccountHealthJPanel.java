@@ -72,12 +72,10 @@ public class AccountHealthJPanel extends javax.swing.JPanel {
         if (loading) {
             return;
         }
-        DefaultTableModel model = new DefaultTableModel(new String[]{"Name", "Role", "User Name", "Issue", "Details"}, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;   // a report is read only
-            }
-        };
+         
+        DefaultTableModel model = (DefaultTableModel) tblHealth.getModel();
+        model.setRowCount(0);  
+        
         tblHealth.setModel(model);
         disabled = neverLoggedIn = noLogin = noEmail = 0;
         String show = String.valueOf(cmbShow.getSelectedItem());
@@ -179,16 +177,31 @@ public class AccountHealthJPanel extends javax.swing.JPanel {
 
         tblHealth.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Name", "Role", "User Name", "Issue", "Details"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(tblHealth);
+        if (tblHealth.getColumnModel().getColumnCount() > 0) {
+            tblHealth.getColumnModel().getColumn(0).setPreferredWidth(20);
+            tblHealth.getColumnModel().getColumn(1).setPreferredWidth(20);
+            tblHealth.getColumnModel().getColumn(2).setPreferredWidth(35);
+            tblHealth.getColumnModel().getColumn(3).setPreferredWidth(75);
+            tblHealth.getColumnModel().getColumn(4).setPreferredWidth(250);
+        }
 
         btnBack.setText("<<< Back");
         btnBack.addActionListener(new java.awt.event.ActionListener() {
@@ -204,21 +217,20 @@ public class AccountHealthJPanel extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(35, 35, 35)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(331, 331, 331)
-                        .addComponent(lblTitle))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(35, 35, 35)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblShow)
-                                .addGap(18, 18, 18)
-                                .addComponent(cmbShow, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 727, Short.MAX_VALUE)
-                            .addComponent(btnBack)
-                            .addComponent(lblSummary, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap(38, Short.MAX_VALUE))
+                        .addComponent(lblShow)
+                        .addGap(18, 18, 18)
+                        .addComponent(cmbShow, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnBack)
+                    .addComponent(lblSummary, javax.swing.GroupLayout.PREFERRED_SIZE, 727, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1250, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(26, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblTitle)
+                .addGap(571, 571, 571))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -230,10 +242,10 @@ public class AccountHealthJPanel extends javax.swing.JPanel {
                     .addComponent(lblShow)
                     .addComponent(cmbShow, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 452, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addComponent(lblSummary)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
+                .addGap(116, 116, 116)
                 .addComponent(btnBack)
                 .addGap(67, 67, 67))
         );
