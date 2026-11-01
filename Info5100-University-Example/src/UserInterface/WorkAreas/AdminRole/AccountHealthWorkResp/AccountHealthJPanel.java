@@ -5,7 +5,7 @@
  */
 /*
  * Account Health screen for the administrator.
- * Christopher Ogden NUID: 003959375 Admin use case.
+ * Created by Christopher Ogden NUID: 003959375 Admin use case.
  */
 package UserInterface.WorkAreas.AdminRole.AccountHealthWorkResp;
 
