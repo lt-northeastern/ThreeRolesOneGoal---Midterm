@@ -52,6 +52,8 @@ public class UniversityReportsJPanel extends javax.swing.JPanel {
         this.userProcessContainer = userProcessContainer;
         cmbReport.removeAllItems();
         cmbReport.addItem(COURSE_ENROLLMENT);
+        cmbReport.addItem(STUDENT_STANDING);
+        cmbReport.addItem(FACULTY_LOAD);
         cmbSemester.removeAllItems();
         for (String semester : business.getDepartment().getSemesters()) {
             cmbSemester.addItem(semester);
@@ -79,6 +81,10 @@ public class UniversityReportsJPanel extends javax.swing.JPanel {
         cmbSemester.setEnabled(bySemester);
         if (COURSE_ENROLLMENT.equals(report)) {
             showCourseEnrollment();
+        } else if (STUDENT_STANDING.equals(report)) {
+            showStudentStanding();
+        } else if (FACULTY_LOAD.equals(report)) {
+            showFacultyLoad();
         }
     }
 
@@ -141,7 +147,85 @@ public class UniversityReportsJPanel extends javax.swing.JPanel {
         lblSummary.setText(schedule.getSemester() + ": " + schedule.getSchedule().size() + " classes, " + taken + " of "
             + total + " seats taken (" + percent(taken, total) + "), revenue " + money(revenue) + ".");
     }
-
+    
+    /**
+     * Student standing: credits, GPA and core courses of every student measured against the
+     * degree, with the credits still needed and whether the student is ready to graduate.
+     *
+     * Christopher Ogden NUID: 003959375 Admin use case.
+     */
+    private void showStudentStanding() {
+        DefaultTableModel model = newTable("Name", "NU ID", "Credits", "GPA", "Core Done", "Credits to Go", "Ready to Graduate");
+        Degree degree = business.getDepartment().getDegree();
+        int ready = 0;
+        List<StudentProfile> students = business.getStudentDirectory().getStudentList();
+        for (StudentProfile student : students) {
+            info5100.university.example.Persona.StudentProfile record = student.getAcademicRecord();
+            int credits = record == null ? 0 : record.getTranscript().getTotalCreditsCompleted();
+            int coreDone = 0;
+            if (record != null) {
+                for (Course core : degree.getCoreList()) {
+                    if (degree.isCoreSatisfied(record.getCourseList(), core)) {
+                        coreDone++;
+                    }
+                }
+            }
+            boolean isReady = record != null && degree.isStudentReadyToGraduate(record);
+            if (isReady) {
+                ready++;
+            }
+            model.addRow(new Object[]{
+                student.getPerson().getName(),
+                student.getNuid(),
+                credits,
+                credits == 0 ? "-" : String.format("%.2f", record.getTranscript().getGPA()),
+                coreDone + " of " + degree.getCoreList().size(),
+                Math.max(0, degree.getRequiredCredits() - credits),
+                isReady ? "Yes" : "No"
+            });
+        }
+        lblSummary.setText(students.size() + " students, " + ready + " ready to graduate. The degree needs "
+            + degree.getRequiredCredits() + " credits and all " + degree.getCoreList().size() + " core courses.");
+    }
+    /**
+     * Faculty load: for each professor teaching in the semester, the classes they teach, the
+     * students in those classes and the tuition revenue.
+     *
+     * Christopher Ogden NUID: 003959375 Admin use case.
+     */
+    private void showFacultyLoad() {
+        DefaultTableModel model = newTable("Professor", "Classes", "Courses", "Students", "Seats", "Revenue");
+        CourseSchedule schedule = selectedSchedule();
+        if (schedule == null) {
+            lblSummary.setText("No semester has a course schedule yet.");
+            return;
+        }
+        Map<String, List<CourseOffer>> byProfessor = new LinkedHashMap<>();
+        for (CourseOffer co : schedule.getSchedule()) {
+            String professor = co.getTeacherName();
+            if (!byProfessor.containsKey(professor)) {
+                byProfessor.put(professor, new ArrayList<CourseOffer>());
+            }
+            byProfessor.get(professor).add(co);
+        }
+        for (Map.Entry<String, List<CourseOffer>> entry : byProfessor.entrySet()) {
+            int students = 0, seats = 0, revenue = 0;
+            StringBuilder courses = new StringBuilder();
+            for (CourseOffer co : entry.getValue()) {
+                students += co.getTotalSeats() - co.getAvailableSeats();
+                seats += co.getTotalSeats();
+                revenue += co.getTotalCourseRevenues();
+                if (courses.length() > 0) {
+                    courses.append(", ");
+                }
+                courses.append(co.getCourseNumber());
+            }
+            model.addRow(new Object[]{entry.getKey(), entry.getValue().size(), courses.toString(), students, seats, money(revenue)});
+        }
+        lblSummary.setText(schedule.getSemester() + ": " + byProfessor.size() + " professors teach "
+            + schedule.getSchedule().size() + " classes.");
+    }
+    
     /**
      * part of whole as a whole-number percentage, or "-" when whole is 0.
      *
@@ -177,6 +261,7 @@ public class UniversityReportsJPanel extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblReport = new javax.swing.JTable();
         btnBack = new javax.swing.JButton();
+        lblSummary = new javax.swing.JLabel();
 
         lblTitle.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         lblTitle.setText("Univeristy Reports");
@@ -217,6 +302,8 @@ public class UniversityReportsJPanel extends javax.swing.JPanel {
             }
         });
 
+        lblSummary.setText("Summary");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -228,18 +315,18 @@ public class UniversityReportsJPanel extends javax.swing.JPanel {
                         .addComponent(lblTitle))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(43, 43, 43)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(btnBack)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(lblSemester)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(cmbSemester, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(lblReport)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(cmbReport, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 728, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblSemester)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cmbSemester, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(lblReport)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cmbReport, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 728, Short.MAX_VALUE)
+                            .addComponent(lblSummary, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(29, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -254,8 +341,10 @@ public class UniversityReportsJPanel extends javax.swing.JPanel {
                     .addComponent(cmbSemester, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblSemester))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 369, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
+                .addComponent(lblSummary)
+                .addGap(41, 41, 41)
                 .addComponent(btnBack)
                 .addContainerGap(36, Short.MAX_VALUE))
         );
@@ -294,6 +383,7 @@ public class UniversityReportsJPanel extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblReport;
     private javax.swing.JLabel lblSemester;
+    private javax.swing.JLabel lblSummary;
     private javax.swing.JLabel lblTitle;
     private javax.swing.JTable tblReport;
     // End of variables declaration//GEN-END:variables
