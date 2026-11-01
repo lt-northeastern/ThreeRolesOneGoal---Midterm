@@ -148,13 +148,4 @@ public class Transcript {
         }
     }
 
-    // frees every seat the student holds, graded or not; used when the administrator removes the student
-    // and the record is discarded with them, so no seat stays occupied by a student who no longer exists
-    public void releaseSeats() {
-        for (CourseLoad cl : courseloadlist.values()) {
-            for (SeatAssignment sa : new ArrayList<SeatAssignment>(cl.getSeatAssignments())) {
-                cl.dropSeatAssignment(sa);
-            }
-        }
-    }
 }

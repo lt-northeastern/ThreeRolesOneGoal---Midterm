@@ -1,6 +1,7 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ *  modified by Christopher Ogden NUID: 003959375 Admin use case.
  */
 package Business;
 
@@ -44,7 +45,20 @@ public class Validation {
     public static boolean isValidEmail(String s) {
         return s != null && EMAIL.matcher(s.trim()).matches();
     }
+    
+        /**
+     * A phone number is optional; when given it may contain only digits, spaces, + ( ) and -,
+     * 7 to 20 characters. Used by the staff, student and faculty forms so all three follow the
+     * same rule.
+     *
+     * Christopher Ogden NUID: 003959375 Admin use case.
+     */
+    public static boolean isValidPhone(String s) {
+        return isBlank(s) || s.trim().matches("[0-9 +()\\-]{7,20}");
+    }
 
+    /** Message shown when isValidPhone fails. Christopher Ogden NUID: 003959375 Admin use case. */
+    public static final String PHONE_RULE = "The phone number is not valid. Use 7-20 digits, spaces, + ( ) and - only.";
     
     /**
      * Returns true when the NUID is exactly 9 digits.
