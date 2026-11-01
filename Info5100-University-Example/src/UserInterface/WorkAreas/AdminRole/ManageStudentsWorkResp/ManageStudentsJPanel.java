@@ -381,6 +381,12 @@ import java.util.List;
             }
         });
         jScrollPane1.setViewportView(tblStudentData);
+        if (tblStudentData.getColumnModel().getColumnCount() > 0) {
+            tblStudentData.getColumnModel().getColumn(2).setPreferredWidth(100);
+            tblStudentData.getColumnModel().getColumn(3).setPreferredWidth(150);
+            tblStudentData.getColumnModel().getColumn(4).setPreferredWidth(150);
+            tblStudentData.getColumnModel().getColumn(5).setPreferredWidth(150);
+        }
 
         txtEmail.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -487,8 +493,8 @@ import java.util.List;
                                 .addComponent(lblPassword)
                                 .addGap(82, 82, 82)
                                 .addComponent(pwEntry, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 761, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(15, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 942, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(34, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -569,8 +575,8 @@ import java.util.List;
         // Christopher Ogden NUID: 003959375 Admin use case: warn when the student is in classes this semester
         CourseLoad load = currentCourseLoad(student);
         if (load != null && !load.getSeatAssignments().isEmpty()) {
-            message += "\n" + student.getPerson().getName() + " is enrolled in " + load.getSeatAssignments().size()
-                + " class(es) this semester (" + currentClasses(student) + "). Those seats will be freed.";
+                    message += "\n" + student.getPerson().getName() + " is enrolled in " + load.getSeatAssignments().size()
+                + " class(es) this semester (" + currentClasses(student) + ").\nAll of their class seats, including past semesters, will be freed, which changes the past semester reports.";
         }
         int answer = JOptionPane.showConfirmDialog(this,
             message + "\nThis cannot be undone.",
