@@ -167,6 +167,24 @@ public class Business {
                 && ua.isActive()
                 && useraccountdirectory.getUserAccountList().contains(ua)
                 && ua.getAssociatedPersonProfile() instanceof EmployeeProfile;
+    }
+    /**
+     * True if another person already uses this email address (case-insensitive). Blank emails
+     * are never "taken". Used by the staff, student and faculty forms so two people cannot be
+     * registered with the same address.
+     *
+     * Christopher Ogden NUID: 003959375 Admin use case.
+     */
+    public boolean isEmailTaken(String email, Person except) {
+        if (Validation.isBlank(email)) {
+            return false;
+        }
+        for (Person p : persondirectory.getPersonList()) {
+            if (p != except && p.getEmail().equalsIgnoreCase(email.trim())) {
+                return true;
+            }
+        }
+        return false;
     }    
     // ---- added for the Student use case by Hemanth Bezawada (NUID 002059527) ----
     public Department getDepartment() {
