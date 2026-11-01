@@ -92,6 +92,42 @@ public class StudentUITest {
         try { closer.join(4500); } catch (InterruptedException e) { }
     }
 
+    /** click; the confirmation box opened by the click is answered Yes, the message after it is read and dismissed */
+    static void clickYes(AbstractButton b) {
+        lastDialogText = "";
+        Thread closer = new Thread(new Runnable() {
+            public void run() {
+                try {
+                    int handled = 0;
+                    for (int i = 0; i < 60 && handled < 2; i++) {
+                        Thread.sleep(100);
+                        for (Window w : Window.getWindows()) {
+                            if (w instanceof JDialog && w.isShowing()) {
+                                JButton yes = null;
+                                for (JButton jb : all((Container) w, JButton.class)) if ("Yes".equals(jb.getText())) yes = jb;
+                                if (handled == 0 && yes != null) {
+                                    yes.doClick();
+                                } else {
+                                    StringBuilder sb = new StringBuilder();
+                                    for (JLabel l : all((Container) w, JLabel.class)) if (l.getText() != null) sb.append(l.getText()).append(" ");
+                                    lastDialogText = sb.toString();
+                                    w.dispose();
+                                }
+                                handled++;
+                                break;
+                            }
+                        }
+                    }
+                } catch (InterruptedException e) {
+                }
+            }
+        });
+        closer.setDaemon(true);
+        closer.start();
+        b.doClick();
+        try { closer.join(6500); } catch (InterruptedException e) { }
+    }
+
     static void render(JComponent c, String name, int w, int h) throws Exception {
         JFrame f = new JFrame();
         f.setContentPane(c);
@@ -189,6 +225,7 @@ public class StudentUITest {
         check("registration: Fall 2026 shows 5 classes offered", offers.getRowCount() == 5);
         check("registration: Adam's registered class is marked Registered", "Registered".equals(offers.getValueAt(0, 5)) && "INFO 7250".equals(offers.getValueAt(0, 0)));
         check("registration: the one-seat class is marked Full", "Full".equals(offers.getValueAt(1, 5)));
+        check("registration: header shows the student's name and NUID", label(reg, "Student:").getText().contains("Adam Rollen") && label(reg, "Student:").getText().contains("912568888"));
         check("registration: my classes table shows the in-progress class", mine.getRowCount() == 1 && "In progress".equals(mine.getValueAt(0, 3)));
         render(reg, "10_registration", 900, 480);
 
@@ -299,6 +336,7 @@ public class StudentUITest {
         check("transcript: 7 classes over 3 semesters, oldest first", trCourses.getRowCount() == 7 && "Fall 2025".equals(trCourses.getValueAt(0, 0)) && "Fall 2026".equals(trCourses.getValueAt(6, 0)) && trSem.getRowCount() == 3);
         check("transcript: letter grades and points shown", "A".equals(trCourses.getValueAt(0, 4)) && "16.0".equals(trCourses.getValueAt(0, 5)) && "-".equals(trCourses.getValueAt(6, 5)));
         check("transcript: semester GPA for Fall 2025 is 3.65", "3.65".equals(trSem.getValueAt(0, 3)));
+        check("transcript: header shows the name, not the person id", label(tr, "Student:").getText().contains("Adam Rollen") && !label(tr, "Student:").getText().contains("P10"));
         check("transcript: summary shows 16 credits, GPA 3.50, 3 in progress", label(tr, "Credits completed").getText().contains("16") && label(tr, "Credits completed").getText().contains("3.50") && label(tr, "Credits completed").getText().contains("progress: 3"));
         render(tr, "30_transcript", 900, 500);
         if (stage.equals("transcript")) { finish(); return; }
@@ -356,6 +394,22 @@ public class StudentUITest {
         offersN2.setRowSelectionInterval(0, 0);
         click(button(regN2, "Register for Selected Class"));
         check("new student: a course still in progress cannot be registered again", lastDialogText.contains("already taking") && newKid.getAcademicRecord().getCourseLoadBySemester("Spring 2027") == null);
+        // ---- dropping the only class of a semester takes the empty semester off the transcript
+        CourseOffer spring7375 = b.getDepartment().getCourseSchedule("Spring 2027").newCourseOffer("INFO 7375");
+        spring7375.generatSeats(5);
+        JPanel regN3 = (JPanel) regCls.getConstructor(Business.class, StudentProfile.class, JPanel.class).newInstance(b, newKid, upc);
+        JTable offersN3 = all(regN3, JTable.class).get(0), mineN3 = all(regN3, JTable.class).get(1);
+        for (int i = 0; i < offersN3.getRowCount(); i++) if ("INFO 7375".equals(offersN3.getValueAt(i, 0))) offersN3.setRowSelectionInterval(i, i);
+        click(button(regN3, "Register for Selected Class"));
+        check("drop: new student holds one class in Spring 2027 before the drop", mineN3.getRowCount() == 1 && spring7375.getAvailableSeats() == 4 && newKid.getAcademicRecord().getTranscript().getCourseLoads().size() == 2);
+        mineN3.setRowSelectionInterval(0, 0);
+        clickYes(button(regN3, "Drop Selected Class"));
+        check("drop: confirming the drop frees the seat and removes the empty semester", lastDialogText.contains("dropped") && mineN3.getRowCount() == 0 && spring7375.getAvailableSeats() == 5
+                && newKid.getAcademicRecord().getCourseLoadBySemester("Spring 2027") == null && newKid.getAcademicRecord().getTranscript().getCourseLoads().size() == 1);
+        JPanel trN = (JPanel) Class.forName("UserInterface.WorkAreas.StudentRole.TranscriptWorkResp.TranscriptJPanel").getConstructor(Business.class, StudentProfile.class, JPanel.class).newInstance(b, newKid, upc);
+        JTable semestersN = null;
+        for (JTable t : all(trN, JTable.class)) if (t.getColumnCount() == 4) semestersN = t;
+        check("transcript: only the Fall 2026 semester is listed after the drop", semestersN.getRowCount() == 1 && "Fall 2026".equals(semestersN.getValueAt(0, 0)));
         StudentProfile emptyKid = b.getStudentDirectory().newStudentProfile(b.getPersonDirectory().newPerson("Empty Kid"), "912570002");
         UserAccount emptyKidAccount = b.getUserAccountDirectory().newUserAccount(emptyKid, "emptykid", "******");
         JPanel waE = (JPanel) Class.forName("UserInterface.WorkAreas.StudentRole.StudentWorkAreaJPanel").getConstructor(Business.class, UserAccount.class, JPanel.class).newInstance(b, emptyKidAccount, upc);
@@ -364,6 +418,36 @@ public class StudentUITest {
         check("course work: an empty record says to register first", label(cwE, "You are not registered").getText().contains("Registration"));
         click(button(cwE, "Submit Assignment"));
         check("course work: submit with no classes explains what to do", lastDialogText.contains("Registration"));
+
+        // ---- a long name must not push the NUID out of the header
+        StudentProfile longName = b.getStudentDirectory().newStudentProfile(b.getPersonDirectory().newPerson("Priya Natarajan-Venkataraman"), "912570009");
+        UserAccount longNameAccount = b.getUserAccountDirectory().newUserAccount(longName, "priya", "priya123");
+        JPanel waL = (JPanel) Class.forName("UserInterface.WorkAreas.StudentRole.StudentWorkAreaJPanel").getConstructor(Business.class, UserAccount.class, JPanel.class).newInstance(b, longNameAccount, upc);
+        click(button(waL, "Registration"));
+        JLabel hdrReg = label((JPanel) upc.getComponent(upc.getComponentCount() - 1), "Student:");
+        check("registration: a 28-character name still leaves the NUID visible in the header", hdrReg.getText().endsWith("(NUID 912570009)") && hdrReg.getPreferredSize().width <= hdrReg.getWidth());
+        click(button(waL, "Course Work"));
+        JLabel hdrCw = label((JPanel) upc.getComponent(upc.getComponentCount() - 1), "Student:");
+        check("course work: the long name fits the header as well", hdrCw.getText().endsWith("(NUID 912570009)") && hdrCw.getPreferredSize().width <= hdrCw.getWidth());
+
+        // ---- deleting a student from the administrator side frees the seats and removes the university record
+        StudentProfile jimProfile = b.getStudentDirectory().findStudentByNuid("912564001");
+        info5100.university.example.Persona.StudentProfile jimRecord = jimProfile.getAcademicRecord();
+        List<SeatAssignment> jimClasses = new ArrayList<SeatAssignment>(jimRecord.getCourseList());
+        int[] seatsBeforeDelete = new int[jimClasses.size()];
+        for (int i = 0; i < jimClasses.size(); i++) seatsBeforeDelete[i] = jimClasses.get(i).getCourseOffer().getAvailableSeats();
+        b.deleteProfile(jimProfile);
+        boolean freed = !jimClasses.isEmpty();
+        for (int i = 0; i < jimClasses.size(); i++) freed &= jimClasses.get(i).getCourseOffer().getAvailableSeats() == seatsBeforeDelete[i] + 1;
+        StudentProfile adamProfile = b.getStudentDirectory().findStudentByNuid("912568888");
+        List<SeatAssignment> adamClasses = new ArrayList<SeatAssignment>(adamProfile.getAcademicRecord().getCourseList());
+        b.deleteProfile(adamProfile);
+        boolean adamFreed = !adamClasses.isEmpty();
+        for (SeatAssignment sa : adamClasses) adamFreed &= !sa.getSeat().isOccupied();
+        check("delete: removing Adam frees his graded seats as well as the one in progress", adamFreed && adamProfile.getAcademicRecord() == null);
+        check("delete: removing Jim frees his seats and drops his university record and login", freed
+                && b.getDepartment().getStudentDirectory().findStudent(jimRecord.getPerson().getPersonId()) == null
+                && jimProfile.getAcademicRecord() == null && b.getUserAccountDirectory().findByUsername("jim") == null);
         finish();
     }
 

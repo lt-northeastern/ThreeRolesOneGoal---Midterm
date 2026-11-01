@@ -29,7 +29,7 @@ public class TranscriptJPanel extends javax.swing.JPanel {
         department = b.getDepartment();
         CardSequencePanel = clp;
         initComponents();
-        lblStudent.setText("Student: " + student.getPerson().getPersonId() + "   -   Degree: " + department.getDegree().getTitle() + " (" + department.getName() + ")");
+        lblStudent.setText("Student: " + student.getPerson().getName() + " (NUID " + student.getNuid() + ")" + "   -   Degree: " + department.getDegree().getTitle() + " (" + department.getName() + ")");
         refreshTables();
     }
 

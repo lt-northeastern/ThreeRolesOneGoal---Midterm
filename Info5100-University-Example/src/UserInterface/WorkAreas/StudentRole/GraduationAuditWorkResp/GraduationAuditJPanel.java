@@ -31,7 +31,7 @@ public class GraduationAuditJPanel extends javax.swing.JPanel {
         department = b.getDepartment();
         CardSequencePanel = clp;
         initComponents();
-        lblStudent.setText("Student: " + student.getPerson().getPersonId() + "   -   Degree: " + department.getDegree().getTitle());
+        lblStudent.setText("Student: " + student.getPerson().getName() + " (NUID " + student.getNuid() + ")" + "   -   Degree: " + department.getDegree().getTitle());
         refreshAudit();
     }
 
