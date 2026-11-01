@@ -101,6 +101,7 @@ class ConfigureABusiness {
         ua9.setActive(false);
   
         setUpUniversity(business, studentprofile0, studentprofile1);
+        setUpFacultyDemo(business, studentprofile0, studentprofile1, studentprofile2);
         return business;
         
         
@@ -197,4 +198,45 @@ class ConfigureABusiness {
             sa.submitAssignment("Assignment " + i);
         }
     }
+     // ---- Faculty use case demo data (Luke Tomlinson) ----
+    // Hobbies and interests for every student, and more students with grades in Gina's classes.
+     // No new students, so the Admin and Student demo data and tests are unchanged.
+    static void setUpFacultyDemo(Business business, StudentProfile studentprofile0, StudentProfile studentprofile1, StudentProfile studentprofile2) {
+   
+ 
+    // Hobbies and interests for the existing students
+        studentprofile0.setHobbies("Hiking, chess");                 // Adam Rollen
+        studentprofile0.setInterests("Data analytics, AI");
+        studentprofile1.setHobbies("Soccer, cooking");               // Jim Dellon
+        studentprofile1.setInterests("Mobile apps, UX design");
+        studentprofile2.setHobbies("Photography, running");          // Anna Shnider
+        studentprofile2.setInterests("Cloud computing");
+ 
+   
+ 
+    // Enroll students in Gina's classes: student, semester, course, grade (0 = in progress)
+        
+        enroll(business, studentprofile2, "Fall 2025", "INFO 6150", 4.0f);     // Anna
+        enroll(business, studentprofile2, "Spring 2026", "INFO 6105", 3.7f);   // Anna
+        enroll(business, studentprofile2, "Spring 2026", "INFO 6250", 3.3f);   // Anna
+
+    }
+    
+     // Puts a student in a class for a semester and gives the grade (0 = still in progress)
+    static void enroll(Business business, StudentProfile student, String semester, String courseNumber, float grade) {
+        Department dept = business.getDepartment();
+        if (student.getAcademicRecord() == null) {   // first class: create the student's transcript
+            student.setAcademicRecord(dept.getStudentDirectory().newStudentProfile(
+                    dept.getPersonDirectory().newPerson(student.getPerson().getPersonId())));
+        }
+        CourseLoad load = student.getAcademicRecord().getCourseLoadBySemester(semester);
+        if (load == null) {
+            load = student.getAcademicRecord().newCourseLoad(semester);
+        }
+        SeatAssignment seat = load.newSeatAssignment(dept.getCourseSchedule(semester).getCourseOfferByNumber(courseNumber));
+        if (grade > 0) {
+            seat.setGrade(grade);
+        }
+    }
+ 
 }

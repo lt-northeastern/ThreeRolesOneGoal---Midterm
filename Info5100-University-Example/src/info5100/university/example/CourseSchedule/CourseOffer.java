@@ -112,4 +112,22 @@ public class CourseOffer {
         }
         return free;
     }
+     // ---- Added for the Faculty use case by Luke Tomlinson ----
+    // Section details the professor can update from Manage Courses
+    private String description = "";
+    private String meetingDay = "";
+    private String meetingTime = "";
+    private String room = "";
+
+    public String getDescription() { return description; }
+    public void setDescription(String d) { description = d == null ? "" : d.trim(); }
+
+    public String getMeetingDay() { return meetingDay; }
+    public void setMeetingDay(String d) { meetingDay = d == null ? "" : d.trim(); }
+
+    public String getMeetingTime() { return meetingTime; }
+    public void setMeetingTime(String t) { meetingTime = t == null ? "" : t.trim(); }
+
+    public String getRoom() { return room; }
+    public void setRoom(String r) { room = r == null ? "" : r.trim(); }
 }
