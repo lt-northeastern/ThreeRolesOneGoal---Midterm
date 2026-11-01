@@ -185,7 +185,7 @@ public class FacultyWorkAreaJPanel extends javax.swing.JPanel {
      */
     private void btnMyProfileIdentifyEventsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMyProfileIdentifyEventsActionPerformed
         // TODO add your handling code here:
-        MyProfileJPanel profile = new MyProfileJPanel(useraccount, CardSequencePanel);
+        MyProfileJPanel profile = new MyProfileJPanel(business, useraccount, CardSequencePanel);
         CardSequencePanel.add("MyProfile", profile);
         ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
 

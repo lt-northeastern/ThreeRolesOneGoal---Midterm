@@ -166,8 +166,13 @@ public class MyProfileJPanel extends javax.swing.JPanel {
      *
      * Christopher Ogden NUID: 003959375 Admin use case.
      */
-    private boolean canEdit() {
-        return business != null && business.isAdministrator(account);
+     private boolean canEdit() {
+        if (business == null) {
+            return false;   // opened view only
+        }
+        // Luke Tomlinson NUID: 003989857 - Faculty use case: a faculty member manages their own profile
+        boolean faculty = account.getAssociatedPersonProfile() instanceof FacultyProfile;
+        return business.isAdministrator(account) || faculty;
     }
 
     /**
