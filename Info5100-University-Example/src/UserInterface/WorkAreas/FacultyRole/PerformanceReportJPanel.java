@@ -177,15 +177,15 @@ public class PerformanceReportJPanel extends javax.swing.JPanel {
 
         txtAverage.setEditable(false);
         add(txtAverage);
-        txtAverage.setBounds(573, 314, 170, 23);
+        txtAverage.setBounds(573, 307, 170, 30);
 
         txtLowestScore.setEditable(false);
         add(txtLowestScore);
-        txtLowestScore.setBounds(573, 357, 170, 23);
+        txtLowestScore.setBounds(573, 350, 170, 30);
 
         lblLowestScore.setText("Lowest");
         add(lblLowestScore);
-        lblLowestScore.setBounds(487, 360, 42, 17);
+        lblLowestScore.setBounds(487, 357, 42, 20);
 
         lblCourse.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
         lblCourse.setText("Course");
@@ -199,14 +199,14 @@ public class PerformanceReportJPanel extends javax.swing.JPanel {
 
         lblAverage.setText("Average");
         add(lblAverage);
-        lblAverage.setBounds(482, 317, 47, 17);
+        lblAverage.setBounds(482, 314, 47, 20);
 
         add(cmbCoursesPR);
         cmbCoursesPR.setBounds(314, 49, 193, 23);
 
         txtNumberofStudents.setEditable(false);
         add(txtNumberofStudents);
-        txtNumberofStudents.setBounds(224, 314, 170, 23);
+        txtNumberofStudents.setBounds(224, 307, 170, 30);
 
         tblPerformanceReport.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -234,15 +234,15 @@ public class PerformanceReportJPanel extends javax.swing.JPanel {
 
         txtHighestScore.setEditable(false);
         add(txtHighestScore);
-        txtHighestScore.setBounds(224, 357, 170, 23);
+        txtHighestScore.setBounds(224, 350, 170, 30);
 
         lblStudentCount.setText("Number of Students");
         add(lblStudentCount);
-        lblStudentCount.setBounds(62, 317, 117, 17);
+        lblStudentCount.setBounds(62, 314, 117, 20);
 
         lblHighestScore.setText("Highest");
         add(lblHighestScore);
-        lblHighestScore.setBounds(135, 360, 44, 17);
+        lblHighestScore.setBounds(135, 357, 44, 20);
 
         btnBack.setText("<< Back");
         btnBack.addActionListener(new java.awt.event.ActionListener() {

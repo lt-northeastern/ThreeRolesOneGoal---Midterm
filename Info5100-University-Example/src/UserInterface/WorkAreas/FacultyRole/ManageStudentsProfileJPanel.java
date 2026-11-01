@@ -231,39 +231,39 @@ public class ManageStudentsProfileJPanel extends javax.swing.JPanel {
 
         lblName.setText("Name");
         add(lblName);
-        lblName.setBounds(53, 297, 34, 17);
+        lblName.setBounds(53, 294, 34, 20);
 
         lblNUID.setText("NU ID");
         add(lblNUID);
-        lblNUID.setBounds(53, 340, 34, 17);
+        lblNUID.setBounds(53, 337, 34, 20);
 
         lblHobbies.setText("Hobbies");
         add(lblHobbies);
-        lblHobbies.setBounds(38, 383, 49, 17);
+        lblHobbies.setBounds(38, 380, 49, 20);
 
         lblGrade.setText("Grade");
         add(lblGrade);
-        lblGrade.setBounds(51, 424, 36, 17);
+        lblGrade.setBounds(51, 421, 36, 20);
 
         lblInterests.setText("Interests");
         add(lblInterests);
-        lblInterests.setBounds(410, 383, 50, 17);
+        lblInterests.setBounds(410, 380, 50, 20);
 
         lblGPA.setText("GPA");
         add(lblGPA);
-        lblGPA.setBounds(434, 340, 26, 17);
+        lblGPA.setBounds(434, 337, 26, 20);
 
         lblEmail.setText("Email");
         add(lblEmail);
-        lblEmail.setBounds(428, 297, 32, 17);
+        lblEmail.setBounds(428, 294, 32, 20);
 
         txtName.setEditable(false);
         add(txtName);
-        txtName.setBounds(132, 294, 170, 23);
+        txtName.setBounds(132, 287, 170, 30);
 
         txtNUID.setEditable(false);
         add(txtNUID);
-        txtNUID.setBounds(132, 337, 170, 23);
+        txtNUID.setBounds(132, 330, 170, 30);
 
         txtHobbies.setEditable(false);
         txtHobbies.addActionListener(new java.awt.event.ActionListener() {
@@ -272,23 +272,23 @@ public class ManageStudentsProfileJPanel extends javax.swing.JPanel {
             }
         });
         add(txtHobbies);
-        txtHobbies.setBounds(132, 380, 170, 23);
+        txtHobbies.setBounds(132, 373, 260, 30);
 
         txtGrade.setEditable(false);
         add(txtGrade);
-        txtGrade.setBounds(132, 421, 170, 23);
+        txtGrade.setBounds(132, 414, 140, 30);
 
         txtEmail.setEditable(false);
         add(txtEmail);
-        txtEmail.setBounds(515, 294, 170, 23);
+        txtEmail.setBounds(500, 283, 220, 30);
 
         txtGPA.setEditable(false);
         add(txtGPA);
-        txtGPA.setBounds(515, 337, 170, 23);
+        txtGPA.setBounds(500, 333, 120, 30);
 
         txtInterests.setEditable(false);
         add(txtInterests);
-        txtInterests.setBounds(515, 380, 170, 23);
+        txtInterests.setBounds(500, 373, 220, 30);
 
         btnBack.setText("<< Back");
         btnBack.addActionListener(new java.awt.event.ActionListener() {

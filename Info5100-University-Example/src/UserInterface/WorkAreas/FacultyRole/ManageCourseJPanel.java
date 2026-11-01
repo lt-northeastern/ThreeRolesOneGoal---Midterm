@@ -243,19 +243,19 @@ public class ManageCourseJPanel extends javax.swing.JPanel {
             }
         });
         add(txtCourseNum);
-        txtCourseNum.setBounds(215, 294, 168, 23);
+        txtCourseNum.setBounds(215, 287, 168, 30);
 
         txtCourseName.setEditable(false);
         add(txtCourseName);
-        txtCourseName.setBounds(215, 335, 260, 23);
+        txtCourseName.setBounds(215, 328, 260, 30);
 
         txtSemester.setEditable(false);
         add(txtSemester);
-        txtSemester.setBounds(215, 417, 168, 23);
+        txtSemester.setBounds(215, 410, 168, 30);
 
         txtEnrolled.setEditable(false);
         add(txtEnrolled);
-        txtEnrolled.setBounds(215, 376, 168, 23);
+        txtEnrolled.setBounds(215, 369, 168, 30);
 
         txtCredits.setEditable(false);
         txtCredits.addActionListener(new java.awt.event.ActionListener() {
@@ -264,23 +264,23 @@ public class ManageCourseJPanel extends javax.swing.JPanel {
             }
         });
         add(txtCredits);
-        txtCredits.setBounds(215, 458, 168, 23);
+        txtCredits.setBounds(215, 451, 168, 30);
 
         jLabel1.setText("Description");
         add(jLabel1);
-        jLabel1.setBounds(454, 297, 66, 17);
+        jLabel1.setBounds(454, 294, 66, 20);
 
         jLabel2.setText("Room");
         add(jLabel2);
-        jLabel2.setBounds(486, 338, 34, 17);
+        jLabel2.setBounds(486, 335, 34, 20);
 
         jLabel3.setText("Meeting Time");
         add(jLabel3);
-        jLabel3.setBounds(442, 420, 78, 17);
+        jLabel3.setBounds(442, 417, 78, 20);
 
         jLabel6.setText("Meeting Day");
         add(jLabel6);
-        jLabel6.setBounds(447, 379, 73, 17);
+        jLabel6.setBounds(447, 376, 73, 20);
 
         txtDescription.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -288,7 +288,7 @@ public class ManageCourseJPanel extends javax.swing.JPanel {
             }
         });
         add(txtDescription);
-        txtDescription.setBounds(548, 294, 170, 23);
+        txtDescription.setBounds(548, 287, 220, 30);
 
         txtTime.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -296,7 +296,7 @@ public class ManageCourseJPanel extends javax.swing.JPanel {
             }
         });
         add(txtTime);
-        txtTime.setBounds(548, 417, 170, 23);
+        txtTime.setBounds(548, 410, 170, 30);
 
         txtRoom.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -304,11 +304,11 @@ public class ManageCourseJPanel extends javax.swing.JPanel {
             }
         });
         add(txtRoom);
-        txtRoom.setBounds(548, 335, 170, 23);
+        txtRoom.setBounds(548, 328, 170, 30);
 
         cmbDay.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday" }));
         add(cmbDay);
-        cmbDay.setBounds(548, 376, 170, 23);
+        cmbDay.setBounds(548, 369, 170, 30);
 
         btnBack.setText("<< Back");
         btnBack.addActionListener(new java.awt.event.ActionListener() {
