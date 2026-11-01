@@ -19,7 +19,7 @@ import javax.swing.ListSelectionModel;
 
 /**
  *
- * @author luke
+ * @author Luke Tomlinson (003989857)
  */
 
   

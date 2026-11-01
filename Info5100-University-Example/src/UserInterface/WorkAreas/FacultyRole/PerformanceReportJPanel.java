@@ -19,7 +19,7 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author luke
+ * @author Luke Tomlinson (003989857)
  */
 public class PerformanceReportJPanel extends javax.swing.JPanel {
 
