@@ -15,6 +15,9 @@ import java.time.format.DateTimeFormatter;
 import javax.swing.JPanel;
 import Business.Validation;
 import javax.swing.JOptionPane;
+import java.awt.GridLayout;
+import javax.swing.JLabel;
+import javax.swing.JPasswordField;
 
 /**
  *
@@ -176,6 +179,8 @@ public class MyProfileJPanel extends javax.swing.JPanel {
         btnEdit.setVisible(canEdit());
         btnEdit.setText(editing ? "Save" : "Edit Profile");
         btnCancel.setVisible(canEdit() && editing);
+        btnChangePassword.setVisible(canEdit());   // Christopher Ogden NUID: 003959375 Admin use case
+        btnChangePassword.setEnabled(!editing);    // save or cancel the profile edits first
     }
 
     /**
@@ -226,7 +231,29 @@ public class MyProfileJPanel extends javax.swing.JPanel {
         }
         return null;
     }
-
+    /**
+     * Checks the password change and makes it: the current password must be right, the new
+     * one must follow the password rule, match its confirmation and differ from the current
+     * one. Returns the first problem as a message, or null once the password is changed.
+     *
+     * Christopher Ogden NUID: 003959375 Admin use case.
+     */
+    private String changePassword(String current, String newPassword, String confirm) {
+        if (!account.IsValidUser(account.getUserLoginName(), current)) {
+            return "The current password is not correct.";
+        }
+        if (!Validation.isValidPassword(newPassword)) {
+            return "The new password must be at least " + Validation.MIN_PASSWORD_LENGTH + " characters.";
+        }
+        if (!newPassword.equals(confirm)) {
+            return "The new password and the confirmation do not match.";
+        }
+        if (newPassword.equals(current)) {
+            return "The new password must be different from the current one.";
+        }
+        account.setPassword(newPassword);   // also updates the account's last-updated time
+        return null;
+    }
     /**
      * One line with the editable fields, used to tell whether Save changed anything.
      *
@@ -306,6 +333,7 @@ public class MyProfileJPanel extends javax.swing.JPanel {
         btnBack = new javax.swing.JButton();
         btnEdit = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
+        btnChangePassword = new javax.swing.JButton();
 
         txtName.setEditable(false);
 
@@ -382,6 +410,13 @@ public class MyProfileJPanel extends javax.swing.JPanel {
             }
         });
 
+        btnChangePassword.setText("Change Password");
+        btnChangePassword.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnChangePasswordActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -426,7 +461,10 @@ public class MyProfileJPanel extends javax.swing.JPanel {
                         .addComponent(txtAccountCreated)
                         .addComponent(txtLastLogin)
                         .addComponent(txtAccountLastUpdated))
-                    .addComponent(btnCancel))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnCancel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnChangePassword)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -491,7 +529,8 @@ public class MyProfileJPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnEdit)
-                    .addComponent(btnCancel))
+                    .addComponent(btnCancel)
+                    .addComponent(btnChangePassword))
                 .addContainerGap(33, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -555,11 +594,46 @@ public class MyProfileJPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
         setEditing(false);
     }//GEN-LAST:event_btnCancelActionPerformed
+    /**
+     * Asks for the current password and the new one twice, then changes the password.
+     *
+     * Christopher Ogden NUID: 003959375 Admin use case.
+     */
+    private void btnChangePasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangePasswordActionPerformed
+        // TODO add your handling code here:
+        if (!canEdit()) {
+            return;
+        }
+        JPasswordField current = new JPasswordField();
+        JPasswordField newPassword = new JPasswordField();
+        JPasswordField confirm = new JPasswordField();
+        JPanel form = new JPanel(new GridLayout(0, 1, 0, 4));
+        form.add(new JLabel("Current password"));
+        form.add(current);
+        form.add(new JLabel("New password (at least " + Validation.MIN_PASSWORD_LENGTH + " characters)"));
+        form.add(newPassword);
+        form.add(new JLabel("Confirm new password"));
+        form.add(confirm);
+        int answer = JOptionPane.showConfirmDialog(this, form, "Change Password",
+            JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        if (answer != JOptionPane.OK_OPTION) {
+            return;
+        }
+        String problem = changePassword(new String(current.getPassword()),
+            new String(newPassword.getPassword()), new String(confirm.getPassword()));
+        if (problem != null) {
+            JOptionPane.showMessageDialog(this, problem, "Password not changed", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        populateProfile();   // shows the new "Account Last Updated" time
+        JOptionPane.showMessageDialog(this, "Your password was changed.");
+    }//GEN-LAST:event_btnChangePasswordActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnCancel;
+    private javax.swing.JButton btnChangePassword;
     private javax.swing.JButton btnEdit;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
