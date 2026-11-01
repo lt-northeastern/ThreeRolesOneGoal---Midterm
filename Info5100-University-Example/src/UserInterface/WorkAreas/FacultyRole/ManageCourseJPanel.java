@@ -18,8 +18,8 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.ListSelectionModel;
 
 /**
- *
- * @author Luke Tomlinson (003989857)
+*
+ * @author Luke Tomlinson (NUID 003989857)
  */
 
   
@@ -33,8 +33,11 @@ public class ManageCourseJPanel extends javax.swing.JPanel {
     private final List<CourseOffer> rows = new ArrayList<>();
 
     /**
-     * Creates new form ManageCourseJPanel
-     */
+    * Builds the Manage Courses screen: single-row selection, a selected row loads into the
+    * form, then the table is filled with the logged-in professor's course sections.
+    * 
+    * Luke Tomlinson NUID: 003989857 - Faculty use case
+    */
     public ManageCourseJPanel(Business business, UserAccount currentUser, JPanel userProcessContainer) {
         initComponents();
         
@@ -52,7 +55,7 @@ public class ManageCourseJPanel extends javax.swing.JPanel {
         refreshTable();
 
     }
-    // Author: Luke Tomlinson
+    // Luke Tomlinson NUID: 003989857 - Faculty use case.
     // Fills the table with every course section the logged-in professor teaches
     private void refreshTable() {
         DefaultTableModel model = (DefaultTableModel) tblCourses.getModel();
@@ -79,14 +82,14 @@ public class ManageCourseJPanel extends javax.swing.JPanel {
         }
     }
     
-    // Author: Luke Tomlinson
+    // Luke Tomlinson NUID: 003989857 - Faculty use case
     // Returns the course section for the selected row, or null if nothing is selected
     private CourseOffer selectedCourse() {
         int row = tblCourses.getSelectedRow();
         return (row < 0 || row >= rows.size()) ? null : rows.get(row);
     }
 
-    // Author: Luke Tomlinson
+    // Luke Tomlinson NUID: 003989857 - Faculty use case
     // Copies the selected course into the form fields
     private void populateFormFromSelection() {
         CourseOffer co = selectedCourse();
@@ -107,7 +110,7 @@ public class ManageCourseJPanel extends javax.swing.JPanel {
         cmbDay.setSelectedItem(co.getMeetingDay().isEmpty() ? "Monday" : co.getMeetingDay());
     }
 
-    // Author: Luke Tomlinson
+    // Luke Tomlinson NUID: 003989857 - Faculty use case
     // Empties every field and clears the table selection
     private void clearForm() {
         txtCourseNum.setText("");
@@ -122,7 +125,7 @@ public class ManageCourseJPanel extends javax.swing.JPanel {
         tblCourses.clearSelection();
     }
     
-     // Author: Luke Tomlinson
+     // Luke Tomlinson NUID: 003989857 - Faculty use case
     // Checks the editable fields; returns a message describing the first problem, or null if OK
     private String validateForm() {
         if (Validation.isBlank(txtRoom.getText())) {
@@ -134,7 +137,7 @@ public class ManageCourseJPanel extends javax.swing.JPanel {
         return null;
     }
 
-    // Author: Luke Tomlinson
+    // Luke Tomlinson NUID: 003989857 - Faculty use case
     // Copies the editable fields into the selected course section
     private void applyForm(CourseOffer co) {
         co.setDescription(txtDescription.getText());
@@ -143,7 +146,7 @@ public class ManageCourseJPanel extends javax.swing.JPanel {
         co.setMeetingDay((String) cmbDay.getSelectedItem());
     }
 
-    // Author: Luke Tomlinson
+    // Luke Tomlinson NUID: 003989857 - Faculty use case.
     // One string of the editable values, used to tell whether anything actually changed
     private String snapshot(CourseOffer co) {
         return co.getDescription() + "|" + co.getRoom() + "|" + co.getMeetingTime() + "|" + co.getMeetingDay();

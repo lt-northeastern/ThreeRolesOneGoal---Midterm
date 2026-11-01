@@ -19,7 +19,7 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author Luke Tomlinson (003989857)
+ * @author Luke Tomlinson (NUID 003989857)
  */
 public class ManageStudentsProfileJPanel extends javax.swing.JPanel {
     
@@ -29,10 +29,13 @@ public class ManageStudentsProfileJPanel extends javax.swing.JPanel {
     
     private final List<CourseOffer> courseRows = new ArrayList<>();      // section behind each dropdown item
     private final List<SeatAssignment> rows = new ArrayList<>();        // student's seat (grade) behind each table row
-    private final List<StudentProfile> studentRows = new ArrayList<>();        // student's seat behind each table row
+    private final List<StudentProfile> studentRows = new ArrayList<>();        // student behind each table row
 
     /**
-     * Creates new form ManageStudentsJPanel
+     * Builds the Student Profiles screen: the course drop down lists the logged-in professor's
+     * sections; picking a course lists its students; clicking a student shows their profile.
+     *
+     * Luke Tomlinson NUID: 003989857 - Faculty use case.
      */
     public ManageStudentsProfileJPanel(Business business, UserAccount currentUser, JPanel userProcessContainer) {
         initComponents();
@@ -55,7 +58,7 @@ public class ManageStudentsProfileJPanel extends javax.swing.JPanel {
        
        
     }
-// Author: Luke Tomlinson
+    // Luke Tomlinson NUID: 003989857 - Faculty use case
     // Fills the Course dropdown with every section the logged-in professor teaches
     private void fillCourseDropdown() {
         cmbCourses.removeAllItems();
@@ -75,20 +78,20 @@ public class ManageStudentsProfileJPanel extends javax.swing.JPanel {
         }
     }
     
-    // Author: Luke Tomlinson
+    // Luke Tomlinson NUID: 003989857 - Faculty use case
     // Returns the section chosen in the dropdown, or null
     private CourseOffer selectedCourse() {
         int i = cmbCourses.getSelectedIndex();
         return (i < 0 || i >= courseRows.size()) ? null : courseRows.get(i);
     }
 
-    // Author: Luke Tomlinson
-    // Returns the student's seat for the selected table row, or null
+    // Luke Tomlinson NUID: 003989857 - Faculty use case
+    //Returns the selected table row, or -1 if nothing is selected
     private int selectedRow() {
         int row = tblStudents.getSelectedRow();
         return (row < 0 || row >= rows.size()) ? -1 : row;
     }
-    // Author: Luke Tomlinson
+    // Luke Tomlinson NUID: 003989857 - Faculty use case
     // Fills the table with the students in the selected section
     private void refreshTable() {
         DefaultTableModel model = (DefaultTableModel) tblStudents.getModel();
@@ -121,7 +124,7 @@ public class ManageStudentsProfileJPanel extends javax.swing.JPanel {
             }
         }
     }
-    // Author: Luke Tomlinson
+    // Luke Tomlinson NUID: 003989857 - Faculty use case
     // Copies the selected student's profile and progress into the form fields
     private void populateFormFromSelection() {
         int row = selectedRow();
@@ -142,7 +145,7 @@ public class ManageStudentsProfileJPanel extends javax.swing.JPanel {
         txtGrade.setText(sa.getLetterGrade());
     }
 
-    // Author: Luke Tomlinson
+    // Luke Tomlinson NUID: 003989857 - Faculty use case
     // Empties every field and clears the table selection
     private void clearForm() {
         txtName.setText("");

@@ -19,7 +19,7 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author Luke Tomlinson (003989857)
+ * @author Luke Tomlinson (NUID 003989857)
  */
 public class PerformanceReportJPanel extends javax.swing.JPanel {
 
@@ -30,10 +30,9 @@ public class PerformanceReportJPanel extends javax.swing.JPanel {
     private final List<CourseOffer> courseRows = new ArrayList<>();   // section behind each dropdown item
 
     /**
-     * Creates new form PerformanceReportJPanel Generate Report lists each
-     * student's grade with the class summary.
+     * Builds the Performance Report screen: the course drop down lists the logged-in professor's sections. Generate Report lists each student's grade with the class summary.
      *
-     * Luke Tomlinson
+     * Luke Tomlinson NUID: 003989857 - Faculty use case.
      */
     public PerformanceReportJPanel(Business business, UserAccount currentUser, JPanel userProcessContainer) {
         initComponents();
@@ -50,7 +49,7 @@ public class PerformanceReportJPanel extends javax.swing.JPanel {
 
     }
 
-    // Author: Luke Tomlinson
+    // Luke Tomlinson NUID: 003989857 - Faculty use case.
     // Fills the Course dropdown with every section the logged-in professor teaches
     private void fillCourseDropdown() {
         cmbCoursesPR.removeAllItems();
@@ -70,14 +69,14 @@ public class PerformanceReportJPanel extends javax.swing.JPanel {
         }
     }
 
-    // Author: Luke Tomlinson
+    // Luke Tomlinson NUID: 003989857 - Faculty use case.
     // Returns the section chosen in the dropdown, or null
     private CourseOffer selectedCourse() {
         int i = cmbCoursesPR.getSelectedIndex();
         return (i < 0 || i >= courseRows.size()) ? null : courseRows.get(i);
     }
 
-    // Author: Luke Tomlinson
+    // Luke Tomlinson NUID: 003989857 - Faculty use case.
     // Empties the table and the summary fields
     private void clearReport() {
         ((DefaultTableModel) tblPerformanceReport.getModel()).setRowCount(0);
@@ -87,7 +86,7 @@ public class PerformanceReportJPanel extends javax.swing.JPanel {
         txtLowestScore.setText("");
     }
 
-    // Author: Luke Tomlinson
+    // Luke Tomlinson NUID: 003989857 - Faculty use case.
     // Lists every student in the selected section with their grade, then the class summary.
     // Average, highest and lowest use graded students only ("In progress" has no grade yet).
     private void generateReport() {
