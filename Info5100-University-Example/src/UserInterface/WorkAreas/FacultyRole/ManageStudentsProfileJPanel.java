@@ -287,7 +287,7 @@ public class ManageStudentsProfileJPanel extends javax.swing.JPanel {
 
         txtGPA.setEditable(false);
         add(txtGPA);
-        txtGPA.setBounds(500, 333, 120, 30);
+        txtGPA.setBounds(500, 333, 210, 30);
 
         txtInterests.setEditable(false);
         add(txtInterests);
