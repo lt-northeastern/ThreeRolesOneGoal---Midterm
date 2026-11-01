@@ -92,6 +92,7 @@ class ConfigureABusiness {
 
   
         setUpUniversity(business, studentprofile0, studentprofile1);
+        setUpFacultyDemo(business, studentprofile0, studentprofile1, studentprofile2);
         return business;
         
         
@@ -188,4 +189,66 @@ class ConfigureABusiness {
             sa.submitAssignment("Assignment " + i);
         }
     }
+     // ---- Faculty use case demo data (Luke Tomlinson) ----
+    // Hobbies and interests for every student, and more students with grades in Gina's classes.
+    // Adam's and Jim's existing course records are not changed.
+    static void setUpFacultyDemo(Business business, StudentProfile studentprofile0, StudentProfile studentprofile1, StudentProfile studentprofile2) {
+        PersonDirectory persondirectory = business.getPersonDirectory();
+        StudentDirectory studentdirectory = business.getStudentDirectory();
+ 
+    // Hobbies and interests for the existing students
+        studentprofile0.setHobbies("Hiking, chess");                 // Adam Rollen
+        studentprofile0.setInterests("Data analytics, AI");
+        studentprofile1.setHobbies("Soccer, cooking");               // Jim Dellon
+        studentprofile1.setInterests("Mobile apps, UX design");
+        studentprofile2.setHobbies("Photography, running");          // Anna Shnider
+        studentprofile2.setInterests("Cloud computing");
+ 
+    // Create Persons
+        Person person010 = persondirectory.newPerson("Priya Shah");
+        Person person011 = persondirectory.newPerson("Marcus Lee");
+        Person person012 = persondirectory.newPerson("Daniel Kim");
+ 
+        person010.setEmail("priya.shah@northeastern.edu");
+        person011.setEmail("marcus.lee@northeastern.edu");
+        person012.setEmail("daniel.kim@northeastern.edu");
+ 
+    // Create Students
+        StudentProfile studentprofile3 = studentdirectory.newStudentProfile(person010, "912580011");   // Priya Shah
+        StudentProfile studentprofile4 = studentdirectory.newStudentProfile(person011, "912580012");   // Marcus Lee
+        StudentProfile studentprofile5 = studentdirectory.newStudentProfile(person012, "912580013");   // Daniel Kim
+ 
+        studentprofile3.setHobbies("Painting, yoga");
+        studentprofile3.setInterests("Machine learning");
+        studentprofile4.setHobbies("Basketball, gaming");
+        studentprofile4.setInterests("Cybersecurity");
+        studentprofile5.setHobbies("Guitar, cycling");
+        studentprofile5.setInterests("Data engineering");
+ 
+    // Enroll students in Gina's classes: student, semester, course, grade (0 = in progress)
+        enroll(business, studentprofile2, "Spring 2026", "INFO 6105", 3.7f);   // Anna
+        enroll(business, studentprofile2, "Spring 2026", "INFO 6250", 3.3f);   // Anna
+        enroll(business, studentprofile3, "Spring 2026", "INFO 6105", 4.0f);   // Priya
+        enroll(business, studentprofile3, "Spring 2026", "INFO 6250", 3.7f);   // Priya
+        enroll(business, studentprofile4, "Fall 2025", "INFO 6150", 3.0f);     // Marcus
+        enroll(business, studentprofile5, "Fall 2026", "INFO 6105", 0);        // Daniel
+    }
+    
+     // Puts a student in a class for a semester and gives the grade (0 = still in progress)
+    static void enroll(Business business, StudentProfile student, String semester, String courseNumber, float grade) {
+        Department dept = business.getDepartment();
+        if (student.getAcademicRecord() == null) {   // first class: create the student's transcript
+            student.setAcademicRecord(dept.getStudentDirectory().newStudentProfile(
+                    dept.getPersonDirectory().newPerson(student.getPerson().getPersonId())));
+        }
+        CourseLoad load = student.getAcademicRecord().getCourseLoadBySemester(semester);
+        if (load == null) {
+            load = student.getAcademicRecord().newCourseLoad(semester);
+        }
+        SeatAssignment seat = load.newSeatAssignment(dept.getCourseSchedule(semester).getCourseOfferByNumber(courseNumber));
+        if (grade > 0) {
+            seat.setGrade(grade);
+        }
+    }
+ 
 }
