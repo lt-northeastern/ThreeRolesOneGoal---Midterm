@@ -88,7 +88,7 @@ All administrator screens live in `UserInterface.WorkAreas.AdminRole` and are Ne
 | Manage Faculty | Register, update and delete faculty with department, title and their login. |
 | University Reports | Read-only reports on the university model in one table, chosen in a *Report* dropdown: **Course enrollment** (each class of the chosen semester with professor, credits, seats taken, % full and tuition revenue, plus a semester total), **Student standing** (each student's credits, GPA, core courses done, credits still needed and whether they are ready to graduate) and **Faculty load** (each professor's classes, students, seats and revenue in the chosen semester). |
 | Account Health | One table of everything that needs attention: **disabled accounts**, logins that were **never used**, people with **no login account** and people with **no email address**, with a *Show* filter and a summary line that counts each issue. |
-| My Profile | The shared profile screen; for an administrator it adds **Edit Profile** (name, email, phone, address) and **Change Password** (current password, new password twice). Student and faculty pages stay view only. |
+| My Profile | The shared profile screen; for an administrator it adds **Edit Profile** (name, email, phone, address) and **Change Password** (current password, new password twice). Faculty can use both on their own profile as well (faculty use case); student pages stay view only. |
 
 Rules shared by the staff, student and faculty forms: name required, a valid email address (required for staff), **one email address per person** (`Business.isEmailTaken`, any case), phone 7–20 digits, spaces, `+ ( ) -` (`Validation.isValidPhone`), 9-digit unique NUID for students.
 
@@ -103,7 +103,7 @@ All faculty screens live in `UserInterface.WorkAreas.FacultyRole` and are NetBea
 | Manage Courses | Table of the professor's sections (course #, name, credits, semester, enrolled). Clicking a row fills the form; catalog data (course #, name, credits, semester, enrolled) is read-only because the department owns it. Description, meeting day, meeting time and room can be updated. Rules: a row must be selected; room and meeting time are required; saving with nothing changed says so; Clear empties the form. |
 | Manage Students Profiles | Course dropdown with the professor's sections; the table lists the students enrolled in that section with NU ID, email and grade. Clicking a student shows name, email, NU ID, overall GPA, hobbies, interests and grade in that class (all read-only; hobbies and interests come from the student's About Me screen). Clear empties the form. |
 | Performance Reports | Course dropdown with the professor's sections; *Generate Report* lists each student's letter grade and grade points, plus the number of students, average, highest and lowest grade. Average, highest and lowest use graded students only, so an in-progress class shows "No grades yet"; an empty class says "No students are enrolled in this course yet."; changing the course clears the old report. |
-| My Profile | The shared profile screen of the access control layer. |
+| My Profile | The shared profile screen of the access control layer. A faculty member can use **Edit Profile** (name, email, phone, address) and **Change Password** on their own profile, with the same rules as the administrator page. |
 
 All three tables are read-only. Changes to the shared code for the faculty use case, each commented "Luke Tomlinson NUID: 003989857 - Faculty use case": description, meeting day, meeting time and room on `CourseOffer`; hobbies and interests on the access control `StudentProfile`; faculty demo data in `ConfigureABusiness.setUpFacultyDemo` (hobbies and interests for the seeded students, Anna Shnider enrolled in three of Gina Montana's classes).
 
@@ -227,7 +227,7 @@ Faculty cases to repeat by hand:
 - Grades entered by faculty through the faculty use case feeding the student's transcript live.
 - Waiting lists for full classes and prerequisites in the catalog.
 - Persisting the department to a file so data survives a restart.
-- Profile editing and password change for students and faculty (administrators can already do both on My Profile).
+- Profile editing and password change for students (administrators and faculty can already do both on My Profile).
 - An audit log of administrator actions and of every login attempt (who disabled, created or deleted which account, failed logins), shown as another Account Health issue.
 - Exporting the university reports to CSV.
 - Matching course sections to professors by an ID instead of the display name (renaming a professor currently empties their faculty screens).
