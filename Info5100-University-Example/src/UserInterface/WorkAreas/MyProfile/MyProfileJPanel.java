@@ -13,6 +13,8 @@ import java.awt.CardLayout;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import javax.swing.JPanel;
+import Business.Validation;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -48,6 +50,7 @@ public class MyProfileJPanel extends javax.swing.JPanel {
         this.userProcessContainer = userProcessContainer;
         makeFieldsReadOnly();
         populateProfile();
+        updateButtons(); 
     
     }
     /**
@@ -152,6 +155,95 @@ public class MyProfileJPanel extends javax.swing.JPanel {
         txtHireDate.setVisible(visible);
     }
 
+     private boolean editing = false;   // Christopher Ogden NUID: 003959375 Admin use case
+
+    /**
+     * Only an administrator can edit this page (the student and faculty pages stay view
+     * only), using the same check as every other admin screen.
+     *
+     * Christopher Ogden NUID: 003959375 Admin use case.
+     */
+    private boolean canEdit() {
+        return business != null && business.isAdministrator(account);
+    }
+
+    /**
+     * Shows Edit Profile (or Save while editing) and Cancel only when the user may edit.
+     *
+     * Christopher Ogden NUID: 003959375 Admin use case.
+     */
+    private void updateButtons() {
+        btnEdit.setVisible(canEdit());
+        btnEdit.setText(editing ? "Save" : "Edit Profile");
+        btnCancel.setVisible(canEdit() && editing);
+    }
+
+    /**
+     * Turns edit mode on (name, email, phone and address unlock and show their real values,
+     * not "-") or off (fields lock and show the saved details again).
+     *
+     * Christopher Ogden NUID: 003959375 Admin use case.
+     */
+    private void setEditing(boolean on) {
+        editing = on;
+        txtName.setEditable(on);
+        txtEmail.setEditable(on);
+        txtPhone.setEditable(on);
+        txtAddress.setEditable(on);
+        if (on) {
+            Person person = account.getAssociatedPersonProfile().getPerson();
+            txtName.setText(orEmpty(person.getName()));
+            txtEmail.setText(orEmpty(person.getEmail()));
+            txtPhone.setText(orEmpty(person.getPhone()));
+            txtAddress.setText(orEmpty(person.getAddress()));
+            txtName.requestFocusInWindow();
+        } else {
+            populateProfile();
+        }
+        updateButtons();
+    }
+
+    /**
+     * Checks the edited details with the same rules as the Manage screens: a name is
+     * required, the email must be valid and not used by another person, and the phone must be
+     * valid. Returns the first problem as a message, or null.
+     *
+     * Christopher Ogden NUID: 003959375 Admin use case.
+     */
+    private String validateProfile() {
+        if (Validation.isBlank(txtName.getText())) {
+            return "Please enter your name.";
+        }
+        String email = txtEmail.getText().trim();
+        if (!email.isEmpty() && !Validation.isValidEmail(email)) {
+            return "Please enter a valid email address (for example name@northeastern.edu).";
+        }
+        if (business.isEmailTaken(email, account.getAssociatedPersonProfile().getPerson())) {
+            return "Another person is already registered with this email address.";
+        }
+        if (!Validation.isValidPhone(txtPhone.getText())) {
+            return Validation.PHONE_RULE;
+        }
+        return null;
+    }
+
+    /**
+     * One line with the editable fields, used to tell whether Save changed anything.
+     *
+     * Christopher Ogden NUID: 003959375 Admin use case.
+     */
+    private String snapshot(Person p) {
+        return p.getName() + "|" + p.getEmail() + "|" + p.getPhone() + "|" + p.getAddress();
+    }
+
+    /**
+     * Returns "" for null so a field never shows the word "null".
+     *
+     * Christopher Ogden NUID: 003959375 Admin use case.
+     */
+    private String orEmpty(String s) {
+        return s == null ? "" : s;
+    }
     /**
      * Returns "-" for blank values so empty fields don't look broken.
      *
@@ -212,6 +304,8 @@ public class MyProfileJPanel extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         btnBack = new javax.swing.JButton();
+        btnEdit = new javax.swing.JButton();
+        btnCancel = new javax.swing.JButton();
 
         txtName.setEditable(false);
 
@@ -274,48 +368,66 @@ public class MyProfileJPanel extends javax.swing.JPanel {
             }
         });
 
+        btnEdit.setText("Edit Profile");
+        btnEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditActionPerformed(evt);
+            }
+        });
+
+        btnCancel.setText("Cancel");
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblName)
-                    .addComponent(lblRole)
-                    .addComponent(lblEmployeeID)
-                    .addComponent(lblDepartment)
-                    .addComponent(lblJobTitle)
-                    .addComponent(jLabel1)
-                    .addComponent(lblEmail)
-                    .addComponent(lblPhone)
-                    .addComponent(lblAddress)
-                    .addComponent(lblUserName)
-                    .addComponent(lblAccountCreated)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3))
-                .addGap(32, 32, 32)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txtName)
-                    .addComponent(txtRole)
-                    .addComponent(txtEmployeeID)
-                    .addComponent(txtJobTitle)
-                    .addComponent(txtDepartment)
-                    .addComponent(txtHireDate, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)
-                    .addComponent(txtEmail)
-                    .addComponent(txtPhone)
-                    .addComponent(txtAddress)
-                    .addComponent(txtUserName, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(txtAccountCreated)
-                    .addComponent(txtLastLogin)
-                    .addComponent(txtAccountLastUpdated))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGap(45, 45, 45)
                 .addComponent(btnBack)
                 .addGap(235, 235, 235)
                 .addComponent(lblTitle)
                 .addContainerGap(374, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnEdit)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(lblName)
+                        .addComponent(lblRole)
+                        .addComponent(lblEmployeeID)
+                        .addComponent(lblDepartment)
+                        .addComponent(lblJobTitle)
+                        .addComponent(jLabel1)
+                        .addComponent(lblEmail)
+                        .addComponent(lblPhone)
+                        .addComponent(lblAddress)
+                        .addComponent(lblUserName)
+                        .addComponent(lblAccountCreated)
+                        .addComponent(jLabel2)
+                        .addComponent(jLabel3)))
+                .addGap(32, 32, 32)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(txtName)
+                        .addComponent(txtRole)
+                        .addComponent(txtEmployeeID)
+                        .addComponent(txtJobTitle)
+                        .addComponent(txtDepartment)
+                        .addComponent(txtHireDate, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)
+                        .addComponent(txtEmail)
+                        .addComponent(txtPhone)
+                        .addComponent(txtAddress)
+                        .addComponent(txtUserName, javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(txtAccountCreated)
+                        .addComponent(txtLastLogin)
+                        .addComponent(txtAccountLastUpdated))
+                    .addComponent(btnCancel))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -376,7 +488,11 @@ public class MyProfileJPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtAccountLastUpdated, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
-                .addContainerGap(68, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnEdit)
+                    .addComponent(btnCancel))
+                .addContainerGap(33, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -391,10 +507,60 @@ public class MyProfileJPanel extends javax.swing.JPanel {
         CardLayout layout = (CardLayout) userProcessContainer.getLayout();
         layout.previous(userProcessContainer);
     }//GEN-LAST:event_btnBackActionPerformed
+    
+     /**
+     * Edit Profile unlocks the name, email, phone and address. Pressed again (now labelled
+     * Save) it checks the values, saves them to the person record and locks the fields again.
+     *
+     * Christopher Ogden NUID: 003959375 Admin use case.
+     */
+    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
+        // TODO add your handling code here:
+        if (!canEdit()) {
+            return;
+        }
+        if (!editing) {
+            setEditing(true);
+            return;
+        }
+        String problem = validateProfile();
+        if (problem != null) {
+            JOptionPane.showMessageDialog(this, problem, "Please check your details", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        Person person = account.getAssociatedPersonProfile().getPerson();
+        String before = snapshot(person);
+        person.setName(txtName.getText().trim());
+        person.setEmail(txtEmail.getText().trim());
+        person.setPhone(txtPhone.getText().trim());
+        person.setAddress(txtAddress.getText().trim());
+        if (before.equals(snapshot(person))) {
+            setEditing(false);
+            JOptionPane.showMessageDialog(this, "Nothing was changed.");
+            return;
+        }
+        account.touch();   // updates "Account Last Updated"
+        setEditing(false);
+        JOptionPane.showMessageDialog(this, "Your profile was saved.");
+
+
+    /**
+     * Throws away the unsaved edits, shows the saved details again and locks the fields.
+     *
+     * Christopher Ogden NUID: 003959375 Admin use case.
+     */
+    }//GEN-LAST:event_btnEditActionPerformed
+
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+        // TODO add your handling code here:
+        setEditing(false);
+    }//GEN-LAST:event_btnCancelActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
+    private javax.swing.JButton btnCancel;
+    private javax.swing.JButton btnEdit;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
