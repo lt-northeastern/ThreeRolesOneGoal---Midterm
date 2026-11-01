@@ -202,7 +202,15 @@ public class ManageCourseJPanel extends javax.swing.JPanel {
             new String [] {
                 "Course #", "Course Name", "Credits", "Semester", "Enrolled"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(tblCourses);
 
         add(jScrollPane1);

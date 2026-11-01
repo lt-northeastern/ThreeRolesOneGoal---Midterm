@@ -215,11 +215,16 @@ public class ManageStudentsProfileJPanel extends javax.swing.JPanel {
             new String [] {
                 "Name", "NU ID", "Email", "Grade"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, true, true
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(tblStudents);
-        if (tblStudents.getColumnModel().getColumnCount() > 0) {
-            tblStudents.getColumnModel().getColumn(3).setResizable(false);
-        }
 
         add(jScrollPane1);
         jScrollPane1.setBounds(26, 91, 692, 185);

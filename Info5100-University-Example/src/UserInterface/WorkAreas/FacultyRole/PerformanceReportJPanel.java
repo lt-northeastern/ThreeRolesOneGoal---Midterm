@@ -218,7 +218,15 @@ public class PerformanceReportJPanel extends javax.swing.JPanel {
             new String [] {
                 "Name", "NU ID", "Letter Grade", "Grade Points"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(tblPerformanceReport);
 
         add(jScrollPane1);
