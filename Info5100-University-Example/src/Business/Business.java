@@ -2,6 +2,7 @@
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
+ * modified by Christopher Ogden NUID: 003959375 Admin use case.
  */
 package Business;
 
@@ -136,9 +137,11 @@ public class Business {
     }
     /**
      * Deletes a person completely: removes the login account, the role profile (student,
-     * faculty or employee) and the person record.
+     * faculty or employee) and the person record. For a student it also frees every class
+     * seat they hold and removes their academic record, so a full class opens up again.
      *
      * Christopher Ogden NUID: 003959375 Contributed from Assignment 3 codebase.
+     * Christopher Ogden NUID: 003959375 Admin use case: frees seats and removes the academic record.
      */
          public void deleteProfile(Profile profile) {
         Person person = profile.getPerson();
@@ -147,7 +150,7 @@ public class Business {
             useraccountdirectory.removeUserAccount(ua);
         }
         if (profile instanceof StudentProfile) {
-            releaseStudentRecord((StudentProfile) profile);   // seats and university record go with the student
+            removeAcademicRecord((StudentProfile) profile);   // Christopher Ogden NUID: 003959375 Admin use case
             studentdirectory.removeStudent((StudentProfile) profile);
         } else if (profile instanceof FacultyProfile) {
             facultydirectory.removeFaculty((FacultyProfile) profile);
@@ -155,6 +158,27 @@ public class Business {
             employeedirectory.removeEmployee((EmployeeProfile) profile);
         }
         persondirectory.removePerson(person);
+    }
+         /**
+     * Drops every class the student is in (each seat is released so another student can take
+     * it) and removes the student's academic record from the department.
+     *
+     * Christopher Ogden NUID: 003959375 Admin use case.
+     */
+    private void removeAcademicRecord(StudentProfile student) {
+        info5100.university.example.Persona.StudentProfile record = student.getAcademicRecord();
+        if (record == null) {
+            return;   // pre-registered students have no classes yet
+        }
+        for (info5100.university.example.CourseSchedule.CourseLoad load : record.getTranscript().getCourseLoads()) {
+            // copy the list first: dropping a seat removes it from the list we are looping over
+            for (info5100.university.example.CourseSchedule.SeatAssignment sa
+                    : new java.util.ArrayList<>(load.getSeatAssignments())) {
+                load.dropSeatAssignment(sa);
+            }
+        }
+        department.getStudentDirectory().removeStudent(record);
+        student.setAcademicRecord(null);
     }
     /**
      * Authorization check for the administrator screens: true only for an  active account that still
@@ -168,21 +192,28 @@ public class Business {
                 && ua.isActive()
                 && useraccountdirectory.getUserAccountList().contains(ua)
                 && ua.getAssociatedPersonProfile() instanceof EmployeeProfile;
+    }
+    /**
+     * True if another person already uses this email address (case-insensitive). Blank emails
+     * are never "taken". Used by the staff, student and faculty forms so two people cannot be
+     * registered with the same address.
+     *
+     * Christopher Ogden NUID: 003959375 Admin use case.
+     */
+    public boolean isEmailTaken(String email, Person except) {
+        if (Validation.isBlank(email)) {
+            return false;
+        }
+        for (Person p : persondirectory.getPersonList()) {
+            if (p != except && p.getEmail().equalsIgnoreCase(email.trim())) {
+                return true;
+            }
+        }
+        return false;
     }    
     // ---- added for the Student use case by Hemanth Bezawada (NUID 002059527) ----
     public Department getDepartment() {
         return department;
     }
 
-    // the student's university record goes with the profile: every seat the student held opens up
-    // again and the record leaves the department's student directory
-    private void releaseStudentRecord(StudentProfile sp) {
-        info5100.university.example.Persona.StudentProfile record = sp.getAcademicRecord();
-        if (record == null || department == null) {
-            return;
-        }
-        record.getTranscript().releaseSeats();
-        department.getStudentDirectory().removeStudent(record);
-        sp.setAcademicRecord(null);
-    }
 }

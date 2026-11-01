@@ -73,7 +73,7 @@ All student screens live in `UserInterface.WorkAreas.StudentRole` and are NetBea
 | Graduation Audit | Core courses and electives against the MSIS degree, each completed, in progress or not taken; credits completed against the 32 required; a verdict that says ready or lists what is outstanding. |
 | About Me | Hobbies and interests the student wants their professors to see; they are kept on the student's profile (fields added by the faculty use case) so the faculty Manage Students Profiles screen can show them once that branch merges. Rules: plain text, at most 120 characters each, not only punctuation; an empty box clears the value; saving with nothing changed says so; Undo Changes restores the saved values. |
 
-Changes to the shared model for the student use case, each in a block marked "added for the Student use case": `Business.getDepartment()`, `StudentProfile.getAcademicRecord()`, grade, like and submission helpers on `SeatAssignment`, semester GPA and drop on `CourseLoad`, seat release on `Seat`, ordered course loads, overall GPA, `removeCourseLoad` and `releaseSeats` on `Transcript`, `removeStudent` on the university `StudentDirectory`, `getPerson()` on the university `StudentProfile` and `FacultyProfile`, name and teacher/seat helpers on `Course`, `CourseOffer` and `CourseSchedule`, getters and the semester list on `Department`, getters on `Degree` plus the 32-credit and graded-core rules in `Degree.isStudentReadyToGraduate`. `Business.deleteProfile` releases every seat the student held and removes the university record together with the profile.
+Changes to the shared model for the student use case, each in a block marked "added for the Student use case": `Business.getDepartment()`, `StudentProfile.getAcademicRecord()`, grade, like and submission helpers on `SeatAssignment`, semester GPA and drop on `CourseLoad`, seat release on `Seat`, ordered course loads, overall GPA, `removeCourseLoad` on `Transcript`, `getPerson()` on the university `StudentProfile` and `FacultyProfile`, name and teacher/seat helpers on `Course`, `CourseOffer` and `CourseSchedule`, getters and the semester list on `Department`, getters on `Degree` plus the 32-credit and graded-core rules in `Degree.isStudentReadyToGraduate`.
 
 ### Administrator ((add name))
 
@@ -136,7 +136,7 @@ Authentication and authorization check: log in with each demo account and confir
 - The university model stores course loads in a `HashMap`, so semesters came out in random order. A semester sort key (year, then Spring/Summer/Fall) orders every table oldest first.
 - Dropping a class had no model support. `Seat.release()` and `CourseLoad.dropSeatAssignment()` free the seat so another student can take it.
 - The main branch was replaced with the new authentication layer after the student use case had been merged, so the student screens disappeared from `main`. Instead of forcing the old history back, the old `main` was merged into a branch of the new one: the authentication files were kept as they are and the student hooks were re-added on top (`Business.getDepartment`, `StudentProfile.getAcademicRecord`, the university seed data and the work area handlers, now built from the logged-in `UserAccount`).
-- Deleting a student from the administrator screen left the seats occupied and the university record in place. `Business.deleteProfile` now releases every seat the student held and removes the record, so another student can take the seat.
+- Deleting a student from the administrator screen left the seats occupied and the university record in place. The administrator use case's `Business.deleteProfile` now releases every seat the student held and removes the record, so another student can take the seat.
 
 ## Future Enhancements
 
@@ -149,6 +149,6 @@ Authentication and authorization check: log in with each demo account and confir
 
 | Member | Coding | Documentation | Testing | Other |
 |---|---|---|---|---|
-| Hemanth Bezawada | Student use case (5 screens, 11 pull requests), model integration, university seed data, empty-login check, post-merge fixes (name headers, empty semesters, seat release on delete) | this README's shared sections and the student sections | student UI harness (76 checks) | restoring the student work onto the new authentication layer, reviewing the team's pull requests |
+| Hemanth Bezawada | Student use case (5 screens, 11 pull requests), model integration, university seed data, empty-login check, post-merge fixes (name headers, empty semesters) | this README's shared sections and the student sections | student UI harness (76 checks) | restoring the student work onto the new authentication layer, reviewing the team's pull requests |
 | Luke Tomlinson | (add) | (add) | (add) | (add) |
 | Christopher Ogden | (add) | (add) | (add) | (add) |
