@@ -1,6 +1,7 @@
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
+ * modified by Christopher Ogden NUID: 003959375 Admin use case.
  */
 
  /*
@@ -242,7 +243,8 @@ public class AdminRoleWorkAreaJPanel extends javax.swing.JPanel {
             return;
         }
         
-    MyProfileJPanel profile = new MyProfileJPanel(useraccount, CardSequencePanel);
+    // Christopher Ogden NUID: 003959375 Admin use case: pass the business so the admin can edit the profile
+    MyProfileJPanel profile = new MyProfileJPanel(business, useraccount, CardSequencePanel);
     CardSequencePanel.add("MyProfile", profile);
     ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
     }//GEN-LAST:event_btnMyprofileIdentifyEventsActionPerformed
