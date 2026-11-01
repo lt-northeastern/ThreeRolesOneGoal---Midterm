@@ -1,12 +1,13 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
+ * modified by Christopher Ogden NUID: 003959375 Admin use case.
  */
 package UserInterface.WorkAreas.AdminRole.UniversityReportsWorkResp;
 
 /*
  * University Reports screen for the administrator.
- * Christopher Ogden NUID: 003959375 Admin use case.
+ * Created by Christopher Ogden NUID: 003959375 Admin use case.
  */
 
 import Business.Business;
