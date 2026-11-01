@@ -336,8 +336,8 @@ public class ManageStudentsProfileJPanel extends javax.swing.JPanel {
         
           refreshTable();
 
-        btnClear.addActionListener(e -> clearForm());          // Clear button empties the form
-        tblStudents.setDefaultEditor(Object.class, null);       // table is read-only
+        btnClear.addActionListener(e -> clearForm());          // Clear button empties the form for the user
+        tblStudents.setDefaultEditor(Object.class, null);       // table is read-only 
     
     }//GEN-LAST:event_btnClearActionPerformed
 
